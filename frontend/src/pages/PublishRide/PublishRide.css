@@ -324,6 +324,48 @@
   display: block;
 }
 
+/* --- Saved vehicles picker --- */
+.publish-ride__saved-vehicles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+}
+
+.publish-ride__saved-vehicle {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  background: transparent;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.publish-ride__saved-vehicle:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.publish-ride__saved-vehicle--active {
+  border-color: var(--color-primary);
+  background-color: rgba(78, 159, 61, 0.12);
+  color: var(--color-primary);
+}
+
+.publish-ride__saved-vehicle-name {
+  font-weight: var(--font-weight-semibold);
+}
+
+.publish-ride__saved-vehicle-plate {
+  opacity: 0.7;
+  font-size: var(--font-size-xs);
+}
+
 /* --- Actions (Navigacija na dnu) --- */
 .publish-ride__actions {
   display: flex;

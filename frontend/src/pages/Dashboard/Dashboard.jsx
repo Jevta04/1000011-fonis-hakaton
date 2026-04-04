@@ -17,9 +17,11 @@ export function Dashboard() {
   })();
 
   useEffect(() => {
-    const fetchRides = async () => {
+    const fetchRides = async (userLat, userLng) => {
       try {
-        const response = await getAvailableRides({ limit: 5 });
+        const params = { limit: 5 };
+        if (userLat && userLng) { params.user_lat = userLat; params.user_lng = userLng; }
+        const response = await getAvailableRides(params);
         setRides(response.data?.data || response.data || []);
       } catch {
         setRides([]);
@@ -27,7 +29,16 @@ export function Dashboard() {
         setLoading(false);
       }
     };
-    fetchRides();
+
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        ({ coords }) => fetchRides(coords.latitude, coords.longitude),
+        () => fetchRides(),
+        { timeout: 3000 }
+      );
+    } else {
+      fetchRides();
+    }
   }, []);
 
   const handleJoin = async (rideId) => {

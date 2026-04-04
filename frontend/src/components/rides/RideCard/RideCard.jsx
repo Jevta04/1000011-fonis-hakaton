@@ -29,9 +29,9 @@ function getCarColor(boja) {
 
 export function RideCard({
   mestoOd, mestoDo, datumVreme,
-  seats = 0, driver, driverId, avatar, vehicle, boja,
+  seats = 0, driver, driverId, avatar, vehicle, boja, brojTablica,
   smoking = false, music = false, airCondition = false, pets = false,
-  isJoined = false,
+  isJoined = false, isPast = false,
   onJoin, onLeave, onDelete,
   compact = false, className = '',
 }) {
@@ -61,7 +61,7 @@ export function RideCard({
 
   return (
     <article
-      className={`ride-card ${isFull ? 'ride-card--full' : ''} ${compact ? 'ride-card--compact' : ''} ${className}`}
+      className={`ride-card ${isFull ? 'ride-card--full' : ''} ${compact ? 'ride-card--compact' : ''} ${isPast ? 'ride-card--past' : ''} ${className}`}
       aria-label={`Vožnja od ${mestoOd} do ${mestoDo}`}
     >
       {/* Ruta – timeline layout */}
@@ -113,7 +113,7 @@ export function RideCard({
                     aria-label={boja}
                   />
                 )}
-                {vehicle}{boja ? ` · ${boja}` : ''}
+                {vehicle}{brojTablica ? ` · ${brojTablica}` : ''}
               </span>
             )}
           </div>

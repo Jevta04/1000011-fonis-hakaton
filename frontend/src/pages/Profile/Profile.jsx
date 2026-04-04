@@ -20,7 +20,7 @@ export function Profile() {
   const [history, setHistory]     = useState([]);
   const [vehicles, setVehicles]   = useState([]);
   const [loading, setLoading]     = useState(true);
-  const [activeTab, setActiveTab] = useState('driver');
+  const [activeTab, setActiveTab] = useState('upcoming');
 
   const [vForm, setVForm]         = useState(VEHICLE_INIT);
   const [editingId, setEditingId] = useState(null);
@@ -61,8 +61,11 @@ export function Profile() {
     );
   }
 
-  const driverRides    = history.filter((r) => r.role === 'driver' || r.uloga === 'vozac');
-  const passengerRides = history.filter((r) => r.role === 'passenger' || r.uloga === 'putnik');
+  const allDriverRides    = history.filter((r) => r.role === 'driver' || r.uloga === 'vozac');
+  const allPassengerRides = history.filter((r) => r.role === 'passenger' || r.uloga === 'putnik');
+  const driverRides    = allDriverRides.filter((r) => r.isPast);
+  const passengerRides = allPassengerRides.filter((r) => r.isPast);
+  const upcomingRides  = history.filter((r) => !r.isPast);
 
   /* ── Vehicle CRUD ── */
   const openNew   = () => { setVForm(VEHICLE_INIT); setEditingId(null); setVErrors({}); setShowVForm(true); };
@@ -97,6 +100,7 @@ export function Profile() {
   };
 
   const TABS = [
+    { key: 'upcoming',  label: t('upcoming_rides'),     count: upcomingRides.length },
     { key: 'driver',    label: t('rides_as_driver'),    count: driverRides.length },
     { key: 'passenger', label: t('rides_as_passenger'), count: passengerRides.length },
     { key: 'vehicles',  label: t('vehicles'),           count: vehicles.length },
@@ -130,11 +134,11 @@ export function Profile() {
 
           <div className="profile-stats">
             <div className="stat">
-              <span className="stat-number">{driverRides.length}</span>
+              <span className="stat-number">{allDriverRides.length}</span>
               <span className="stat-label">{t('rides_as_driver')}</span>
             </div>
             <div className="stat">
-              <span className="stat-number">{passengerRides.length}</span>
+              <span className="stat-number">{allPassengerRides.length}</span>
               <span className="stat-label">{t('rides_as_passenger')}</span>
             </div>
           </div>
@@ -231,19 +235,22 @@ export function Profile() {
             </div>
           )}
 
-          {/* Ride history tabs */}
+          {/* Ride history / upcoming tabs */}
           {activeTab !== 'vehicles' && (
             <div className="profile__rides-list" role="tabpanel">
-              {(activeTab === 'driver' ? driverRides : passengerRides).length === 0 ? (
-                <div className="profile__empty">
-                  <span aria-hidden="true">📋</span>
-                  <p>{t('no_rides_found')}</p>
-                </div>
-              ) : (
-                (activeTab === 'driver' ? driverRides : passengerRides).map((ride) => (
+              {(() => {
+                const list = activeTab === 'upcoming'  ? upcomingRides
+                           : activeTab === 'driver'    ? driverRides
+                           : passengerRides;
+                return list.length === 0 ? (
+                  <div className="profile__empty">
+                    <span aria-hidden="true">📋</span>
+                    <p>{t('no_rides_found')}</p>
+                  </div>
+                ) : list.map((ride) => (
                   <RideCard key={ride.id} {...ride} compact />
-                ))
-              )}
+                ));
+              })()}
             </div>
           )}
         </div>

@@ -24,16 +24,31 @@ class UserController extends Controller
 
     public function rides(Request $request)
     {
-        $user = $request->user();
+        $user  = $request->user();
+        $now   = now();
 
-        $voznje = $user->voznje()->with(['vozac'])->get()->map(function ($voznja) use ($user) {
-            $pivot = $voznja->pivot;
+        $voznje = $user->voznje()->with(['vozac'])->get()->map(function ($voznja) use ($user, $now) {
+            $pivot  = $voznja->pivot;
+            $vozac  = $voznja->vozac->first();
+            $isPast = $voznja->datumVreme && $voznja->datumVreme->lt($now);
+
             return [
-                'id'         => $voznja->id,
-                'mestoOd'    => $voznja->mestoOd,
-                'mestoDo'    => $voznja->mestoDo,
-                'datumVreme' => $voznja->datumVreme,
-                'role'       => $pivot->uloga === 'vozac' ? 'driver' : 'passenger',
+                'id'          => $voznja->id,
+                'mestoOd'     => $voznja->mestoOd,
+                'mestoDo'     => $voznja->mestoDo,
+                'datumVreme'  => $voznja->datumVreme?->format('Y-m-d H:i'),
+                'seats'       => $voznja->seats,
+                'smoking'     => $voznja->smoking,
+                'music'       => $voznja->muzika,
+                'airCondition'=> $voznja->klima,
+                'vehicle'     => $voznja->marka,
+                'boja'        => $voznja->boja,
+                'brojTablica' => $voznja->brojTablica,
+                'driver'      => $vozac ? trim("{$vozac->ime} {$vozac->prezime}") : null,
+                'driverId'    => $vozac?->id,
+                'avatar'      => $vozac ? strtoupper(substr($vozac->ime ?? '?', 0, 1)) : '?',
+                'role'        => $pivot->uloga === 'vozac' ? 'driver' : 'passenger',
+                'isPast'      => $isPast,
             ];
         });
 

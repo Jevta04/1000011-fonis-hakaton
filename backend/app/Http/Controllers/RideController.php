@@ -14,8 +14,7 @@ class RideController extends Controller
     {
         $query = Voznja::with(['vozac'])
             ->where('datumVreme', '>=', now())
-            ->where('seats', '>', 0)
-            ->orderBy('datumVreme');
+            ->where('seats', '>', 0);
 
         // Geo pretraga (Haversine) — koristi se kad su dostupni lat/lng
         if ($request->filled('departure_lat') && $request->filled('departure_lng')) {
@@ -60,6 +59,18 @@ class RideController extends Controller
 
         if ($request->filled('date')) {
             $query->whereDate('datumVreme', $request->date);
+        }
+
+        // Sortiranje: po distanci od korisnika (ako su date koordinate), pa po vremenu
+        if ($request->filled('user_lat') && $request->filled('user_lng')) {
+            $uLat = (float) $request->user_lat;
+            $uLng = (float) $request->user_lng;
+            $query->selectRaw(
+                'voznje.*, (6371 * acos(LEAST(1, cos(radians(?)) * cos(radians(departure_lat)) * cos(radians(departure_lng) - radians(?)) + sin(radians(?)) * sin(radians(departure_lat))))) AS dist_km',
+                [$uLat, $uLng, $uLat]
+            )->orderByRaw('dist_km ASC NULLS LAST')->orderBy('datumVreme');
+        } else {
+            $query->orderBy('datumVreme');
         }
 
         $limit = min((int) ($request->limit ?? 20), 50);
@@ -311,6 +322,7 @@ class RideController extends Controller
             'airCondition'         => $v->klima,
             'vehicle'              => $v->marka,
             'boja'                 => $v->boja,
+            'brojTablica'          => $v->brojTablica,
             'driver'               => $vozac ? trim("{$vozac->ime} {$vozac->prezime}") : null,
             'driverId'             => $vozac?->id,
             'avatar'               => $vozac ? strtoupper(substr($vozac->ime ?? '?', 0, 1)) : '?',

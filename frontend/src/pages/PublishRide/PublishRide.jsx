@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   MapPin, Flag, Calendar, Car, Hash, Palette,
@@ -6,7 +6,7 @@ import {
   Wind, Route, Fuel, Coins, Users, AlertCircle,
 } from 'lucide-react';
 import { useTranslation } from '../../hooks/useTranslation';
-import { publishRide, calculateRoute } from '../../services/apiService';
+import { publishRide, calculateRoute, getVehicles } from '../../services/apiService';
 import { AddressAutocomplete } from '../../components/map/AddressAutocomplete';
 import { MapPicker }           from '../../components/map/MapPicker';
 import { Input }  from '../../components/common/Input/Input';
@@ -38,6 +38,13 @@ export function PublishRide() {
   const [calcLoading, setCalcLoading] = useState(false);
   const [errors, setErrors]     = useState({});
   const [routeError, setRouteError] = useState('');
+  const [savedVehicles, setSavedVehicles] = useState([]);
+
+  useEffect(() => {
+    getVehicles().then((res) => {
+      setSavedVehicles(res.data?.data || res.data || []);
+    }).catch(() => {});
+  }, []);
 
   // MapPicker state
   const [mapOpen, setMapOpen]   = useState(false);
@@ -260,6 +267,29 @@ export function PublishRide() {
                 <p className="publish-ride__section-label">
                   <Car size={16} /> {t('my_vehicle')}
                 </p>
+
+                {savedVehicles.length > 0 && (
+                  <div className="publish-ride__saved-vehicles">
+                    {savedVehicles.map((v) => (
+                      <button
+                        key={v.id} type="button"
+                        className={`publish-ride__saved-vehicle ${form.marka === v.marka && form.broj_tablica === v.broj_tablica ? 'publish-ride__saved-vehicle--active' : ''}`}
+                        onClick={() => setForm((p) => ({
+                          ...p,
+                          marka:            v.marka            || '',
+                          broj_tablica:     v.broj_tablica      || '',
+                          boja:             v.boja              || '',
+                          fuel_consumption: v.fuel_consumption_per_100km ? String(v.fuel_consumption_per_100km) : '',
+                        }))}
+                      >
+                        <Car size={14} />
+                        <span className="publish-ride__saved-vehicle-name">{v.marka}</span>
+                        <span className="publish-ride__saved-vehicle-plate">{v.broj_tablica}</span>
+                      </button>
+                    ))}
+                  </div>
+                )}
+
                 <Input
                   name="marka" label={t('vehicle_brand')} placeholder={t('vehicle_brand_placeholder')}
                   value={form.marka} onChange={(e) => set('marka', e.target.value)}

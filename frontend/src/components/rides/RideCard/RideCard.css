@@ -29,6 +29,17 @@
   box-shadow: var(--shadow-sm);
 }
 
+.ride-card--past {
+  opacity: 0.45;
+  filter: grayscale(0.4);
+  pointer-events: none;
+}
+
+.ride-card--past:hover {
+  border-color: var(--color-border);
+  box-shadow: var(--shadow-sm);
+}
+
 .ride-card--compact {
   padding: var(--space-4);
 }
