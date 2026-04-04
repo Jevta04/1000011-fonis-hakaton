@@ -165,10 +165,10 @@ class RideController extends Controller
             return response()->json(['message' => 'Već ste u ovoj vožnji.'], 422);
         }
 
-        // Dodaj kao putnik sa statusom 'pending' — vozač treba da potvrdi
-        $voznja->users()->attach($userId, ['uloga' => 'putnik', 'status' => 'pending']);
+        $voznja->users()->attach($userId, ['uloga' => 'putnik', 'status' => 'confirmed']);
+        $voznja->decrement('seats');
 
-        return response()->json(['message' => 'Zahtev za pridruživanje je poslat. Čekajte potvrdu vozača.']);
+        return response()->json(['message' => 'Uspešno ste se priključili vožnji.']);
     }
 
     /** PATCH /rides/:id/passengers/:passengerId/confirm */
