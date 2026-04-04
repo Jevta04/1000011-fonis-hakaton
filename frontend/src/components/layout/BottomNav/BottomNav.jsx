@@ -1,13 +1,14 @@
 import { NavLink } from 'react-router-dom';
+import { Home, Search, PlusCircle, ClipboardList, User } from 'lucide-react';
 import { useTranslation } from '../../../hooks/useTranslation';
 import './BottomNav.css';
 
 const NAV_ITEMS = [
-  { to: '/',        icon: '🏠', labelKey: 'nav_home'    },
-  { to: '/search',  icon: '🔍', labelKey: 'nav_search'  },
-  { to: '/publish', icon: '➕', labelKey: 'nav_publish' },
-  { to: '/history', icon: '📋', labelKey: 'nav_history' },
-  { to: '/profile', icon: '👤', labelKey: 'nav_profile' },
+  { to: '/',        Icon: Home,          labelKey: 'nav_home'    },
+  { to: '/search',  Icon: Search,        labelKey: 'nav_search'  },
+  { to: '/publish', Icon: PlusCircle,    labelKey: 'nav_publish' },
+  { to: '/history', Icon: ClipboardList, labelKey: 'nav_history' },
+  { to: '/profile', Icon: User,          labelKey: 'nav_profile' },
 ];
 
 export function BottomNav() {
@@ -15,7 +16,7 @@ export function BottomNav() {
 
   return (
     <nav className="bottom-nav" aria-label="Navigacija">
-      {NAV_ITEMS.map(({ to, icon, labelKey }) => (
+      {NAV_ITEMS.map(({ to, Icon, labelKey }) => (
         <NavLink
           key={to}
           to={to}
@@ -24,7 +25,7 @@ export function BottomNav() {
             `bottom-nav__item ${isActive ? 'bottom-nav__item--active' : ''}`
           }
         >
-          <span className="bottom-nav__icon" aria-hidden="true">{icon}</span>
+          <Icon size={22} strokeWidth={1.75} className="bottom-nav__icon" />
           <span className="bottom-nav__label">{t(labelKey)}</span>
         </NavLink>
       ))}

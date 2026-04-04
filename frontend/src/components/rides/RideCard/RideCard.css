@@ -228,29 +228,34 @@
   margin-left: var(--space-1);
 }
 
-/* --- Cena --- */
-.ride-card__price {
+/* --- Opcije (smoking, muzika...) --- */
+.ride-card__options {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
+  gap: var(--space-1);
+  flex-wrap: wrap;
 }
 
-@media (min-width: 36em) {
-  .ride-card__price {
-    align-items: flex-end;
-  }
+.ride-card__option {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--color-border);
 }
 
-.ride-card__price-amount {
-  font-size: var(--font-size-xl);
-  font-weight: var(--font-weight-bold);
+.ride-card__option--active {
+  background-color: rgba(78, 159, 61, 0.1);
+  border-color: var(--color-primary);
   color: var(--color-primary);
-  line-height: 1.2;
 }
 
-.ride-card__price-label {
-  font-size: var(--font-size-xs);
+.ride-card__option--inactive {
+  background-color: var(--color-bg-input);
   color: var(--color-text-muted);
+  opacity: 0.6;
 }
 
 /* --- Join dugme --- */

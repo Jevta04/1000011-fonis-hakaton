@@ -1,44 +1,46 @@
 /* ============================================================
-   LOGIN FORM
+   SIGNUP FORM
    ============================================================ */
 
-.login-form-wrapper {
+.signup-form-wrapper {
   width: 100%;
   max-width: 26rem;
   margin-inline: auto;
   display: flex;
   flex-direction: column;
-  gap: var(--space-6);
+  gap: var(--space-5);
 }
 
 /* --- Header --- */
-.login-form__header {
+.signup-form__header {
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--space-3);
+  gap: var(--space-2);
 }
 
-.login-form__logo {
-  font-size: 3rem;
-  line-height: 1;
+.signup-form__logo-icon {
+  color: var(--color-primary);
   filter: drop-shadow(0 0.25rem 0.5rem rgba(78, 159, 61, 0.3));
 }
 
-.login-form__title {
+.signup-form__title {
   font-size: var(--font-size-2xl);
   font-weight: var(--font-weight-bold);
   color: var(--color-text);
 }
 
-.login-form__subtitle {
+.signup-form__subtitle {
   font-size: var(--font-size-sm);
   color: var(--color-text-muted);
 }
 
 /* --- Server greška --- */
-.login-form__server-error {
+.signup-form__server-error {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
   padding: var(--space-3) var(--space-4);
   background-color: var(--color-error-bg);
   border: 1px solid var(--color-error);
@@ -46,43 +48,30 @@
   color: var(--color-error);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
-  animation: fadeIn var(--transition-fast) ease;
 }
 
 /* --- Forma --- */
-.login-form {
+.signup-form {
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
 }
 
-/* --- Zaboravljena lozinka --- */
-.login-form__forgot {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: calc(-1 * var(--space-2));
+/* --- Red sa dva input-a --- */
+.signup-form__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
 }
 
-.login-form__forgot-link {
-  font-size: var(--font-size-sm);
-  color: var(--color-primary);
-  text-decoration: none;
-  transition: color var(--transition-fast);
-}
-
-.login-form__forgot-link:hover {
-  color: var(--color-primary-dark);
-  text-decoration: underline;
-}
-
-.login-form__switch {
+/* --- Switch link --- */
+.signup-form__switch {
   text-align: center;
   font-size: var(--font-size-sm);
   color: var(--color-text-muted);
-  margin-top: var(--space-2);
 }
 
-.login-form__switch-btn {
+.signup-form__switch-btn {
   color: var(--color-primary);
   font-weight: var(--font-weight-semibold);
   font-size: var(--font-size-sm);
@@ -93,6 +82,6 @@
   transition: color var(--transition-fast);
 }
 
-.login-form__switch-btn:hover {
+.signup-form__switch-btn:hover {
   color: var(--color-primary-dark);
 }

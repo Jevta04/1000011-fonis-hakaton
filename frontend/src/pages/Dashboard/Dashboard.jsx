@@ -1,51 +1,15 @@
 import { useState, useEffect } from 'react';
+import { Car, ArrowRight } from 'lucide-react';
 import { useTranslation } from '../../hooks/useTranslation';
 import { SearchForm }  from '../../components/rides/SearchForm/SearchForm';
 import { RideCard }    from '../../components/rides/RideCard/RideCard';
 import { getAvailableRides, joinRide } from '../../services/apiService';
 import './Dashboard.css';
 
-// Mock podaci za prikaz dok nema backend-a
 const MOCK_RIDES = [
-  {
-    id: 1,
-    from: 'Beograd',
-    to: 'Novi Sad',
-    date: '2026-04-10',
-    time: '07:30',
-    seats: 3,
-    price: 500,
-    driver: 'Marko Petrović',
-    avatar: 'M',
-    duration: '1h 15min',
-    vehicle: 'Škoda Octavia',
-  },
-  {
-    id: 2,
-    from: 'Novi Sad',
-    to: 'Beograd',
-    date: '2026-04-10',
-    time: '16:00',
-    seats: 1,
-    price: 500,
-    driver: 'Ana Jovanović',
-    avatar: 'A',
-    duration: '1h 20min',
-    vehicle: 'Toyota Corolla',
-  },
-  {
-    id: 3,
-    from: 'Beograd',
-    to: 'Niš',
-    date: '2026-04-11',
-    time: '06:45',
-    seats: 0,
-    price: 1200,
-    driver: 'Nikola Nikolić',
-    avatar: 'N',
-    duration: '2h 30min',
-    vehicle: 'BMW Serija 3',
-  },
+  { id: 1, mestoOd: 'Bežanijska kosa', mestoDo: 'Novi Beograd (Ušće)', datumVreme: '2026-04-10T07:30:00', seats: 3, driver: 'Marko Petrović',  avatar: 'M', vehicle: 'Škoda Octavia',  smoking: false, music: true,  airCondition: true,  pets: false },
+  { id: 2, mestoOd: 'Zemun centar',    mestoDo: 'Savski venac',        datumVreme: '2026-04-10T08:00:00', seats: 1, driver: 'Ana Jovanović',   avatar: 'A', vehicle: 'Toyota Corolla', smoking: false, music: false, airCondition: true,  pets: true  },
+  { id: 3, mestoOd: 'Voždovac',        mestoDo: 'Novi Beograd (Ušće)', datumVreme: '2026-04-11T07:15:00', seats: 0, driver: 'Nikola Nikolić',  avatar: 'N', vehicle: 'BMW Serija 3',   smoking: true,  music: true,  airCondition: false, pets: false },
 ];
 
 export function Dashboard() {
@@ -64,32 +28,26 @@ export function Dashboard() {
         const response = await getAvailableRides({ limit: 5 });
         setRides(response.data?.data || response.data || []);
       } catch {
-        // Ako API nije dostupan, prikaži mock podatke
         setRides(MOCK_RIDES);
       } finally {
         setLoading(false);
       }
     };
-
     fetchRides();
   }, []);
 
   const handleJoin = async (rideId) => {
     try {
       await joinRide(rideId);
-      setRides((prev) =>
-        prev.map((r) =>
-          r.id === rideId ? { ...r, seats: r.seats - 1 } : r
-        )
-      );
+      setRides((prev) => prev.map((r) => r.id === rideId ? { ...r, seats: r.seats - 1 } : r));
     } catch (err) {
-      console.error('Greška pri prijavi:', err);
+      console.error(err);
     }
   };
 
   return (
     <div className="dashboard page-enter">
-      {/* Hero sekcija sa pretragom */}
+      {/* Hero */}
       <section className="dashboard__hero">
         <div className="container">
           <div className="dashboard__hero-text">
@@ -98,40 +56,35 @@ export function Dashboard() {
             </h1>
             <p className="dashboard__tagline">{t('tagline')}</p>
           </div>
-
           <div className="dashboard__search-card">
             <SearchForm />
           </div>
         </div>
       </section>
 
-      {/* Dostupne vožnje */}
+      {/* Vožnje */}
       <section className="dashboard__rides">
         <div className="container">
           <div className="dashboard__section-header">
             <h2 className="dashboard__section-title">{t('available_rides')}</h2>
-            <a href="/search" className="dashboard__view-all">{t('view_all')}</a>
+            <a href="/search" className="dashboard__view-all">
+              {t('view_all')} <ArrowRight size={14} />
+            </a>
           </div>
 
           {loading ? (
-            <div className="dashboard__loading" role="status">
-              {[1, 2, 3].map((i) => (
-                <div key={i} className="dashboard__skeleton" aria-hidden="true" />
-              ))}
+            <div className="dashboard__loading">
+              {[1, 2, 3].map((i) => <div key={i} className="dashboard__skeleton" aria-hidden="true" />)}
             </div>
           ) : rides.length === 0 ? (
             <div className="dashboard__empty">
-              <span aria-hidden="true">🚗</span>
+              <Car size={48} strokeWidth={1} />
               <p>{t('no_rides_found')}</p>
             </div>
           ) : (
             <div className="dashboard__rides-list">
               {rides.map((ride) => (
-                <RideCard
-                  key={ride.id}
-                  {...ride}
-                  onJoin={() => handleJoin(ride.id)}
-                />
+                <RideCard key={ride.id} {...ride} onJoin={() => handleJoin(ride.id)} />
               ))}
             </div>
           )}

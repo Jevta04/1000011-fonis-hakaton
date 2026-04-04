@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { MapPin, Flag, Calendar, Users, Search as SearchIcon, ArrowRight } from 'lucide-react';
 import { useTranslation } from '../../../hooks/useTranslation';
 import { Input }  from '../../common/Input/Input';
 import { Button } from '../../common/Button/Button';
@@ -9,12 +10,7 @@ export function SearchForm({ onSearch, compact = false }) {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
-  const [form, setForm] = useState({
-    from:  '',
-    to:    '',
-    date:  '',
-    seats: '1',
-  });
+  const [form, setForm] = useState({ mestoOd: '', mestoDo: '', date: '', seats: '1' });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -23,48 +19,37 @@ export function SearchForm({ onSearch, compact = false }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const params = new URLSearchParams(form).toString();
-
-    if (onSearch) {
-      onSearch(form);
-    } else {
-      navigate(`/search?${params}`);
-    }
+    if (onSearch) onSearch(form);
+    else navigate(`/search?${new URLSearchParams(form).toString()}`);
   };
 
   return (
-    <form
-      className={`search-form ${compact ? 'search-form--compact' : ''}`}
-      onSubmit={handleSubmit}
-      aria-label={t('find_ride')}
-    >
+    <form className={`search-form ${compact ? 'search-form--compact' : ''}`} onSubmit={handleSubmit}>
       <div className="search-form__fields">
-        {/* Polazište */}
         <Input
-          name="from"
+          name="mestoOd"
           label={!compact ? t('from') : undefined}
           placeholder={t('from_placeholder')}
-          value={form.from}
+          value={form.mestoOd}
           onChange={handleChange}
-          icon="📍"
+          icon={<MapPin size={16} />}
           required
         />
 
-        {/* Strelica smera (dekorativna) */}
-        <div className="search-form__arrow" aria-hidden="true">→</div>
+        <div className="search-form__arrow" aria-hidden="true">
+          <ArrowRight size={18} strokeWidth={2} />
+        </div>
 
-        {/* Odredište */}
         <Input
-          name="to"
+          name="mestoDo"
           label={!compact ? t('to') : undefined}
           placeholder={t('to_placeholder')}
-          value={form.to}
+          value={form.mestoDo}
           onChange={handleChange}
-          icon="🏁"
+          icon={<Flag size={16} />}
           required
         />
 
-        {/* Datum */}
         <Input
           name="date"
           type="date"
@@ -72,19 +57,16 @@ export function SearchForm({ onSearch, compact = false }) {
           value={form.date}
           onChange={handleChange}
           min={new Date().toISOString().split('T')[0]}
-          icon="📅"
+          icon={<Calendar size={16} />}
           required
         />
 
-        {/* Broj mesta */}
         <div className="search-form__select-group">
           {!compact && (
-            <label htmlFor="seats-select" className="search-form__label">
-              {t('seats')}
-            </label>
+            <label htmlFor="seats-select" className="search-form__label">{t('seats')}</label>
           )}
           <div className="search-form__select-wrapper">
-            <span className="search-form__select-icon" aria-hidden="true">👥</span>
+            <span className="search-form__select-icon"><Users size={16} /></span>
             <select
               id="seats-select"
               name="seats"
@@ -102,8 +84,8 @@ export function SearchForm({ onSearch, compact = false }) {
         </div>
       </div>
 
-      <Button type="submit" variant="primary" size={compact ? 'md' : 'lg'} fullWidth>
-        🔍 {t('search')}
+      <Button type="submit" variant="primary" size={compact ? 'md' : 'lg'} fullWidth icon={<SearchIcon size={16} />}>
+        {t('search')}
       </Button>
     </form>
   );

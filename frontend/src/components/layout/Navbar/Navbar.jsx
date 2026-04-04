@@ -1,8 +1,13 @@
 import { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
+import {
+  Car, LogOut, Menu, X,
+} from 'lucide-react';
 import { useTheme }       from '../../../hooks/useTheme';
 import { useTranslation } from '../../../hooks/useTranslation';
 import { logout }         from '../../../services/apiService';
+import { ThemeSwitch }    from '../../ThemeSwitch/ThemeSwitch';
+import { LocaleSwitch }   from '../../LocaleSwitch/LocaleSwitch';
 import './Navbar.css';
 
 export function Navbar() {
@@ -38,7 +43,7 @@ export function Navbar() {
       <div className="navbar__inner container">
         {/* Logo */}
         <NavLink to="/" className="navbar__logo">
-          <span className="navbar__logo-icon">🚗</span>
+          <Car size={22} strokeWidth={2} />
           <span className="navbar__logo-text">{t('app_name')}</span>
         </NavLink>
 
@@ -58,29 +63,13 @@ export function Navbar() {
           ))}
         </nav>
 
-        {/* Desna strana: kontrole */}
+        {/* Desna strana */}
         <div className="navbar__controls">
-          {/* Language toggle */}
-          <button
-            className="navbar__control-btn"
-            onClick={toggleLocale}
-            aria-label={t('language')}
-            title={locale === 'sr' ? 'Switch to English' : 'Promeni na srpski'}
-          >
-            <span className="navbar__lang-flag">
-              {locale === 'sr' ? '🇷🇸 SR' : '🇬🇧 EN'}
-            </span>
-          </button>
+          {/* Locale toggle */}
+          <LocaleSwitch locale={locale} onToggle={toggleLocale} />
 
           {/* Theme toggle */}
-          <button
-            className="navbar__control-btn"
-            onClick={toggleTheme}
-            aria-label={isDark ? t('theme_light') : t('theme_dark')}
-            title={isDark ? t('theme_light') : t('theme_dark')}
-          >
-            {isDark ? '☀️' : '🌙'}
-          </button>
+          <ThemeSwitch isDark={isDark} onToggle={toggleTheme} />
 
           {/* Avatar + Logout */}
           <div className="navbar__user">
@@ -92,23 +81,23 @@ export function Navbar() {
               onClick={handleLogout}
               title={t('logout')}
             >
-              ⎋
+              <LogOut size={15} />
             </button>
           </div>
 
-          {/* Hamburger (mobile/tablet) */}
+          {/* Hamburger */}
           <button
-            className={`navbar__hamburger ${menuOpen ? 'navbar__hamburger--open' : ''}`}
+            className="navbar__hamburger"
             onClick={() => setMenuOpen(!menuOpen)}
             aria-label="Meni"
             aria-expanded={menuOpen}
           >
-            <span /><span /><span />
+            {menuOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
         </div>
       </div>
 
-      {/* Mobile dropdown meni */}
+      {/* Mobile dropdown */}
       {menuOpen && (
         <nav className="navbar__mobile-menu" aria-label="Mobilna navigacija">
           {navLinks.map(({ to, label }) => (
@@ -125,6 +114,7 @@ export function Navbar() {
             </NavLink>
           ))}
           <button className="navbar__mobile-logout" onClick={handleLogout}>
+            <LogOut size={15} />
             {t('nav_logout')}
           </button>
         </nav>

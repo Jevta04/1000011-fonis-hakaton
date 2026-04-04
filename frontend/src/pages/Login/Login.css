@@ -15,12 +15,11 @@
   transition: background-color var(--transition-normal);
 }
 
-/* --- Dekorativni zeleni krugovi u pozadini --- */
 .login-page__bg-shape {
   position: absolute;
   border-radius: var(--radius-full);
   pointer-events: none;
-  opacity: 0.08;
+  opacity: 0.07;
 }
 
 .login-page__bg-shape--1 {
@@ -39,7 +38,7 @@
   left: -8rem;
 }
 
-/* --- Kontrole (tema + jezik) --- */
+/* --- Kontrole --- */
 .login-page__controls {
   position: fixed;
   top: var(--space-4);
@@ -53,6 +52,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: var(--space-1);
   padding: var(--space-2) var(--space-3);
   border-radius: var(--radius-full);
   background-color: var(--color-bg-card);
@@ -62,15 +62,11 @@
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-semibold);
   color: var(--color-text);
-  transition:
-    background-color var(--transition-fast),
-    box-shadow       var(--transition-fast),
-    transform        var(--transition-fast);
+  transition: background-color var(--transition-fast), transform var(--transition-fast);
 }
 
 .login-page__control-btn:hover {
   background-color: var(--color-accent);
-  box-shadow: var(--shadow-md);
   transform: translateY(-1px);
 }
 
@@ -79,20 +75,58 @@
   position: relative;
   z-index: 1;
   width: 100%;
-  max-width: 26rem;
+  max-width: 28rem;
   background-color: var(--color-bg-card);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-2xl);
-  padding: var(--space-8) var(--space-6);
   box-shadow: var(--shadow-lg);
+  overflow: hidden;
   transition: background-color var(--transition-normal);
+}
+
+/* --- Tabovi --- */
+.login-page__tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.login-page__tab {
+  padding: var(--space-4);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: color var(--transition-fast), background-color var(--transition-fast);
+  margin-bottom: -1px;
+}
+
+.login-page__tab:hover {
+  color: var(--color-primary);
+  background-color: var(--color-bg-input);
+}
+
+.login-page__tab--active {
+  color: var(--color-primary);
+  border-bottom-color: var(--color-primary);
+  background-color: var(--color-bg-card);
+}
+
+/* --- Sadržaj taba --- */
+.login-page__tab-content {
+  padding: var(--space-6);
+  max-height: 85vh;
+  overflow-y: auto;
 }
 
 /* --- Footer --- */
 .login-page__footer {
   position: relative;
   z-index: 1;
-  margin-top: var(--space-6);
+  margin-top: var(--space-5);
 }
 
 .login-page__footer-text {

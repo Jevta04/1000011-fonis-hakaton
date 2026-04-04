@@ -5,7 +5,7 @@ import axios from 'axios';
    baseURL se proxy-uje na Laravel backend (vite.config.js)
    ============================================================ */
 const api = axios.create({
-  baseURL: '/api',
+  baseURL: 'http://localhost:8000/api',
   timeout: 15000,
   headers: {
     'Content-Type': 'application/json',
@@ -61,9 +61,15 @@ export const login = (email, password) =>
 export const logout = () =>
   api.post('/auth/logout');
 
-/** POST /auth/register */
-export const register = (data) =>
-  api.post('/auth/register', data);
+/**
+ * POST /auth/register
+ * Šalje FormData (multipart) zbog opcione slike.
+ * @param {FormData} formData – ime, prezime, email, password, broj_telefona, uloga, slika?
+ */
+export const register = (formData) =>
+  api.post('/register', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  });
 
 /* ============================================================
    RIDES (VOŽNJE) ENDPOINTS
@@ -71,20 +77,19 @@ export const register = (data) =>
 
 /**
  * GET /rides
- * @param {Object} params – query parametri: from, to, date, seats
+ * @param {Object} params – mestoOd, mestoDo, date, seats
  */
 export const getAvailableRides = (params = {}) =>
   api.get('/rides', { params });
 
-/**
- * GET /rides/:id
- */
+/** GET /rides/:id */
 export const getRideById = (id) =>
   api.get(`/rides/${id}`);
 
 /**
  * POST /rides
- * @param {Object} data – { from, to, date, time, seats, price, vehicle_id }
+ * @param {Object} data – { mestoOd, mestoDo, datumVreme, seats, smoking, music,
+ *                          airCondition, pets, luggage, vozilo: { broj_tablica, marka, boja } }
  */
 export const publishRide = (data) =>
   api.post('/rides', data);
