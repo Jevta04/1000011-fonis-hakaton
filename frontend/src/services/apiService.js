@@ -30,10 +30,9 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      // Token istekao ili nevalidan – odjavi korisnika
+      // Token istekao ili nevalidan – obriši lokalno, PrivateRoute radi redirect
       localStorage.removeItem('token');
       localStorage.removeItem('user');
-      window.location.href = '/login';
     }
 
     if (error.response?.status === 403) {

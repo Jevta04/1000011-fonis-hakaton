@@ -13,12 +13,21 @@ class Voznja extends Model
         'mestoOd',
         'mestoDo',
         'datumVreme',
-        'smoking'
+        'smoking',
+        'muzika',
+        'klima',
+        'brojTablica',
+        'marka',
+        'boja',
+        'seats',
     ];
 
     protected $casts = [
-        'datumVreme'=>'datetime',
-        'smoking'=>'boolean'
+        'datumVreme'  => 'datetime',
+        'smoking'     => 'boolean',
+        'muzika'      => 'boolean',
+        'klima'       => 'boolean',
+        'seats'       => 'integer',
     ];
 
 
