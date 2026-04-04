@@ -1,0 +1,102 @@
+/* ============================================================
+   LOGIN PAGE
+   ============================================================ */
+
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-bg);
+  padding: var(--space-6) var(--space-4);
+  position: relative;
+  overflow: hidden;
+  transition: background-color var(--transition-normal);
+}
+
+/* --- Dekorativni zeleni krugovi u pozadini --- */
+.login-page__bg-shape {
+  position: absolute;
+  border-radius: var(--radius-full);
+  pointer-events: none;
+  opacity: 0.08;
+}
+
+.login-page__bg-shape--1 {
+  width: 30rem;
+  height: 30rem;
+  background-color: var(--color-primary);
+  top: -10rem;
+  right: -10rem;
+}
+
+.login-page__bg-shape--2 {
+  width: 20rem;
+  height: 20rem;
+  background-color: var(--color-primary-dark);
+  bottom: -8rem;
+  left: -8rem;
+}
+
+/* --- Kontrole (tema + jezik) --- */
+.login-page__controls {
+  position: fixed;
+  top: var(--space-4);
+  right: var(--space-4);
+  z-index: 50;
+  display: flex;
+  gap: var(--space-2);
+}
+
+.login-page__control-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-full);
+  background-color: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+  transition:
+    background-color var(--transition-fast),
+    box-shadow       var(--transition-fast),
+    transform        var(--transition-fast);
+}
+
+.login-page__control-btn:hover {
+  background-color: var(--color-accent);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+/* --- Kartica --- */
+.login-page__card {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 26rem;
+  background-color: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-2xl);
+  padding: var(--space-8) var(--space-6);
+  box-shadow: var(--shadow-lg);
+  transition: background-color var(--transition-normal);
+}
+
+/* --- Footer --- */
+.login-page__footer {
+  position: relative;
+  z-index: 1;
+  margin-top: var(--space-6);
+}
+
+.login-page__footer-text {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  text-align: center;
+}

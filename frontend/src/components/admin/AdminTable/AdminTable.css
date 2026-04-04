@@ -1,0 +1,145 @@
+/* ============================================================
+   ADMIN TABLE
+   Responsive: horizontal scroll na mobile
+   ============================================================ */
+
+.admin-table-wrapper {
+  background-color: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition: background-color var(--transition-normal);
+}
+
+/* Horizontal scroll kontejner */
+.admin-table-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--font-size-sm);
+  white-space: nowrap;
+}
+
+/* --- Header --- */
+.admin-table__th {
+  padding: var(--space-4) var(--space-5);
+  text-align: left;
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-muted);
+  background-color: var(--color-bg-input);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.admin-table__th--actions {
+  text-align: right;
+  min-width: 10rem;
+}
+
+/* --- Rows --- */
+.admin-table__row {
+  border-bottom: 1px solid var(--color-border);
+  transition: background-color var(--transition-fast);
+}
+
+.admin-table__row:last-child {
+  border-bottom: none;
+}
+
+.admin-table__row:hover {
+  background-color: var(--color-bg-input);
+}
+
+.admin-table__td {
+  padding: var(--space-4) var(--space-5);
+  color: var(--color-text);
+  vertical-align: middle;
+}
+
+.admin-table__td--actions {
+  text-align: right;
+}
+
+/* --- Action dugmad --- */
+.admin-table__action {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+  border: none;
+  transition: background-color var(--transition-fast), transform var(--transition-fast);
+}
+
+.admin-table__action:active {
+  transform: scale(0.96);
+}
+
+.admin-table__action--approve {
+  background-color: var(--color-success-bg);
+  color: var(--color-success);
+  margin-right: var(--space-2);
+}
+
+.admin-table__action--approve:hover {
+  background-color: var(--color-success);
+  color: #fff;
+}
+
+.admin-table__action--delete {
+  background-color: var(--color-error-bg);
+  color: var(--color-error);
+}
+
+.admin-table__action--delete:hover {
+  background-color: var(--color-error);
+  color: #fff;
+}
+
+/* --- Loading state --- */
+.admin-table__loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  padding: var(--space-10);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.admin-table__spinner {
+  width: 1.25rem;
+  height: 1.25rem;
+  border: 2px solid var(--color-border);
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  animation: btn-spin 0.7s linear infinite;
+  flex-shrink: 0;
+}
+
+/* --- Empty state --- */
+.admin-table__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  padding: var(--space-12);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.admin-table__empty span {
+  font-size: 2.5rem;
+  opacity: 0.5;
+}

@@ -1,0 +1,153 @@
+/* ============================================================
+   DASHBOARD PAGE
+   ============================================================ */
+
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+/* --- Hero sekcija --- */
+.dashboard__hero {
+  background: linear-gradient(
+    135deg,
+    var(--color-primary-dark) 0%,
+    var(--color-primary) 100%
+  );
+  padding: var(--space-10) 0 var(--space-12);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Dekorativni krug u pozadini heroja */
+.dashboard__hero::before {
+  content: '';
+  position: absolute;
+  top: -5rem;
+  right: -5rem;
+  width: 20rem;
+  height: 20rem;
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.05);
+  pointer-events: none;
+}
+
+.dashboard__hero .container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+/* --- Hero tekst --- */
+.dashboard__hero-text {
+  color: #fff;
+}
+
+.dashboard__greeting {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  color: #fff;
+  line-height: var(--line-height-tight);
+}
+
+@media (min-width: 48em) {
+  .dashboard__greeting {
+    font-size: var(--font-size-3xl);
+  }
+}
+
+.dashboard__name {
+  color: var(--color-accent);
+}
+
+.dashboard__tagline {
+  margin-top: var(--space-2);
+  font-size: var(--font-size-base);
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* --- Search card (izlazi malo ispod heroja) --- */
+.dashboard__search-card {
+  position: relative;
+  margin-bottom: calc(-1 * var(--space-8));
+  z-index: 2;
+}
+
+/* --- Rides sekcija --- */
+.dashboard__rides {
+  padding-top: var(--space-10);
+}
+
+.dashboard__section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-5);
+}
+
+.dashboard__section-title {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+}
+
+.dashboard__view-all {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.dashboard__view-all:hover {
+  color: var(--color-primary-dark);
+  text-decoration: underline;
+}
+
+/* --- Lista vožnji --- */
+.dashboard__rides-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+/* --- Loading skeleton --- */
+.dashboard__loading {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.dashboard__skeleton {
+  height: 10rem;
+  background: linear-gradient(
+    90deg,
+    var(--color-bg-input) 25%,
+    var(--color-border) 50%,
+    var(--color-bg-input) 75%
+  );
+  background-size: 200% 100%;
+  border-radius: var(--radius-xl);
+  animation: skeleton-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes skeleton-pulse {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* --- Empty state --- */
+.dashboard__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-12) 0;
+  color: var(--color-text-muted);
+}
+
+.dashboard__empty span {
+  font-size: 3rem;
+  opacity: 0.5;
+}

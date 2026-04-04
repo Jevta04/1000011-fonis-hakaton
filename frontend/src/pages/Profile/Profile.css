@@ -1,0 +1,183 @@
+/* ============================================================
+   PROFILE PAGE
+   ============================================================ */
+
+.profile {
+  padding-block: var(--space-4);
+}
+
+.profile .container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+/* --- Profil kartica --- */
+.profile__card {
+  background-color: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-2xl);
+  padding: var(--space-8) var(--space-6);
+  box-shadow: var(--shadow-md);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-5);
+  text-align: center;
+  transition: background-color var(--transition-normal);
+}
+
+@media (min-width: 48em) {
+  .profile__card {
+    flex-direction: row;
+    text-align: left;
+    align-items: flex-start;
+    gap: var(--space-8);
+  }
+}
+
+/* --- Avatar --- */
+.profile__avatar {
+  width: 5rem;
+  height: 5rem;
+  border-radius: var(--radius-full);
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  flex-shrink: 0;
+  box-shadow: 0 0.25rem 1rem rgba(78, 159, 61, 0.35);
+}
+
+/* --- Info --- */
+.profile__info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.profile__name {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+}
+
+.profile__email,
+.profile__company {
+  font-size: var(--font-size-sm);
+}
+
+/* --- Stats --- */
+.profile__stats {
+  display: flex;
+  gap: var(--space-6);
+  flex-shrink: 0;
+}
+
+@media (min-width: 48em) {
+  .profile__stats {
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+}
+
+.profile__stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+@media (min-width: 48em) {
+  .profile__stat {
+    align-items: flex-end;
+  }
+}
+
+.profile__stat-value {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary);
+  line-height: 1;
+}
+
+.profile__stat-label {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+/* --- Istorija --- */
+.profile__history-title {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+  margin-bottom: var(--space-4);
+}
+
+/* --- Tabovi --- */
+.profile__tabs {
+  display: flex;
+  gap: var(--space-2);
+  margin-bottom: var(--space-5);
+  border-bottom: 2px solid var(--color-border);
+  padding-bottom: 0;
+}
+
+.profile__tab {
+  padding: var(--space-2) var(--space-4);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-muted);
+  border: none;
+  background: none;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  transition: color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.profile__tab:hover {
+  color: var(--color-primary);
+}
+
+.profile__tab--active {
+  color: var(--color-primary);
+  font-weight: var(--font-weight-semibold);
+  border-bottom-color: var(--color-primary);
+}
+
+/* --- Lista vožnji --- */
+.profile__rides-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+/* --- Skeleton --- */
+.profile__skeleton {
+  height: 16rem;
+  background: linear-gradient(90deg, var(--color-bg-input) 25%, var(--color-border) 50%, var(--color-bg-input) 75%);
+  background-size: 200% 100%;
+  border-radius: var(--radius-2xl);
+  animation: skeleton-pulse 1.5s ease-in-out infinite;
+}
+
+/* --- Empty --- */
+.profile__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-10) 0;
+  color: var(--color-text-muted);
+}
+
+.profile__empty span {
+  font-size: 2.5rem;
+  opacity: 0.5;
+}

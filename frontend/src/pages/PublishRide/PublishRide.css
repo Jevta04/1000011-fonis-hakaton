@@ -1,0 +1,211 @@
+/* ============================================================
+   PUBLISH RIDE PAGE – Multi-step forma
+   ============================================================ */
+
+.publish-ride {
+  padding-block: var(--space-4);
+}
+
+.publish-ride__title {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+  margin-bottom: var(--space-6);
+}
+
+/* --- Step indikator --- */
+.publish-ride__steps {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin-bottom: var(--space-8);
+  position: relative;
+}
+
+.publish-ride__steps::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: var(--color-border);
+  z-index: 0;
+  transform: translateY(-50%);
+}
+
+.publish-ride__step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  flex: 1;
+  position: relative;
+  z-index: 1;
+}
+
+.publish-ride__step-num {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-sm);
+  background-color: var(--color-bg-input);
+  border: 2px solid var(--color-border);
+  color: var(--color-text-muted);
+  transition: all var(--transition-normal);
+}
+
+.publish-ride__step--active .publish-ride__step-num {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #fff;
+  box-shadow: 0 0 0 4px rgba(78, 159, 61, 0.2);
+}
+
+.publish-ride__step--done .publish-ride__step-num {
+  background-color: var(--color-success);
+  border-color: var(--color-success);
+  color: #fff;
+}
+
+.publish-ride__step-label {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+.publish-ride__step--active .publish-ride__step-label {
+  color: var(--color-primary);
+  font-weight: var(--font-weight-semibold);
+}
+
+/* --- Kartica sa formom --- */
+.publish-ride__card {
+  background-color: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-2xl);
+  padding: var(--space-6);
+  box-shadow: var(--shadow-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  max-width: 40rem;
+  transition: background-color var(--transition-normal);
+}
+
+/* --- Polja --- */
+.publish-ride__fields {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.publish-ride__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+}
+
+/* --- Textarea --- */
+.publish-ride__label {
+  display: block;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+  margin-bottom: var(--space-2);
+}
+
+.publish-ride__textarea-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.publish-ride__textarea {
+  padding: var(--space-3) var(--space-4);
+  background-color: var(--color-bg-input);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  font-size: var(--font-size-base);
+  color: var(--color-text);
+  resize: vertical;
+  font-family: var(--font-family);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  outline: none;
+}
+
+.publish-ride__textarea:focus {
+  border-color: var(--color-border-focus);
+  box-shadow: 0 0 0 3px rgba(78, 159, 61, 0.15);
+}
+
+/* --- Summary (korak 3) --- */
+.publish-ride__summary {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.publish-ride__summary-title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+}
+
+.publish-ride__summary-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.publish-ride__summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.publish-ride__summary-row:last-child {
+  border-bottom: none;
+}
+
+.publish-ride__summary-label {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+.publish-ride__summary-value {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+}
+
+.publish-ride__notes {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  font-style: italic;
+  padding: var(--space-3) var(--space-4);
+  background-color: var(--color-bg-input);
+  border-radius: var(--radius-md);
+}
+
+/* --- Akcioni buttons --- */
+.publish-ride__actions {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--color-border);
+}
+
+.publish-ride__actions > *:only-child {
+  margin-left: auto;
+}

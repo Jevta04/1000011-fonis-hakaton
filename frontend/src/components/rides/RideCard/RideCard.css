@@ -1,0 +1,284 @@
+/* ============================================================
+   RIDE CARD – kartica vožnje (BlaBlaCar stil)
+   Mobile-first, responsive
+   ============================================================ */
+
+.ride-card {
+  background-color: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: var(--space-5);
+  box-shadow: var(--shadow-sm);
+  transition:
+    box-shadow      var(--transition-fast),
+    border-color    var(--transition-fast),
+    background-color var(--transition-normal);
+  width: 100%;
+}
+
+.ride-card:hover {
+  box-shadow: var(--shadow-md);
+  border-color: var(--color-primary);
+}
+
+.ride-card--full {
+  opacity: 0.7;
+}
+
+.ride-card--full:hover {
+  border-color: var(--color-border);
+  box-shadow: var(--shadow-sm);
+}
+
+.ride-card--compact {
+  padding: var(--space-4);
+}
+
+/* --- Ruta --- */
+.ride-card__route {
+  margin-bottom: var(--space-4);
+}
+
+.ride-card__route-stops {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.ride-card__stop {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  position: relative;
+}
+
+/* Tačke (●) */
+.ride-card__dot {
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
+  margin-top: 0.25rem;
+  position: relative;
+  z-index: 1;
+}
+
+.ride-card__dot--start {
+  background-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(78, 159, 61, 0.2);
+}
+
+.ride-card__dot--end {
+  background-color: var(--color-primary-dark);
+  border: 2px solid var(--color-primary);
+  width: 0.75rem;
+  height: 0.75rem;
+  box-sizing: border-box;
+}
+
+/* Vertikalna linija između tačaka */
+.ride-card__line-wrapper {
+  display: flex;
+  align-items: center;
+  padding-left: 0.3125rem; /* 5px – centrira liniju ispod dot-a */
+  gap: var(--space-2);
+  height: 2rem;
+}
+
+.ride-card__line {
+  width: 2px;
+  height: 100%;
+  background: linear-gradient(
+    to bottom,
+    var(--color-primary) 0%,
+    var(--color-primary-dark) 100%
+  );
+  border-radius: 1px;
+  flex-shrink: 0;
+}
+
+.ride-card__duration {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  padding: var(--space-1) var(--space-2);
+  background-color: var(--color-bg-input);
+  border-radius: var(--radius-full);
+  white-space: nowrap;
+}
+
+/* Tekst uz tačke */
+.ride-card__stop-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.ride-card__city {
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-base);
+  color: var(--color-text);
+}
+
+.ride-card__time {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-primary);
+}
+
+.ride-card__time--muted {
+  color: var(--color-text-muted);
+  font-weight: var(--font-weight-regular);
+}
+
+/* --- Razdvajač --- */
+.ride-card__divider {
+  height: 1px;
+  background-color: var(--color-border);
+  margin-bottom: var(--space-4);
+}
+
+/* --- Footer --- */
+.ride-card__footer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+@media (min-width: 36em) {
+  .ride-card__footer {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+/* --- Vozač --- */
+.ride-card__driver {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.ride-card__avatar {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: var(--radius-full);
+  background-color: var(--color-primary);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-sm);
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.ride-card__avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ride-card__driver-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.ride-card__driver-name {
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-sm);
+  color: var(--color-text);
+}
+
+.ride-card__vehicle {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+/* --- Meta (mesta + cena + dugme) --- */
+.ride-card__meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-3);
+}
+
+@media (min-width: 36em) {
+  .ride-card__meta {
+    align-items: flex-end;
+  }
+}
+
+.ride-card__seats {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.ride-card__seat-icon {
+  font-size: var(--font-size-sm);
+  opacity: 0.8;
+}
+
+.ride-card__seats-count {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  margin-left: var(--space-1);
+}
+
+/* --- Cena --- */
+.ride-card__price {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+@media (min-width: 36em) {
+  .ride-card__price {
+    align-items: flex-end;
+  }
+}
+
+.ride-card__price-amount {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary);
+  line-height: 1.2;
+}
+
+.ride-card__price-label {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+/* --- Join dugme --- */
+.ride-card__join-btn {
+  padding: var(--space-2) var(--space-5);
+  border-radius: var(--radius-lg);
+  background-color: var(--color-primary);
+  color: #fff;
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-sm);
+  border: none;
+  cursor: pointer;
+  transition:
+    background-color var(--transition-fast),
+    transform        var(--transition-fast),
+    box-shadow       var(--transition-fast);
+  white-space: nowrap;
+}
+
+.ride-card__join-btn:hover:not(:disabled) {
+  background-color: var(--color-primary-hover);
+  box-shadow: 0 0.25rem 0.75rem rgba(78, 159, 61, 0.4);
+  transform: translateY(-1px);
+}
+
+.ride-card__join-btn--disabled,
+.ride-card__join-btn:disabled {
+  background-color: var(--color-border);
+  color: var(--color-text-muted);
+  cursor: not-allowed;
+}
