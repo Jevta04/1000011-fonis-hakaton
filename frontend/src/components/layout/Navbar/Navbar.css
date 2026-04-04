@@ -263,6 +263,18 @@
 @media (max-width: 768px) {
   .desktop-only { display: none !important; }
   .mobile-only { display: flex !important; }
+
+  /* Mobile controls pill */
+  .pill-nav-controls.mobile-only {
+    background: var(--base);
+    border-radius: 9999px;
+    height: var(--nav-h);
+    padding: 0 16px;
+    border: 1px solid var(--border-color);
+    border-left: 1px solid var(--border-color);
+    margin-left: 0;
+    gap: 12px;
+  }
 }
 
 .mobile-menu-button {

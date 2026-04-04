@@ -237,34 +237,14 @@ export function Navbar() {
             </div>
           </div>
 
-          <button className="mobile-menu-button mobile-only" onClick={toggleMobileMenu} ref={hamburgerRef}>
-            <span className="hamburger-line" />
-            <span className="hamburger-line" />
-          </button>
+          <div className="pill-nav-controls mobile-only">
+            <LocaleSwitch locale={locale} onToggle={toggleLocale} />
+            <ThemeSwitch isDark={isDark} onToggle={toggleTheme} />
+            <button className="pill-logout-btn" onClick={handleLogout} title={t('logout')}>
+              <LogOut size={18} />
+            </button>
+          </div>
         </nav>
-
-        <div className="mobile-menu-popover mobile-only" ref={mobileMenuRef} style={cssVars}>
-          <ul className="mobile-menu-list">
-            {navLinks.map((item) => (
-              <li key={item.to}>
-                <NavLink
-                  to={item.to}
-                  className={`mobile-menu-link ${activeHref === item.to ? 'is-active' : ''}`}
-                  onClick={() => toggleMobileMenu()}
-                >
-                  {item.label}
-                </NavLink>
-              </li>
-            ))}
-            <li className="mobile-menu-controls-row">
-              <LocaleSwitch locale={locale} onToggle={toggleLocale} />
-              <ThemeSwitch isDark={isDark} onToggle={toggleTheme} />
-              <button className="mobile-menu-logout" onClick={handleLogout}>
-                <LogOut size={16} /> {t('nav_logout') || 'Odjavi se'}
-              </button>
-            </li>
-          </ul>
-        </div>
       </div>
 
       <div className="navbar-spacer"></div>

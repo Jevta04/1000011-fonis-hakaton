@@ -71,8 +71,39 @@
   color: var(--color-text-muted);
 }
 
+/* --- Tabs row (tabs + export btn) --- */
+.admin__tabs-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.admin__export-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  background: transparent;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s;
+  margin-bottom: 2px;
+}
+
+.admin__export-btn:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
 /* --- Tabovi --- */
 .admin__tabs {
+  flex: 1;
   display: flex;
   gap: var(--space-2);
   border-bottom: 2px solid var(--color-border);
@@ -151,4 +182,14 @@
 .admin-badge--pending_approval {
   background-color: rgba(217, 119, 6, 0.1);
   color: var(--color-warning);
+}
+
+.admin-badge--admin {
+  background-color: rgba(124, 58, 237, 0.12);
+  color: #7c3aed;
+}
+
+.admin-badge--korisnik {
+  background-color: rgba(78, 159, 61, 0.12);
+  color: var(--color-primary);
 }
