@@ -302,7 +302,7 @@ class RideController extends Controller
         $vozac = $v->vozac->first();
 
         $isJoined = $currentUserId
-            ? $v->users()->where('user_id', $currentUserId)->where('uloga', 'putnik')->exists()
+            ? $v->users()->where('user_id', $currentUserId)->where('user_voznja.uloga', 'putnik')->exists()
             : false;
 
         $result = [
