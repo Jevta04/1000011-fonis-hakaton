@@ -1,248 +1,305 @@
 /* ============================================================
-   NAVBAR
+   PILL NAVBAR - FINALNA VERZIJA SA ODSTOJNIKOM I BOJAMA
    ============================================================ */
 
-.navbar {
-  position: sticky;
-  top: 0;
-  z-index: 100;
+.pill-nav-container {
+  position: fixed;
+  top: 1.5rem;
+  left: 0;
   width: 100%;
-  height: var(--navbar-height);
-  background-color: var(--color-bg-nav);
-  border-bottom: 1px solid var(--color-border);
-  box-shadow: var(--shadow-sm);
-  transition: background-color var(--transition-normal);
-  /* Skriven na mobile – BottomNav preuzima navigaciju */
-  display: none;
+  display: flex;
+  justify-content: center;
+  z-index: 1000;
 }
 
-@media (min-width: 48em) {
-  .navbar {
-    display: block;
+@media (max-width: 768px) {
+  .pill-nav-container {
+    top: 0.5rem;
+    padding: 0 16px;
   }
 }
 
-.navbar__inner {
+.pill-nav {
+  --nav-h: 56px; 
+  --pill-pad-x: 24px;
+  --pill-gap: 4px;
+  width: max-content;
   display: flex;
   align-items: center;
-  height: 100%;
-  gap: var(--space-4);
+  gap: 12px;
 }
 
-/* --- Logo --- */
-.navbar__logo {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-  font-weight: var(--font-weight-bold);
-  font-size: var(--font-size-lg);
-  color: var(--color-primary);
-  flex-shrink: 0;
-}
-
-.navbar__logo-icon {
-  font-size: var(--font-size-xl);
-}
-
-.navbar__logo-text {
-  display: none;
-}
-
-@media (min-width: 64em) {
-  .navbar__logo-text {
-    display: inline;
+@media (max-width: 768px) {
+  .pill-nav {
+    width: 100%;
+    justify-content: space-between;
   }
 }
 
-/* --- Desktop nav links --- */
-.navbar__links {
-  display: none;
-  align-items: center;
-  gap: var(--space-1);
-  flex: 1;
-}
-
-@media (min-width: 64em) {
-  .navbar__links {
-    display: flex;
-  }
-}
-
-.navbar__link {
-  padding: var(--space-2) var(--space-3);
-  border-radius: var(--radius-md);
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-medium);
-  color: var(--color-text-muted);
-  transition: color var(--transition-fast), background-color var(--transition-fast);
-}
-
-.navbar__link:hover {
-  color: var(--color-primary);
-  background-color: var(--color-bg-input);
-}
-
-.navbar__link--active {
-  color: var(--color-primary);
-  font-weight: var(--font-weight-semibold);
-  background-color: var(--color-bg-input);
-}
-
-/* --- Kontrole (desno) --- */
-.navbar__controls {
+/* --- GLAVNI KONTEJNER ZA LINKOVE I KONTROLE --- */
+.pill-nav-items {
+  position: relative;
   display: flex;
+  flex-direction: row !important;
   align-items: center;
-  gap: var(--space-2);
-  margin-left: auto;
+  flex-wrap: nowrap !important;
+  white-space: nowrap !important;
+  height: var(--nav-h);
+  background: var(--base);
+  border-radius: 9999px;
+  padding: 0 20px 0 8px;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+  width: max-content;
 }
 
-.navbar__control-btn {
+.pill-logo {
+  width: var(--nav-h);
+  height: var(--nav-h);
+  border-radius: 50%;
+  background: var(--base);
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 2.25rem;
-  height: 2.25rem;
-  border-radius: var(--radius-full);
-  border: none;
-  background: var(--color-bg-input);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   cursor: pointer;
-  font-size: var(--font-size-sm);
-  color: var(--color-text);
-  transition: background-color var(--transition-fast), transform var(--transition-fast);
+  transition: background-color 0.3s ease;
+  flex-shrink: 0;
 }
 
-.navbar__control-btn:hover {
-  background-color: var(--color-accent);
-  transform: scale(1.05);
-}
-
-.navbar__lang-flag {
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-semibold);
-}
-
-/* --- User avatar --- */
-.navbar__user {
+/* --- LISTA LINKOVA --- */
+.pill-list {
+  list-style: none;
   display: flex;
-  align-items: center;
-  gap: var(--space-1);
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  align-items: stretch;
+  gap: var(--pill-gap);
+  margin: 0;
+  padding: 6px;
+  height: 100%;
+  flex-shrink: 0;
 }
 
-.navbar__avatar {
+.pill-list > li {
+  display: flex;
+  height: 100%;
+  flex-shrink: 0;
+}
+
+.pill {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 2rem;
-  height: 2rem;
-  border-radius: var(--radius-full);
-  background-color: var(--color-primary);
-  color: #fff;
-  font-weight: var(--font-weight-bold);
-  font-size: var(--font-size-sm);
+  height: 100%;
+  padding: 0 var(--pill-pad-x);
+  background: transparent;
+  color: var(--pill-text);
+  text-decoration: none;
+  border-radius: 9999px;
+  font-weight: 700;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  position: relative;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+/* Krug koji raste kad pređeš mišem */
+.pill .hover-circle {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  border-radius: 50%;
+  background: var(--hover-bg); 
+  z-index: 1;
+  pointer-events: none;
+  will-change: transform;
+}
+
+.pill .label-stack {
+  position: relative;
+  z-index: 2;
+  display: inline-block;
+}
+
+.pill .pill-label {
+  position: relative;
+  z-index: 2;
+  display: inline-block;
+  will-change: transform;
+}
+
+.pill .pill-label-hover {
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: var(--hover-text);
+  opacity: 0;
+  z-index: 3;
+  display: inline-block;
+  will-change: transform, opacity;
+}
+
+/* Tačkica ispod aktivnog linka */
+.pill.is-active::after {
+  content: '';
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 6px;
+  height: 6px;
+  background: var(--active-dot);
+  border-radius: 50%;
+  z-index: 4;
+}
+
+/* --- KONTROLE (JEZIK, TEMA, AVATAR, LOGOUT) --- */
+.pill-nav-controls {
+  display: flex;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  align-items: center;
+  gap: 16px;
+  margin-left: 12px;
+  padding-left: 18px;
+  border-left: 1px solid var(--border-color);
+  height: 60%;
   flex-shrink: 0;
 }
 
-.navbar__logout {
-  display: none;
-  padding: var(--space-1) var(--space-2);
-  border-radius: var(--radius-md);
-  font-size: var(--font-size-sm);
-  color: var(--color-text-muted);
-  cursor: pointer;
-  transition: color var(--transition-fast);
-}
-
-@media (min-width: 64em) {
-  .navbar__logout {
-    display: block;
-  }
-}
-
-.navbar__logout:hover {
-  color: var(--color-error);
-}
-
-/* --- Hamburger --- */
-.navbar__hamburger {
+.pill-nav-controls > * {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 0.3rem;
-  width: 2.25rem;
-  height: 2.25rem;
-  padding: var(--space-2);
-  border-radius: var(--radius-md);
-  cursor: pointer;
-  background: none;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.pill-logout-btn {
+  background: transparent;
   border: none;
+  color: var(--pill-text);
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  transition: transform 0.2s, color 0.2s;
 }
 
-@media (min-width: 64em) {
-  .navbar__hamburger {
-    display: none;
-  }
+.pill-logout-btn:hover {
+  transform: scale(1.1);
+  color: #ef4444; 
 }
 
-.navbar__hamburger span {
-  display: block;
+/* Avatar korisnika */
+.pill-avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--active-dot);
+  color: var(--base);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 800;
+  text-decoration: none;
+  transition: transform 0.2s;
+}
+
+.pill-avatar:hover {
+  transform: scale(1.1);
+}
+
+/* --- MOBILNI MENI --- */
+.desktop-only { display: flex !important; }
+.mobile-only { display: none !important; }
+
+@media (max-width: 768px) {
+  .desktop-only { display: none !important; }
+  .mobile-only { display: flex !important; }
+}
+
+.mobile-menu-button {
+  width: var(--nav-h);
+  height: var(--nav-h);
+  border-radius: 50%;
+  background: var(--base);
+  border: 1px solid var(--border-color);
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  cursor: pointer;
+}
+
+.hamburger-line {
+  width: 18px;
   height: 2px;
-  background-color: var(--color-text);
+  background: var(--pill-text);
   border-radius: 1px;
-  transition: transform var(--transition-fast), opacity var(--transition-fast);
 }
 
-.navbar__hamburger--open span:nth-child(1) {
-  transform: translateY(0.4rem) rotate(45deg);
-}
-.navbar__hamburger--open span:nth-child(2) {
-  opacity: 0;
-}
-.navbar__hamburger--open span:nth-child(3) {
-  transform: translateY(-0.4rem) rotate(-45deg);
+.mobile-menu-popover {
+  position: absolute;
+  top: 4.5rem;
+  left: 1rem;
+  right: 1rem;
+  background: var(--base);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  padding: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+  visibility: hidden;
 }
 
-/* --- Mobile dropdown menu --- */
-.navbar__mobile-menu {
+.mobile-menu-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
   display: flex;
   flex-direction: column;
-  background-color: var(--color-bg-nav);
-  border-top: 1px solid var(--color-border);
-  padding: var(--space-2) var(--space-4) var(--space-4);
-  gap: var(--space-1);
-  animation: fadeIn var(--transition-fast) ease;
+  gap: 4px;
 }
 
-@media (min-width: 64em) {
-  .navbar__mobile-menu {
-    display: none;
+.mobile-menu-link {
+  display: block;
+  padding: 14px 20px;
+  color: var(--pill-text);
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 600;
+  border-radius: 12px;
+  transition: background-color 0.2s;
+}
+
+.mobile-menu-link.is-active,
+.mobile-menu-link:hover {
+  background-color: var(--border-color);
+  color: var(--pill-text);
+}
+
+.mobile-menu-controls-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 15px;
+  margin-top: 10px;
+  border-top: 1px solid var(--border-color);
+}
+
+/* --- ODSTOJNIK (SPACER) --- */
+/* Drastično povećan kako bi odvojio Welcome tekst od Navbara */
+.navbar-spacer {
+  height: 150px; 
+  width: 100%;
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .navbar-spacer {
+    height: 120px;
   }
-}
-
-.navbar__mobile-link {
-  padding: var(--space-3) var(--space-4);
-  border-radius: var(--radius-md);
-  font-weight: var(--font-weight-medium);
-  color: var(--color-text);
-  transition: background-color var(--transition-fast), color var(--transition-fast);
-}
-
-.navbar__mobile-link:hover,
-.navbar__mobile-link--active {
-  background-color: var(--color-bg-input);
-  color: var(--color-primary);
-}
-
-.navbar__mobile-logout {
-  margin-top: var(--space-2);
-  padding: var(--space-3) var(--space-4);
-  border-radius: var(--radius-md);
-  font-weight: var(--font-weight-medium);
-  color: var(--color-error);
-  text-align: left;
-  cursor: pointer;
-  transition: background-color var(--transition-fast);
-}
-
-.navbar__mobile-logout:hover {
-  background-color: var(--color-error-bg);
 }
