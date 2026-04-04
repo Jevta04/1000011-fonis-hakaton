@@ -1,37 +1,33 @@
+import { useState, useEffect } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
+import { getUserProfile } from '../services/apiService';
 
-/**
- * PrivateRoute – štiti rute od neautentifikovanih korisnika.
- *
- * Upotreba u App.jsx:
- *   <Route element={<PrivateRoute />}>
- *     <Route path="/" element={<Dashboard />} />
- *   </Route>
- *
- * AdminRoute – dodatna provera admin role:
- *   <Route element={<PrivateRoute requireAdmin />}>
- *     <Route path="/admin" element={<Admin />} />
- *   </Route>
- */
 export function PrivateRoute({ requireAdmin = false }) {
   const token = localStorage.getItem('token');
+  const [valid, setValid]     = useState(null); // null = proverava, true = ok, false = nije
+  const [isAdmin, setIsAdmin] = useState(false);
 
-  if (!token) {
-    // Sačuvaj trenutni URL da bismo korisnika vratili posle logina
-    return <Navigate to="/login" replace />;
-  }
+  useEffect(() => {
+    if (!token) { setValid(false); return; }
 
-  if (requireAdmin) {
-    try {
-      const user = JSON.parse(localStorage.getItem('user') || '{}');
-      if (user.role !== 'admin') {
-        return <Navigate to="/" replace />;
-      }
-    } catch {
-      return <Navigate to="/login" replace />;
-    }
-  }
+    getUserProfile()
+      .then((res) => {
+        const role = res.data?.role;
+        setIsAdmin(role === 'admin');
+        setValid(true);
+      })
+      .catch(() => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        setValid(false);
+      });
+  }, [token]);
 
-  // Renderuj child rute
+  if (valid === null) return null; // loading — ne renderuj ništa
+
+  if (!valid) return <Navigate to="/login" replace />;
+
+  if (requireAdmin && !isAdmin) return <Navigate to="/" replace />;
+
   return <Outlet />;
 }

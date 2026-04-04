@@ -27,7 +27,7 @@ export function Navbar() {
     try { await logout(); } catch {}
     localStorage.removeItem('token');
     localStorage.removeItem('user');
-    navigate('/login');
+    window.location.href = '/login';
   };
 
   const navLinks = [
