@@ -17,7 +17,7 @@ function isCompanyEmail(email) {
 
 const INITIAL = {
   ime: '', prezime: '', email: '', password: '',
-  password_confirm: '', broj_telefona: '', kompanija_id: '',
+  password_confirmation: '', broj_telefona: '', kompanija_id: '',
 };
 
 export function SignupForm({ onSwitchToLogin }) {
@@ -48,7 +48,7 @@ export function SignupForm({ onSwitchToLogin }) {
     if (!form.prezime.trim()) e.prezime = t('field_required');
     if (!isCompanyEmail(form.email)) e.email = t('email_invalid');
     if (form.password.length < 6)   e.password = t('password_required');
-    if (form.password !== form.password_confirm) e.password_confirm = t('password_mismatch');
+    if (form.password !== form.password_confirmation) e.password_confirmation = t('password_mismatch');
     if (!form.broj_telefona.trim()) e.broj_telefona = t('field_required');
     if (!form.kompanija_id)         e.kompanija_id  = t('field_required');
     return e;
@@ -66,7 +66,8 @@ export function SignupForm({ onSwitchToLogin }) {
       formData.append('ime',           form.ime);
       formData.append('prezime',       form.prezime);
       formData.append('email',         form.email);
-      formData.append('password',      form.password);
+      formData.append('password',              form.password);
+      formData.append('password_confirmation', form.password_confirmation);
       formData.append('broj_telefona', form.broj_telefona);
       formData.append('kompanija_id',  form.kompanija_id);
       formData.append('uloga',         'zaposleni');
@@ -175,10 +176,10 @@ export function SignupForm({ onSwitchToLogin }) {
         />
 
         <Input
-          name="password_confirm" type="password"
+          name="password_confirmation" type="password"
           label={t('password_confirm')} placeholder={t('password_confirm_placeholder')}
-          value={form.password_confirm} onChange={handleChange}
-          error={errors.password_confirm} icon={<Lock size={16} />}
+          value={form.password_confirmation} onChange={handleChange}
+          error={errors.password_confirmation} icon={<Lock size={16} />}
           required autoComplete="new-password"
         />
 

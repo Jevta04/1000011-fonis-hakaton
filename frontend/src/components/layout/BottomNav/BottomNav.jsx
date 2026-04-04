@@ -7,7 +7,7 @@ const NAV_ITEMS = [
   { to: '/',        Icon: Home,          labelKey: 'nav_home'    },
   { to: '/search',  Icon: Search,        labelKey: 'nav_search'  },
   { to: '/publish', Icon: PlusCircle,    labelKey: 'nav_publish' },
-  { to: '/history', Icon: ClipboardList, labelKey: 'nav_history' },
+  { to: '/profile', Icon: ClipboardList, labelKey: 'nav_history' },
   { to: '/profile', Icon: User,          labelKey: 'nav_profile' },
 ];
 
