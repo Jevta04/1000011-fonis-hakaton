@@ -5,6 +5,7 @@ import { useTheme }        from '../../hooks/useTheme';
 import {
   getUserProfile, getRideHistory,
   getVehicles, createVehicle, updateVehicle, deleteVehicle,
+  deleteRide, leaveRide,
 } from '../../services/apiService';
 import { RideCard } from '../../components/rides/RideCard/RideCard';
 import { Button }   from '../../components/common/Button/Button';
@@ -66,6 +67,21 @@ export function Profile() {
   const driverRides    = allDriverRides.filter((r) => r.isPast);
   const passengerRides = allPassengerRides.filter((r) => r.isPast);
   const upcomingRides  = history.filter((r) => !r.isPast);
+
+  /* ── Ride actions ── */
+  const handleRideDelete = async (id) => {
+    try {
+      await deleteRide(id);
+      setHistory((p) => p.filter((r) => r.id !== id));
+    } catch (err) { console.error(err); }
+  };
+
+  const handleRideLeave = async (id) => {
+    try {
+      await leaveRide(id);
+      setHistory((p) => p.filter((r) => r.id !== id));
+    } catch (err) { console.error(err); }
+  };
 
   /* ── Vehicle CRUD ── */
   const openNew   = () => { setVForm(VEHICLE_INIT); setEditingId(null); setVErrors({}); setShowVForm(true); };
@@ -248,7 +264,11 @@ export function Profile() {
                     <p>{t('no_rides_found')}</p>
                   </div>
                 ) : list.map((ride) => (
-                  <RideCard key={ride.id} {...ride} compact />
+                  <RideCard
+                    key={ride.id} {...ride} compact
+                    onDelete={() => handleRideDelete(ride.id)}
+                    onLeave={() => handleRideLeave(ride.id)}
+                  />
                 ));
               })()}
             </div>
