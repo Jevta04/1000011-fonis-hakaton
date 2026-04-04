@@ -2,121 +2,196 @@
    PROFILE PAGE
    ============================================================ */
 
-.profile {
-  padding-block: var(--space-4);
-}
+/* DARK tema (default) */
+.profile-page-wrapper {
+  --bg-color: #191A19;
+  --card-bg: linear-gradient(145deg, #1b211c 0%, #191A19 100%);
+  --card-border: rgba(255, 255, 255, 0.05);
+  --text-primary: #f5f7f8;
+  --text-secondary: #d8e9a8;
+  --card-shadow: 0 4px 20px -4px rgba(0, 0, 0, 0.4);
+  --dashed-border: #1e5128;
+  --tag-bg: rgba(30, 81, 40, 0.1);
+  --tag-border: #1e5128;
+  --header-bg: linear-gradient(135deg, #2a6634 0%, #111512 100%);
 
-.profile .container {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-8);
-}
-
-/* --- Profil kartica --- */
-.profile__card {
-  background-color: var(--color-bg-card);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-2xl);
-  padding: var(--space-8) var(--space-6);
-  box-shadow: var(--shadow-md);
+  background-color: var(--bg-color);
+  min-height: 100vh;
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--space-5);
-  text-align: center;
-  transition: background-color var(--transition-normal);
+  transition: background-color 0.3s ease;
 }
 
-@media (min-width: 48em) {
-  .profile__card {
-    flex-direction: row;
-    text-align: left;
-    align-items: flex-start;
-    gap: var(--space-8);
-  }
+/* LIGHT tema */
+.profile-page-wrapper.theme-light {
+  --bg-color: #e8ecef;
+  --card-bg: #ffffff;
+  --card-border: #d8e9a8;
+  --text-primary: #191A19;
+  --text-secondary: #1e5128;
+  --card-shadow: 0 4px 20px -4px rgba(0, 0, 0, 0.08);
+  --dashed-border: #4e9f3d;
+  --tag-bg: rgba(78, 159, 61, 0.15);
+  --tag-border: #4e9f3d;
+  --header-bg: linear-gradient(135deg, #3a8246 0%, #1e5128 100%);
 }
 
-/* --- Avatar --- */
-.profile__avatar {
-  width: 5rem;
-  height: 5rem;
-  border-radius: var(--radius-full);
-  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
-  color: #fff;
+/* --- KONTEJNER --- */
+.profile-content-box {
+  max-width: 1200px;
+  width: 96%;
+  margin: 0 auto;
+  padding: 0 0 40px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* --- HEADER KARTICA --- */
+.profile-header {
+  background: var(--header-bg);
+  border-radius: 1.5rem;
+  padding: 2.5rem 3rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  width: 100%;
+  box-shadow: 0 0 30px -5px rgba(78, 159, 61, 0.25);
+  border: 1px solid rgba(78, 159, 61, 0.15);
+  transition: background 0.3s ease;
+}
+
+.profile-avatar-wrapper {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.profile-avatar {
+  width: 100px;
+  height: 100px;
+  background-color: #4e9f3d;
+  color: #f5f7f8;
+  font-size: 3rem;
+  font-weight: 700;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: var(--font-size-3xl);
-  font-weight: var(--font-weight-bold);
-  flex-shrink: 0;
-  box-shadow: 0 0.25rem 1rem rgba(78, 159, 61, 0.35);
+  border-radius: 50%;
+  box-shadow: 0 0 20px rgba(78, 159, 61, 0.4);
 }
 
-/* --- Info --- */
-.profile__info {
+.profile-verified-badge {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background-color: #4e9f3d;
+  color: #f5f7f8;
+  border: 3px solid #1e5128;
+  border-radius: 50%;
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile-info {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: var(--space-1);
+  justify-content: center;
 }
 
-.profile__name {
-  font-size: var(--font-size-2xl);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-text);
+.profile-info h1 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.75rem;
+  color: #f5f7f8;
+  font-weight: 700;
 }
 
-.profile__email,
-.profile__company {
-  font-size: var(--font-size-sm);
-}
-
-/* --- Stats --- */
-.profile__stats {
+.profile-info p {
+  margin: 0 0 0.35rem 0;
+  color: #d8e9a8;
+  font-size: 0.95rem;
   display: flex;
-  gap: var(--space-6);
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.profile-badges {
+  display: flex;
+  gap: 0.6rem;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.85rem;
+  border-radius: 50px;
+  border: 1px solid #4e9f3d;
+  color: #4e9f3d;
+  font-size: 0.8rem;
+  font-weight: 600;
+  background-color: rgba(78, 159, 61, 0.1);
+}
+
+.profile-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  text-align: right;
   flex-shrink: 0;
 }
 
-@media (min-width: 48em) {
-  .profile__stats {
-    flex-direction: column;
-    gap: var(--space-3);
-  }
-}
-
-.profile__stat {
+.stat {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: var(--space-1);
+  align-items: flex-end;
 }
 
-@media (min-width: 48em) {
-  .profile__stat {
-    align-items: flex-end;
-  }
-}
-
-.profile__stat-value {
-  font-size: var(--font-size-xl);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-primary);
+.stat-number {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #4e9f3d;
   line-height: 1;
 }
 
-.profile__stat-label {
-  font-size: var(--font-size-xs);
-  color: var(--color-text-muted);
-  text-align: center;
+.stat-label {
+  font-size: 0.85rem;
+  color: #d8e9a8;
+  margin-top: 0.3rem;
+  font-weight: 500;
 }
 
-/* --- Istorija --- */
-.profile__history-title {
-  font-size: var(--font-size-xl);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-text);
-  margin-bottom: var(--space-4);
+/* --- FULL WIDTH CARD --- */
+.profile-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 1.5rem;
+  padding: 2rem 2.5rem;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--card-shadow);
+  transition: all 0.3s ease;
+}
+
+.profile-card--full {
+  width: 100%;
+}
+
+/* --- Skeleton --- */
+.profile__skeleton {
+  height: 16rem;
+  background: linear-gradient(90deg, var(--color-bg-input, #1b211c) 25%, var(--color-border, #1e5128) 50%, var(--color-bg-input, #1b211c) 75%);
+  background-size: 200% 100%;
+  border-radius: 1.5rem;
+  animation: skeleton-pulse 1.5s ease-in-out infinite;
 }
 
 /* --- Tabovi --- */
@@ -124,7 +199,7 @@
   display: flex;
   gap: var(--space-2);
   margin-bottom: var(--space-5);
-  border-bottom: 2px solid var(--color-border);
+  border-bottom: 2px solid var(--card-border);
   padding-bottom: 0;
 }
 
@@ -132,23 +207,23 @@
   padding: var(--space-2) var(--space-4);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
-  color: var(--color-text-muted);
+  color: var(--text-secondary);
   border: none;
   background: none;
   cursor: pointer;
   border-bottom: 2px solid transparent;
   margin-bottom: -2px;
-  transition: color var(--transition-fast), border-color var(--transition-fast);
+  transition: color 0.2s, border-color 0.2s;
 }
 
 .profile__tab:hover {
-  color: var(--color-primary);
+  color: #4e9f3d;
 }
 
 .profile__tab--active {
-  color: var(--color-primary);
+  color: #4e9f3d;
   font-weight: var(--font-weight-semibold);
-  border-bottom-color: var(--color-primary);
+  border-bottom-color: #4e9f3d;
 }
 
 /* --- Lista vožnji --- */
@@ -158,17 +233,12 @@
   gap: var(--space-4);
 }
 
-/* --- Skeleton --- */
-.profile__skeleton {
-  height: 16rem;
-  background: linear-gradient(90deg, var(--color-bg-input) 25%, var(--color-border) 50%, var(--color-bg-input) 75%);
-  background-size: 200% 100%;
-  border-radius: var(--radius-2xl);
-  animation: skeleton-pulse 1.5s ease-in-out infinite;
+/* --- Vehicles --- */
+.profile__vehicles {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
 }
-
-/* --- Vehicles tab --- */
-.profile__vehicles { display: flex; flex-direction: column; gap: var(--space-4); }
 
 .profile__vehicles-header {
   display: flex;
@@ -213,13 +283,13 @@
   align-items: center;
   gap: var(--space-3);
   background-color: var(--color-bg-card);
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--card-border);
   border-radius: var(--radius-xl);
   padding: var(--space-4);
 }
 
 .profile__vehicle-icon {
-  color: var(--color-primary);
+  color: #4e9f3d;
   flex-shrink: 0;
 }
 
@@ -232,12 +302,13 @@
 
 .profile__vehicle-brand {
   font-weight: var(--font-weight-semibold);
-  color: var(--color-text);
+  color: var(--text-primary);
   font-size: var(--font-size-sm);
 }
 
 .profile__vehicle-sub {
   font-size: var(--font-size-xs);
+  color: var(--text-secondary);
 }
 
 .profile__vehicle-actions {
@@ -249,24 +320,24 @@
   width: 2rem;
   height: 2rem;
   border-radius: var(--radius-md);
-  border: 1px solid var(--color-border);
-  background: var(--color-bg-input);
-  color: var(--color-text-muted);
+  border: 1px solid var(--card-border);
+  background: transparent;
+  color: var(--text-secondary);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all var(--transition-fast);
+  transition: all 0.2s;
 }
 
 .profile__vehicle-btn:hover {
-  border-color: var(--color-primary);
-  color: var(--color-primary);
+  border-color: #4e9f3d;
+  color: #4e9f3d;
 }
 
 .profile__vehicle-btn--danger:hover {
-  border-color: var(--color-error);
-  color: var(--color-error);
+  border-color: #ef4444;
+  color: #ef4444;
 }
 
 /* --- Empty --- */
@@ -276,10 +347,38 @@
   align-items: center;
   gap: var(--space-3);
   padding: var(--space-10) 0;
-  color: var(--color-text-muted);
+  color: var(--text-secondary);
 }
 
 .profile__empty span {
   font-size: 2.5rem;
   opacity: 0.5;
+}
+
+/* --- Responsive --- */
+@media (max-width: 768px) {
+  .profile-content-box {
+    width: 95%;
+  }
+
+  .profile-header {
+    flex-direction: column;
+    text-align: center;
+    padding: 2rem 1.5rem;
+  }
+
+  .profile-stats {
+    flex-direction: row;
+    justify-content: space-around;
+    width: 100%;
+    text-align: center;
+  }
+
+  .stat {
+    align-items: center;
+  }
+
+  .profile-card {
+    padding: 1.5rem;
+  }
 }

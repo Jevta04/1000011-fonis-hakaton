@@ -354,13 +354,13 @@
 
 /* --- ODSTOJNIK --- */
 .navbar-spacer {
-  height: 120px;
+  height: 88px;
   width: 100%;
   display: block;
 }
 
 @media (max-width: 768px) {
   .navbar-spacer {
-    height: 100px;
+    height: 72px;
   }
 }

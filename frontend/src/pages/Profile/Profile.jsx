@@ -1,31 +1,32 @@
 import { useState, useEffect } from 'react';
-import { Car, Plus, Trash2, Pencil } from 'lucide-react';
-import { useTranslation }      from '../../hooks/useTranslation';
+import { Car, Plus, Trash2, Pencil, ShieldCheck, Verified, Phone } from 'lucide-react';
+import { useTranslation } from '../../hooks/useTranslation';
+import { useTheme }        from '../../hooks/useTheme';
 import {
   getUserProfile, getRideHistory,
   getVehicles, createVehicle, updateVehicle, deleteVehicle,
 } from '../../services/apiService';
-import { RideCard }   from '../../components/rides/RideCard/RideCard';
-import { Button }     from '../../components/common/Button/Button';
-import { Input }      from '../../components/common/Input/Input';
+import { RideCard } from '../../components/rides/RideCard/RideCard';
+import { Button }   from '../../components/common/Button/Button';
+import { Input }    from '../../components/common/Input/Input';
 import './Profile.css';
 
 const VEHICLE_INIT = { marka: '', broj_tablica: '', boja: '', fuel_consumption_per_100km: '' };
 
 export function Profile() {
-  const { t } = useTranslation();
+  const { t }           = useTranslation();
+  const { isDark }      = useTheme();
   const [profile, setProfile]     = useState(null);
   const [history, setHistory]     = useState([]);
   const [vehicles, setVehicles]   = useState([]);
   const [loading, setLoading]     = useState(true);
   const [activeTab, setActiveTab] = useState('driver');
 
-  // Vehicle form state
-  const [vForm, setVForm]           = useState(VEHICLE_INIT);
-  const [editingId, setEditingId]   = useState(null);
-  const [vErrors, setVErrors]       = useState({});
-  const [vLoading, setVLoading]     = useState(false);
-  const [showVForm, setShowVForm]   = useState(false);
+  const [vForm, setVForm]         = useState(VEHICLE_INIT);
+  const [editingId, setEditingId] = useState(null);
+  const [vErrors, setVErrors]     = useState({});
+  const [vLoading, setVLoading]   = useState(false);
+  const [showVForm, setShowVForm] = useState(false);
 
   useEffect(() => {
     const load = async () => {
@@ -52,28 +53,27 @@ export function Profile() {
 
   if (loading) {
     return (
-      <div className="profile page-enter">
-        <div className="container">
+      <div className={`profile-page-wrapper ${isDark ? 'theme-dark' : 'theme-light'} page-enter`}>
+        <div className="profile-content-box">
           <div className="profile__skeleton" aria-hidden="true" />
         </div>
       </div>
     );
   }
 
-  const driverRides    = history.filter((r) => r.role === 'driver');
-  const passengerRides = history.filter((r) => r.role === 'passenger');
+  const driverRides    = history.filter((r) => r.role === 'driver' || r.uloga === 'vozac');
+  const passengerRides = history.filter((r) => r.role === 'passenger' || r.uloga === 'putnik');
 
   /* ── Vehicle CRUD ── */
-  const openNew  = () => { setVForm(VEHICLE_INIT); setEditingId(null); setVErrors({}); setShowVForm(true); };
-  const openEdit = (v) => { setVForm({ marka: v.marka || '', broj_tablica: v.broj_tablica || '', boja: v.boja || '', fuel_consumption_per_100km: v.fuel_consumption_per_100km || '' }); setEditingId(v.id); setVErrors({}); setShowVForm(true); };
+  const openNew   = () => { setVForm(VEHICLE_INIT); setEditingId(null); setVErrors({}); setShowVForm(true); };
+  const openEdit  = (v) => { setVForm({ marka: v.marka || '', broj_tablica: v.broj_tablica || '', boja: v.boja || '', fuel_consumption_per_100km: v.fuel_consumption_per_100km || '' }); setEditingId(v.id); setVErrors({}); setShowVForm(true); };
   const closeForm = () => { setShowVForm(false); setEditingId(null); };
 
   const handleVSave = async () => {
     const errs = {};
-    if (!vForm.marka.trim())        errs.marka         = t('field_required');
-    if (!vForm.broj_tablica.trim()) errs.broj_tablica  = t('field_required');
+    if (!vForm.marka.trim())        errs.marka        = t('field_required');
+    if (!vForm.broj_tablica.trim()) errs.broj_tablica = t('field_required');
     if (Object.keys(errs).length)   { setVErrors(errs); return; }
-
     setVLoading(true);
     try {
       if (editingId) {
@@ -103,39 +103,49 @@ export function Profile() {
   ];
 
   return (
-    <div className="profile page-enter">
-      <div className="container">
-        {/* Profil kartica */}
-        <section className="profile__card">
-          <div className="profile__avatar">
-            {profile?.name?.charAt(0)?.toUpperCase() || '?'}
-          </div>
-          <div className="profile__info">
-            <h1 className="profile__name">{profile?.name || '—'}</h1>
-            <p className="profile__email text-muted">{profile?.email || '—'}</p>
-            <p className="profile__company text-muted">
-              🏢 {profile?.company?.name || profile?.company || '—'}
-            </p>
-          </div>
-          <div className="profile__stats">
-            <div className="profile__stat">
-              <span className="profile__stat-value">{driverRides.length}</span>
-              <span className="profile__stat-label">{t('rides_as_driver')}</span>
-            </div>
-            <div className="profile__stat">
-              <span className="profile__stat-value">{passengerRides.length}</span>
-              <span className="profile__stat-label">{t('rides_as_passenger')}</span>
-            </div>
-          </div>
-        </section>
+    <div className={`profile-page-wrapper ${isDark ? 'theme-dark' : 'theme-light'} page-enter`}>
+      <div className="profile-content-box">
 
-        {/* Tabovi */}
-        <section className="profile__history">
+        {/* ── HEADER KARTICA ── */}
+        <div className="profile-header">
+          <div className="profile-avatar-wrapper">
+            <div className="profile-avatar">
+              {profile?.name?.charAt(0)?.toUpperCase() || '?'}
+            </div>
+            <div className="profile-verified-badge">
+              <ShieldCheck size={16} strokeWidth={2.5} />
+            </div>
+          </div>
+
+          <div className="profile-info">
+            <h1>{profile?.name || '—'}</h1>
+            <p><span>✉</span> {profile?.email || '—'}</p>
+            <p><span>🏢</span> {profile?.company?.name || profile?.company || '—'}</p>
+            {profile?.phone && <p><Phone size={14} /> {profile.phone}</p>}
+            <div className="profile-badges">
+              <span className="badge"><Verified size={14} /> {t('role_employee')}</span>
+              <span className="badge"><ShieldCheck size={14} /> Trusted member</span>
+            </div>
+          </div>
+
+          <div className="profile-stats">
+            <div className="stat">
+              <span className="stat-number">{driverRides.length}</span>
+              <span className="stat-label">{t('rides_as_driver')}</span>
+            </div>
+            <div className="stat">
+              <span className="stat-number">{passengerRides.length}</span>
+              <span className="stat-label">{t('rides_as_passenger')}</span>
+            </div>
+          </div>
+        </div>
+
+        {/* ── ISTORIJA I VOZILA ── */}
+        <div className="profile-card profile-card--full">
           <div className="profile__tabs" role="tablist">
             {TABS.map(({ key, label, count }) => (
               <button
-                key={key}
-                role="tab"
+                key={key} role="tab"
                 aria-selected={activeTab === key}
                 className={`profile__tab ${activeTab === key ? 'profile__tab--active' : ''}`}
                 onClick={() => setActiveTab(key)}
@@ -202,7 +212,7 @@ export function Profile() {
                       <Car size={20} className="profile__vehicle-icon" />
                       <div className="profile__vehicle-info">
                         <span className="profile__vehicle-brand">{v.marka}</span>
-                        <span className="profile__vehicle-sub text-muted">
+                        <span className="profile__vehicle-sub">
                           {v.broj_tablica}{v.boja ? ` · ${v.boja}` : ''}{v.fuel_consumption_per_100km ? ` · ${v.fuel_consumption_per_100km} L/100km` : ''}
                         </span>
                       </div>
@@ -221,7 +231,7 @@ export function Profile() {
             </div>
           )}
 
-          {/* Rides tabs */}
+          {/* Ride history tabs */}
           {activeTab !== 'vehicles' && (
             <div className="profile__rides-list" role="tabpanel">
               {(activeTab === 'driver' ? driverRides : passengerRides).length === 0 ? (
@@ -236,7 +246,8 @@ export function Profile() {
               )}
             </div>
           )}
-        </section>
+        </div>
+
       </div>
     </div>
   );
