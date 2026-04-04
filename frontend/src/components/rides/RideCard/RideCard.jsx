@@ -3,32 +3,20 @@ import { useTranslation } from '../../../hooks/useTranslation';
 import { formatDate } from '../../../utils/helpers';
 import './RideCard.css';
 
-/**
- * RideCard – kartica vožnje (interna kompanijska aplikacija).
- * Nema cenu. Prikazuje opcije (smoking, muzika, klima, ljubimci).
- *
- * @param {string}  mestoOd
- * @param {string}  mestoDo
- * @param {string}  datumVreme   – ISO datetime
- * @param {number}  seats        – slobodna mesta
- * @param {string}  driver       – ime vozača
- * @param {string}  avatar       – inicijal ili URL
- * @param {string}  vehicle      – marka vozila
- * @param {boolean} smoking
- * @param {boolean} music
- * @param {boolean} airCondition
- * @param {boolean} pets
- * @param {Function} onJoin
- * @param {boolean} compact
- */
 export function RideCard({
   mestoOd, mestoDo, datumVreme,
-  seats = 0, driver, avatar, vehicle,
+  seats = 0, driver, driverId, avatar, vehicle,
   smoking = false, music = false, airCondition = false, pets = false,
   onJoin, compact = false, className = '',
 }) {
   const { t } = useTranslation();
   const isFull = seats === 0;
+
+  const currentUser = (() => {
+    try { return JSON.parse(localStorage.getItem('user') || '{}'); }
+    catch { return {}; }
+  })();
+  const isOwnRide = driverId && currentUser?.id && driverId === currentUser.id;
 
   const date = datumVreme ? new Date(datumVreme) : null;
   const timeStr = date
@@ -48,31 +36,26 @@ export function RideCard({
       className={`ride-card ${isFull ? 'ride-card--full' : ''} ${compact ? 'ride-card--compact' : ''} ${className}`}
       aria-label={`Vožnja od ${mestoOd} do ${mestoDo}`}
     >
-      {/* Ruta */}
+      {/* Ruta – timeline layout */}
       <div className="ride-card__route">
-        <div className="ride-card__route-stops">
-          <div className="ride-card__stop">
-            <span className="ride-card__dot ride-card__dot--start">
-              <MapPin size={11} strokeWidth={2.5} />
-            </span>
-            <div className="ride-card__stop-info">
-              <span className="ride-card__city">{mestoOd}</span>
-              <span className="ride-card__time">{timeStr}</span>
-            </div>
-          </div>
+        <div className="ride-card__timeline">
+          <span className="ride-card__dot ride-card__dot--start">
+            <MapPin size={11} strokeWidth={2.5} />
+          </span>
+          <div className="ride-card__line" />
+          <span className="ride-card__dot ride-card__dot--end">
+            <Flag size={10} strokeWidth={2.5} />
+          </span>
+        </div>
 
-          <div className="ride-card__line-wrapper" aria-hidden="true">
-            <div className="ride-card__line" />
+        <div className="ride-card__route-texts">
+          <div className="ride-card__stop-info">
+            <span className="ride-card__city">{mestoOd}</span>
+            <span className="ride-card__time">{timeStr}</span>
           </div>
-
-          <div className="ride-card__stop">
-            <span className="ride-card__dot ride-card__dot--end">
-              <Flag size={10} strokeWidth={2.5} />
-            </span>
-            <div className="ride-card__stop-info">
-              <span className="ride-card__city">{mestoDo}</span>
-              <span className="ride-card__time ride-card__time--muted">{dateStr}</span>
-            </div>
+          <div className="ride-card__stop-info">
+            <span className="ride-card__city">{mestoDo}</span>
+            <span className="ride-card__time ride-card__time--muted">{dateStr}</span>
           </div>
         </div>
       </div>
@@ -101,7 +84,6 @@ export function RideCard({
 
         {/* Meta */}
         <div className="ride-card__meta">
-          {/* Opcije */}
           {!compact && options.length > 0 && (
             <div className="ride-card__options">
               {options.map(({ Icon, label, active }) => (
@@ -116,16 +98,14 @@ export function RideCard({
             </div>
           )}
 
-          {/* Slobodna mesta */}
           <div className="ride-card__seats">
-            <Users size={13} strokeWidth={2} />
+            <Users size={14} strokeWidth={2} />
             <span className="ride-card__seats-count">
               {seats} {seats === 1 ? t('seat_one') : t('seats_available')}
             </span>
           </div>
 
-          {/* Dugme */}
-          {onJoin && (
+          {onJoin && !isOwnRide && (
             <button
               className={`ride-card__join-btn ${isFull ? 'ride-card__join-btn--disabled' : ''}`}
               onClick={!isFull ? onJoin : undefined}
@@ -133,6 +113,10 @@ export function RideCard({
             >
               {isFull ? t('ride_full') : <>{t('join_ride')} <ChevronRight size={14} /></>}
             </button>
+          )}
+
+          {isOwnRide && (
+            <span className="ride-card__own-badge">{t('your_ride') || 'Vaša vožnja'}</span>
           )}
         </div>
       </div>

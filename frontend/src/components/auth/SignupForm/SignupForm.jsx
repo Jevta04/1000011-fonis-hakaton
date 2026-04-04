@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { User, Mail, Lock, Phone, Building2, AlertCircle, CheckCircle } from 'lucide-react';
+import { User, Mail, Lock, Phone, Building2, AlertCircle, CheckCircle, Plus, Hash } from 'lucide-react';
 import { useTranslation } from '../../../hooks/useTranslation';
-import { register, getCompanies } from '../../../services/apiService';
+import { register, getCompanies, createCompany } from '../../../services/apiService';
 import { Input }    from '../../common/Input/Input';
 import { Button }   from '../../common/Button/Button';
 import './SignupForm.css';
@@ -30,6 +30,12 @@ export function SignupForm({ onSwitchToLogin }) {
   const [loading, setLoading]         = useState(false);
   const [companies, setCompanies]     = useState([]);
 
+  // New company creation
+  const [newCompanyMode, setNewCompanyMode] = useState(false);
+  const [newCompany, setNewCompany]         = useState({ naziv: '', pib: '' });
+  const [newCompanyErrors, setNewCompanyErrors] = useState({});
+  const [creatingCompany, setCreatingCompany]   = useState(false);
+
   useEffect(() => {
     getCompanies()
       .then((res) => setCompanies(res.data?.data || res.data || []))
@@ -40,6 +46,37 @@ export function SignupForm({ onSwitchToLogin }) {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
     if (errors[name]) setErrors((prev) => ({ ...prev, [name]: '' }));
+  };
+
+  const handleNewCompanyChange = (e) => {
+    const { name, value } = e.target;
+    setNewCompany((prev) => ({ ...prev, [name]: value }));
+    if (newCompanyErrors[name]) setNewCompanyErrors((prev) => ({ ...prev, [name]: '' }));
+  };
+
+  const handleCreateCompany = async () => {
+    const errs = {};
+    if (!newCompany.naziv.trim()) errs.naziv = t('field_required');
+    if (!newCompany.pib.trim())   errs.pib   = t('field_required');
+    if (Object.keys(errs).length) { setNewCompanyErrors(errs); return; }
+
+    setCreatingCompany(true);
+    try {
+      const res = await createCompany(newCompany);
+      const created = res.data;
+      setCompanies((prev) => [...prev, created]);
+      setForm((prev) => ({ ...prev, kompanija_id: String(created.id) }));
+      setNewCompanyMode(false);
+      setNewCompany({ naziv: '', pib: '' });
+    } catch (err) {
+      if (err.response?.status === 422) {
+        setNewCompanyErrors(err.response.data?.errors || {});
+      } else {
+        setNewCompanyErrors({ naziv: t('error_network') });
+      }
+    } finally {
+      setCreatingCompany(false);
+    }
   };
 
   const validate = () => {
@@ -145,27 +182,81 @@ export function SignupForm({ onSwitchToLogin }) {
           required
         />
 
-        <div className="signup-form__field">
-          <label className="signup-form__label">
-            <Building2 size={16} className="signup-form__field-icon" />
-            {t('company')} *
-          </label>
-          <select
-            name="kompanija_id"
-            value={form.kompanija_id}
-            onChange={handleChange}
-            className={`signup-form__select ${errors.kompanija_id ? 'signup-form__select--error' : ''}`}
-            required
-          >
-            <option value="">{t('select_company')}</option>
-            {companies.map((c) => (
-              <option key={c.id} value={c.id}>{c.name || c.naziv}</option>
-            ))}
-          </select>
-          {errors.kompanija_id && (
-            <span className="signup-form__error">{errors.kompanija_id}</span>
-          )}
-        </div>
+        {/* Kompanija */}
+        {!newCompanyMode ? (
+          <div className="signup-form__field">
+            <label className="signup-form__label">
+              <Building2 size={16} className="signup-form__field-icon" />
+              {t('company')} *
+            </label>
+            <select
+              name="kompanija_id"
+              value={form.kompanija_id}
+              onChange={handleChange}
+              className={`signup-form__select ${errors.kompanija_id ? 'signup-form__select--error' : ''}`}
+              required
+            >
+              <option value="">{t('select_company')}</option>
+              {companies.map((c) => (
+                <option key={c.id} value={c.id}>{c.naziv}</option>
+              ))}
+            </select>
+            {errors.kompanija_id && (
+              <span className="signup-form__error">{errors.kompanija_id}</span>
+            )}
+            <button
+              type="button"
+              className="signup-form__new-company-link"
+              onClick={() => setNewCompanyMode(true)}
+            >
+              <Plus size={13} /> {t('company_not_found') || 'Moja kompanija nije na listi'}
+            </button>
+          </div>
+        ) : (
+          <div className="signup-form__new-company-box">
+            <div className="signup-form__new-company-header">
+              <Building2 size={16} />
+              <span>{t('add_company') || 'Nova kompanija'}</span>
+              <button
+                type="button"
+                className="signup-form__cancel-link"
+                onClick={() => { setNewCompanyMode(false); setNewCompanyErrors({}); }}
+              >
+                {t('cancel') || 'Otkaži'}
+              </button>
+            </div>
+            <Input
+              name="naziv"
+              label={t('company_name')}
+              placeholder={t('company_name') || 'Naziv kompanije'}
+              value={newCompany.naziv}
+              onChange={handleNewCompanyChange}
+              error={newCompanyErrors.naziv}
+              icon={<Building2 size={16} />}
+              required
+            />
+            <Input
+              name="pib"
+              label={t('company_pib')}
+              placeholder={t('company_pib') || 'PIB'}
+              value={newCompany.pib}
+              onChange={handleNewCompanyChange}
+              error={newCompanyErrors.pib}
+              icon={<Hash size={16} />}
+              required
+            />
+            <Button
+              type="button"
+              variant="secondary"
+              size="sm"
+              loading={creatingCompany}
+              onClick={handleCreateCompany}
+              icon={<Plus size={14} />}
+            >
+              {t('add_company') || 'Dodaj kompaniju'}
+            </Button>
+          </div>
+        )}
 
         <Input
           name="password" type="password"

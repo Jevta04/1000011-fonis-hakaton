@@ -107,6 +107,62 @@
   color: var(--color-error);
 }
 
+/* --- New company link --- */
+.signup-form__new-company-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  background: none;
+  border: none;
+  color: var(--color-primary);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  padding: var(--space-1) 0;
+  margin-top: var(--space-1);
+  text-decoration: underline;
+  transition: color var(--transition-fast);
+}
+
+.signup-form__new-company-link:hover {
+  color: var(--color-primary-dark);
+}
+
+/* --- New company box --- */
+.signup-form__new-company-box {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  background-color: var(--color-bg-input);
+  border: 1.5px solid var(--color-primary);
+  border-radius: var(--radius-xl);
+}
+
+.signup-form__new-company-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+}
+
+.signup-form__cancel-link {
+  background: none;
+  border: none;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
+  cursor: pointer;
+  margin-left: auto;
+  text-decoration: underline;
+  transition: color var(--transition-fast);
+}
+
+.signup-form__cancel-link:hover {
+  color: var(--color-error);
+}
+
 /* --- Switch link --- */
 .signup-form__switch {
   text-align: center;

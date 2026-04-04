@@ -89,6 +89,11 @@ class RideController extends Controller
 
         $userId = Auth::id();
 
+        // Vozač ne može biti putnik u sopstvenoj vožnji
+        if ($voznja->vozac()->where('user_id', $userId)->exists()) {
+            return response()->json(['message' => 'Ne možete se priključiti sopstvenoj vožnji.'], 422);
+        }
+
         // Proveri da li je već u vožnji
         if ($voznja->users()->where('user_id', $userId)->exists()) {
             return response()->json(['message' => 'Već ste u ovoj vožnji.'], 422);
@@ -151,6 +156,7 @@ class RideController extends Controller
             'airCondition'=> $v->klima,
             'vehicle'     => $v->marka,
             'driver'      => $vozac ? trim("{$vozac->ime} {$vozac->prezime}") : null,
+            'driverId'    => $vozac?->id,
             'avatar'      => $vozac ? strtoupper(substr($vozac->ime ?? '?', 0, 1)) : '?',
         ];
 

@@ -163,6 +163,10 @@ export const adminGetAllRides = (params = {}) =>
 export const getCompanies = () =>
   api.get('/companies');
 
+/** POST /companies – kreiranje nove kompanije */
+export const createCompany = (data) =>
+  api.post('/companies', data);
+
 /** GET /admin/companies */
 export const adminGetCompanies = () =>
   api.get('/admin/companies');

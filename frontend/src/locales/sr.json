@@ -87,6 +87,7 @@
 
   "smoking": "Pušenje dozvoljeno",
   "no_smoking": "Zabranjeno pušenje",
+  "your_ride": "Vaša vožnja",
   "music": "Muzika",
   "air_condition": "Klima",
   "pets": "Kućni ljubimci OK",
@@ -119,6 +120,9 @@
   "full_name": "Ime i prezime",
   "company": "Kompanija",
   "select_company": "Izaberi kompaniju",
+  "company_not_found": "Moja kompanija nije na listi",
+  "add_company": "Dodaj kompaniju",
+  "cancel": "Otkaži",
   "company_name": "Naziv kompanije",
   "company_pib": "PIB",
   "member_since": "Član od",

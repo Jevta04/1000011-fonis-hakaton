@@ -1,6 +1,5 @@
 /* ============================================================
-   RIDE CARD – kartica vožnje (BlaBlaCar stil)
-   Mobile-first, responsive
+   RIDE CARD – kartica vožnje
    ============================================================ */
 
 .ride-card {
@@ -34,89 +33,80 @@
   padding: var(--space-4);
 }
 
-/* --- Ruta --- */
+/* --- Ruta: timeline layout --- */
 .ride-card__route {
+  display: flex;
+  gap: var(--space-3);
   margin-bottom: var(--space-4);
 }
 
-.ride-card__route-stops {
+/* Leva kolona: ikona → linija → ikona */
+.ride-card__timeline {
   display: flex;
   flex-direction: column;
-  gap: 0;
+  align-items: center;
+  flex-shrink: 0;
+  padding-top: 2px;
 }
 
-.ride-card__stop {
-  display: flex;
-  align-items: flex-start;
-  gap: var(--space-3);
-  position: relative;
-}
-
-/* Tačke (●) */
+/* Tačke */
 .ride-card__dot {
-  width: 0.75rem;
-  height: 0.75rem;
+  width: 1.25rem;
+  height: 1.25rem;
   border-radius: var(--radius-full);
   flex-shrink: 0;
-  margin-top: 0.25rem;
-  position: relative;
-  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .ride-card__dot--start {
   background-color: var(--color-primary);
+  color: #fff;
   box-shadow: 0 0 0 3px rgba(78, 159, 61, 0.2);
 }
 
 .ride-card__dot--end {
   background-color: var(--color-primary-dark);
+  color: var(--color-accent);
   border: 2px solid var(--color-primary);
-  width: 0.75rem;
-  height: 0.75rem;
   box-sizing: border-box;
 }
 
-/* Vertikalna linija između tačaka */
-.ride-card__line-wrapper {
-  display: flex;
-  align-items: center;
-  padding-left: 0.3125rem; /* 5px – centrira liniju ispod dot-a */
-  gap: var(--space-2);
-  height: 2rem;
-}
-
+/* Linija između tačaka */
 .ride-card__line {
   width: 2px;
-  height: 100%;
+  flex: 1;
+  min-height: 1.5rem;
   background: linear-gradient(
     to bottom,
     var(--color-primary) 0%,
     var(--color-primary-dark) 100%
   );
   border-radius: 1px;
-  flex-shrink: 0;
+  margin: 3px 0;
 }
 
-.ride-card__duration {
-  font-size: var(--font-size-xs);
-  color: var(--color-text-muted);
-  padding: var(--space-1) var(--space-2);
-  background-color: var(--color-bg-input);
-  border-radius: var(--radius-full);
-  white-space: nowrap;
+/* Desna kolona: tekst */
+.ride-card__route-texts {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex: 1;
+  gap: var(--space-3);
 }
 
-/* Tekst uz tačke */
 .ride-card__stop-info {
   display: flex;
   flex-direction: column;
-  gap: 0.125rem;
+  gap: 2px;
 }
 
 .ride-card__city {
   font-weight: var(--font-weight-semibold);
   font-size: var(--font-size-base);
   color: var(--color-text);
+  line-height: 1.25rem; /* matches dot height */
 }
 
 .ride-card__time {
@@ -187,17 +177,20 @@
 }
 
 .ride-card__driver-name {
-  font-weight: var(--font-weight-semibold);
-  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-base);
   color: var(--color-text);
 }
 
 .ride-card__vehicle {
-  font-size: var(--font-size-xs);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: var(--font-size-sm);
   color: var(--color-text-muted);
 }
 
-/* --- Meta (mesta + cena + dugme) --- */
+/* --- Meta (mesta + dugme) --- */
 .ride-card__meta {
   display: flex;
   flex-direction: column;
@@ -215,16 +208,13 @@
   display: flex;
   align-items: center;
   gap: var(--space-1);
-}
-
-.ride-card__seat-icon {
-  font-size: var(--font-size-sm);
-  opacity: 0.8;
+  color: var(--color-primary);
 }
 
 .ride-card__seats-count {
-  font-size: var(--font-size-xs);
-  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-primary);
   margin-left: var(--space-1);
 }
 
@@ -289,4 +279,18 @@
   background-color: var(--color-border);
   color: var(--color-text-muted);
   cursor: not-allowed;
+}
+
+/* --- Badge za sopstvenu vožnju --- */
+.ride-card__own-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-full);
+  background-color: rgba(78, 159, 61, 0.1);
+  border: 1px solid var(--color-primary);
+  color: var(--color-primary);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  white-space: nowrap;
 }

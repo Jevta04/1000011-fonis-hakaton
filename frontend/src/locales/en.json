@@ -87,6 +87,7 @@
 
   "smoking": "Smoking allowed",
   "no_smoking": "No smoking",
+  "your_ride": "Your ride",
   "music": "Music",
   "air_condition": "Air conditioning",
   "pets": "Pets OK",
@@ -119,6 +120,9 @@
   "full_name": "Full name",
   "company": "Company",
   "select_company": "Select your company",
+  "company_not_found": "My company is not on the list",
+  "add_company": "Add company",
+  "cancel": "Cancel",
   "company_name": "Company name",
   "company_pib": "Tax ID (PIB)",
   "member_since": "Member since",

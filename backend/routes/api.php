@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Route;
 Route::post('/register', [RegisterController::class, 'register']);
 Route::post('/auth/login', [LoginController::class, 'login']);
 Route::get('/companies', [CompanyController::class, 'index']);
+Route::post('/companies', [CompanyController::class, 'store']);
 Route::get('/rides', [RideController::class, 'index']);
 Route::get('/rides/{id}', [RideController::class, 'show']);
 

@@ -225,9 +225,15 @@ export function Navbar() {
               <button className="pill-logout-btn" onClick={handleLogout} title={t('logout')}>
                 <LogOut size={18} />
               </button>
-              <NavLink to="/profile" className="pill-avatar">
-                {user?.name?.charAt(0)?.toUpperCase() || '?'}
-              </NavLink>
+              <div className="pill-avatar-wrapper">
+                <NavLink to="/profile" className="pill-avatar">
+                  {user?.name?.charAt(0)?.toUpperCase() || '?'}
+                </NavLink>
+                <div className="pill-avatar-tooltip">
+                  <span className="pill-avatar-tooltip__name">{user?.name || '—'}</span>
+                  <span className="pill-avatar-tooltip__detail">{user?.email || user?.kompanija || '—'}</span>
+                </div>
+              </div>
             </div>
           </div>
 

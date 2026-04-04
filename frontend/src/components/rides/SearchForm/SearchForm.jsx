@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { MapPin, Flag, Calendar, Users, Search as SearchIcon, ArrowRight } from 'lucide-react';
+import { MapPin, Flag, Calendar, Search as SearchIcon, ArrowRight } from 'lucide-react';
 import { useTranslation } from '../../../hooks/useTranslation';
 import { Input }  from '../../common/Input/Input';
 import { Button } from '../../common/Button/Button';
@@ -10,7 +10,7 @@ export function SearchForm({ onSearch, compact = false }) {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
-  const [form, setForm] = useState({ mestoOd: '', mestoDo: '', date: '', seats: '1' });
+  const [form, setForm] = useState({ mestoOd: '', mestoDo: '', date: '' });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -60,28 +60,6 @@ export function SearchForm({ onSearch, compact = false }) {
           icon={<Calendar size={16} />}
           required
         />
-
-        <div className="search-form__select-group">
-          {!compact && (
-            <label htmlFor="seats-select" className="search-form__label">{t('seats')}</label>
-          )}
-          <div className="search-form__select-wrapper">
-            <span className="search-form__select-icon"><Users size={16} /></span>
-            <select
-              id="seats-select"
-              name="seats"
-              className="search-form__select"
-              value={form.seats}
-              onChange={handleChange}
-            >
-              {[1, 2, 3, 4, 5, 6, 7, 8].map((n) => (
-                <option key={n} value={n}>
-                  {n} {n === 1 ? t('seat_one') : t('seats')}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
       </div>
 
       <Button type="submit" variant="primary" size={compact ? 'md' : 'lg'} fullWidth icon={<SearchIcon size={16} />}>
