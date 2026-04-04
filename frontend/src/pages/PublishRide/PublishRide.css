@@ -237,6 +237,93 @@
   font-weight: var(--font-weight-medium);
 }
 
+/* --- Route calc --- */
+.publish-ride__route-calc {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--color-border);
+}
+
+.publish-ride__route-error {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--font-size-sm);
+  color: var(--color-error);
+}
+
+.publish-ride__route-info {
+  display: flex;
+  gap: var(--space-4);
+  align-items: center;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-primary);
+}
+
+/* --- Seats selector --- */
+.publish-ride__seats-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.publish-ride__seats-btns {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.publish-ride__seat-btn {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: var(--radius-full);
+  border: 1.5px solid var(--color-border);
+  background: var(--color-bg-input);
+  color: var(--color-text-muted);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-sm);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.publish-ride__seat-btn:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.publish-ride__seat-btn--active {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #fff;
+}
+
+/* --- Price display --- */
+.publish-ride__price-display {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  background: rgba(78, 159, 61, 0.1);
+  border: 1.5px solid var(--color-primary);
+  border-radius: var(--radius-xl);
+  color: var(--color-primary);
+}
+
+.publish-ride__price-amount {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  display: block;
+}
+
+.publish-ride__price-label {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  display: block;
+}
+
 /* --- Actions (Navigacija na dnu) --- */
 .publish-ride__actions {
   display: flex;

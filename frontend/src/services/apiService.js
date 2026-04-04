@@ -1,9 +1,5 @@
 import axios from 'axios';
 
-/* ============================================================
-   AXIOS INSTANCA
-   baseURL se proxy-uje na Laravel backend (vite.config.js)
-   ============================================================ */
 const api = axios.create({
   baseURL: 'http://localhost:8000/api',
   timeout: 15000,
@@ -13,169 +9,166 @@ const api = axios.create({
   },
 });
 
-/* ---- REQUEST interceptor – dodaje Bearer token ---- */
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('token');
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
+    if (token) config.headers.Authorization = `Bearer ${token}`;
     return config;
   },
   (error) => Promise.reject(error)
 );
 
-/* ---- RESPONSE interceptor – hvata greške globalno ---- */
 api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      // Token istekao ili nevalidan – obriši lokalno, PrivateRoute radi redirect
       localStorage.removeItem('token');
       localStorage.removeItem('user');
     }
-
     if (error.response?.status === 403) {
-      console.error('[API] Nedovoljne privilegije za ovu akciju.');
+      console.error('[API] Nedovoljne privilegije.');
     }
-
     if (!error.response) {
-      // Mrežna greška (server nedostupan)
       console.error('[API] Mrežna greška:', error.message);
     }
-
     return Promise.reject(error);
   }
 );
 
 /* ============================================================
-   AUTH ENDPOINTS
+   AUTH
    ============================================================ */
-
-/** POST /auth/login */
 export const login = (email, password) =>
   api.post('/auth/login', { email, password });
 
-/** POST /auth/logout */
 export const logout = () =>
   api.post('/auth/logout');
 
-/**
- * POST /auth/register
- * Šalje FormData (multipart) zbog opcione slike.
- * @param {FormData} formData – ime, prezime, email, password, broj_telefona, uloga, slika?
- */
 export const register = (formData) =>
   api.post('/register', formData, {
     headers: { 'Content-Type': 'multipart/form-data' },
   });
 
-/* ============================================================
-   RIDES (VOŽNJE) ENDPOINTS
-   ============================================================ */
+export const getMe = () =>
+  api.get('/auth/me');
 
+/* ============================================================
+   RIDES
+   ============================================================ */
 /**
  * GET /rides
- * @param {Object} params – mestoOd, mestoDo, date, seats
+ * Params: mestoOd, mestoDo, date, departure_lat, departure_lng,
+ *         arrival_lat, arrival_lng, radius_m, limit
  */
 export const getAvailableRides = (params = {}) =>
   api.get('/rides', { params });
 
-/** GET /rides/:id */
 export const getRideById = (id) =>
   api.get(`/rides/${id}`);
 
 /**
  * POST /rides
- * @param {Object} data – { mestoOd, mestoDo, datumVreme, seats, smoking, music,
- *                          airCondition, pets, luggage, vozilo: { broj_tablica, marka, boja } }
+ * data: { mestoOd, mestoDo, departure_lat, departure_lng, arrival_lat, arrival_lng,
+ *         distance_km, fuel_price_per_liter, datumVreme, seats, smoking, music,
+ *         airCondition, vozilo: { broj_tablica, marka, boja, fuel_consumption } }
  */
 export const publishRide = (data) =>
   api.post('/rides', data);
 
-/**
- * PUT /rides/:id
- */
 export const updateRide = (id, data) =>
   api.put(`/rides/${id}`, data);
 
-/**
- * DELETE /rides/:id
- */
 export const deleteRide = (id) =>
   api.delete(`/rides/${id}`);
 
-/**
- * POST /rides/:id/join
- */
 export const joinRide = (rideId) =>
   api.post(`/rides/${rideId}/join`);
 
-/**
- * POST /rides/:id/leave
- */
 export const leaveRide = (rideId) =>
   api.post(`/rides/${rideId}/leave`);
 
 /* ============================================================
-   USER (KORISNIK) ENDPOINTS
+   PASSENGERS
    ============================================================ */
+export const getRidePassengers = (rideId) =>
+  api.get(`/rides/${rideId}/passengers`);
 
-/** GET /user/profile */
+export const confirmPassenger = (rideId, passengerId) =>
+  api.patch(`/rides/${rideId}/passengers/${passengerId}/confirm`);
+
+export const rejectPassenger = (rideId, passengerId) =>
+  api.patch(`/rides/${rideId}/passengers/${passengerId}/reject`);
+
+/* ============================================================
+   VEHICLES
+   ============================================================ */
+export const getVehicles = () =>
+  api.get('/vehicles');
+
+export const createVehicle = (data) =>
+  api.post('/vehicles', data);
+
+export const updateVehicle = (id, data) =>
+  api.put(`/vehicles/${id}`, data);
+
+export const deleteVehicle = (id) =>
+  api.delete(`/vehicles/${id}`);
+
+/* ============================================================
+   USER
+   ============================================================ */
 export const getUserProfile = () =>
   api.get('/user/profile');
 
-/** PUT /user/profile */
 export const updateUserProfile = (data) =>
   api.put('/user/profile', data);
 
-/**
- * GET /user/rides – istorija vožnji ulogovanog korisnika
- */
 export const getRideHistory = () =>
   api.get('/user/rides');
 
 /* ============================================================
-   ADMIN ENDPOINTS
+   COMPANIES
    ============================================================ */
-
-/** GET /admin/users */
-export const adminGetUsers = (params = {}) =>
-  api.get('/admin/users', { params });
-
-/** GET /admin/users/:id */
-export const adminGetUser = (id) =>
-  api.get(`/admin/users/${id}`);
-
-/** PUT /admin/users/:id/approve */
-export const adminApproveUser = (id) =>
-  api.put(`/admin/users/${id}/approve`);
-
-/** DELETE /admin/users/:id */
-export const adminDeleteUser = (id) =>
-  api.delete(`/admin/users/${id}`);
-
-/** GET /admin/rides */
-export const adminGetAllRides = (params = {}) =>
-  api.get('/admin/rides', { params });
-
-/** GET /companies – javni endpoint za listu kompanija */
 export const getCompanies = () =>
   api.get('/companies');
 
-/** POST /companies – kreiranje nove kompanije */
 export const createCompany = (data) =>
   api.post('/companies', data);
 
-/** GET /admin/companies */
-export const adminGetCompanies = () =>
-  api.get('/admin/companies');
+/* ============================================================
+   ADMIN
+   ============================================================ */
+export const adminGetUsers = (params = {}) =>
+  api.get('/admin/users', { params });
 
-/** GET /admin/stats */
+export const adminDeleteUser = (id) =>
+  api.delete(`/admin/users/${id}`);
+
+export const adminGetAllRides = (params = {}) =>
+  api.get('/admin/rides', { params });
+
+export const adminDeleteRide = (id) =>
+  api.delete(`/admin/rides/${id}`);
+
 export const adminGetStats = () =>
   api.get('/admin/stats');
 
+export const adminGetCompanies = () =>
+  api.get('/admin/companies');
+
 /* ============================================================
-   EKSPORT – sirova Axios instanca (za custom pozive)
+   OSRM — kalkulacija rute (poziva se direktno sa frontenda)
    ============================================================ */
+export async function calculateRoute(depLat, depLng, arrLat, arrLng) {
+  const url = `https://router.project-osrm.org/route/v1/driving/${depLng},${depLat};${arrLng},${arrLat}?overview=full&geometries=geojson`;
+  const res  = await fetch(url);
+  const data = await res.json();
+  if (!data.routes?.[0]) throw new Error('OSRM: no route found');
+  return {
+    distanceKm:  data.routes[0].distance / 1000,
+    durationMin: Math.round(data.routes[0].duration / 60),
+    geometry:    data.routes[0].geometry,
+  };
+}
+
 export default api;

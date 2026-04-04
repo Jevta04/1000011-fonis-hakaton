@@ -103,8 +103,9 @@
   "already_joined": "Already joined",
 
   "publish_step1": "Route",
-  "publish_step2": "Vehicle & options",
-  "publish_step3": "Confirm",
+  "publish_step2": "Vehicle",
+  "publish_step3": "Price & options",
+  "publish_step4": "Review",
   "next": "Next",
   "back": "Back",
   "submit": "Publish ride",
@@ -170,5 +171,24 @@
   "show_less": "Show less",
   "view_all": "View all",
   "close": "Close",
-  "optional": "optional"
+  "optional": "optional",
+
+  "price_per_seat": "Price per seat",
+  "distance": "Distance",
+  "fuel_price": "Fuel price",
+  "fuel_consumption": "Consumption (L/100km)",
+  "duration": "Duration",
+  "pending": "Pending",
+  "confirmed": "Confirmed",
+  "rejected": "Rejected",
+  "cancelled": "Cancelled",
+  "vehicles": "Vehicles",
+  "no_vehicles": "No vehicles added",
+  "passengers_list": "Passenger list",
+  "confirm_passenger": "Confirm",
+  "reject_passenger": "Reject",
+  "your_status": "Your status",
+  "ride_not_found": "Ride not found",
+  "total_companies": "Companies",
+  "total_passengers": "Passengers"
 }

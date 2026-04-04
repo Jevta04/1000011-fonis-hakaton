@@ -103,8 +103,9 @@
   "already_joined": "Već ste prijavljeni",
 
   "publish_step1": "Ruta",
-  "publish_step2": "Vozilo i opcije",
-  "publish_step3": "Potvrda",
+  "publish_step2": "Vozilo",
+  "publish_step3": "Cena i uslovi",
+  "publish_step4": "Pregled",
   "next": "Dalje",
   "back": "Nazad",
   "submit": "Objavi vožnju",
@@ -170,5 +171,24 @@
   "show_less": "Prikaži manje",
   "view_all": "Vidi sve",
   "close": "Zatvori",
-  "optional": "opciono"
+  "optional": "opciono",
+
+  "price_per_seat": "Cena po mestu",
+  "distance": "Distanca",
+  "fuel_price": "Cena goriva",
+  "fuel_consumption": "Potrošnja (L/100km)",
+  "duration": "Trajanje",
+  "pending": "Na čekanju",
+  "confirmed": "Potvrđeno",
+  "rejected": "Odbijeno",
+  "cancelled": "Otkazano",
+  "vehicles": "Vozila",
+  "no_vehicles": "Nemate dodato vozilo",
+  "passengers_list": "Lista putnika",
+  "confirm_passenger": "Potvrdi",
+  "reject_passenger": "Odbij",
+  "your_status": "Vaš status",
+  "ride_not_found": "Vožnja nije pronađena",
+  "total_companies": "Kompanije",
+  "total_passengers": "Putnici"
 }

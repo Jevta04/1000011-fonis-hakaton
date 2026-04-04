@@ -8,12 +8,19 @@ use Illuminate\Database\Eloquent\Model;
 class Vozilo extends Model
 {
     use HasFactory;
-    protected $table='vozila';
+
+    protected $table = 'vozila';
+
     protected $fillable = [
         'user_id',
         'brojTablica',
         'marka',
-        'boja'
+        'boja',
+        'fuel_consumption_per_100km',
+    ];
+
+    protected $casts = [
+        'fuel_consumption_per_100km' => 'float',
     ];
 
     public function user()

@@ -9,6 +9,7 @@ import { SearchResults } from './pages/SearchResults/SearchResults';
 import { PublishRide }   from './pages/PublishRide/PublishRide';
 import { Profile }       from './pages/Profile/Profile';
 import { Admin }         from './pages/Admin/Admin';
+import { RideDetail }    from './pages/RideDetail/RideDetail';
 
 export default function App() {
   return (
@@ -24,6 +25,7 @@ export default function App() {
             <Route path="/search"         element={<SearchResults />} />
             <Route path="/publish"        element={<PublishRide />} />
             <Route path="/profile"        element={<Profile />} />
+            <Route path="/rides/:id"      element={<RideDetail />} />
           </Route>
         </Route>
 

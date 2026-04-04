@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
-import { Users, Car, CheckCircle } from 'lucide-react';
+import { Users, Car, CheckCircle, Building2 } from 'lucide-react';
 import { useTranslation } from '../../hooks/useTranslation';
 import { AdminTable }     from '../../components/admin/AdminTable/AdminTable';
 import {
   adminGetUsers, adminGetAllRides, adminGetCompanies,
-  adminApproveUser, adminDeleteUser, adminGetStats,
+  adminDeleteUser, adminDeleteRide, adminGetStats,
 } from '../../services/apiService';
 import './Admin.css';
 
@@ -69,18 +69,19 @@ export function Admin() {
     loadAll();
   }, []);
 
-  const handleApprove = async (user) => {
-    try {
-      await adminApproveUser(user.id);
-      setData((prev) => ({ ...prev, users: prev.users.map((u) => u.id === user.id ? { ...u, status: 'active' } : u) }));
-    } catch (err) { console.error(err); }
-  };
-
-  const handleDelete = async (user) => {
+  const handleDeleteUser = async (user) => {
     if (!window.confirm(`Obrisati korisnika "${user.name}"?`)) return;
     try {
       await adminDeleteUser(user.id);
       setData((prev) => ({ ...prev, users: prev.users.filter((u) => u.id !== user.id) }));
+    } catch (err) { console.error(err); }
+  };
+
+  const handleDeleteRide = async (ride) => {
+    if (!window.confirm(`Obrisati vožnju #${ride.id}?`)) return;
+    try {
+      await adminDeleteRide(ride.id);
+      setData((prev) => ({ ...prev, rides: prev.rides.filter((r) => r.id !== ride.id) }));
     } catch (err) { console.error(err); }
   };
 
@@ -89,9 +90,10 @@ export function Admin() {
     activeTab === 'rides' ? RIDE_COLUMNS : COMPANY_COLUMNS;
 
   const STAT_ITEMS = [
-    { Icon: Users,       label: t('total_users'),  value: stats?.total_users  ?? '—' },
-    { Icon: Car,         label: t('total_rides'),  value: stats?.total_rides  ?? '—' },
-    { Icon: CheckCircle, label: t('active_rides'), value: stats?.active_rides ?? '—' },
+    { Icon: Users,       label: t('total_users'),     value: stats?.total_users     ?? '—' },
+    { Icon: Car,         label: t('total_rides'),     value: stats?.total_rides     ?? '—' },
+    { Icon: CheckCircle, label: t('active_rides'),    value: stats?.active_rides    ?? '—' },
+    { Icon: Building2,   label: t('total_companies'), value: stats?.total_companies ?? '—' },
   ];
 
   return (
@@ -134,8 +136,7 @@ export function Admin() {
             columns={currentColumns}
             data={data[activeTab] || []}
             loading={loading}
-            onApprove={activeTab === 'users' ? handleApprove : undefined}
-            onDelete={activeTab === 'users' ? handleDelete : undefined}
+            onDelete={activeTab === 'users' ? handleDeleteUser : activeTab === 'rides' ? handleDeleteRide : undefined}
             emptyMessage={t('no_results')}
           />
         </div>
