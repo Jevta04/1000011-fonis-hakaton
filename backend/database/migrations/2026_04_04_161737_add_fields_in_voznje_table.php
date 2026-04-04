@@ -12,9 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('voznje', function (Blueprint $table) {
-            $table->string('brojTablica')->after('datumVreme');
-            $table->string('marka')->after('brojTablica');
-            $table->string('boja')->after('marka');
+            $table->string('brojTablica');
+            $table->string('marka');
+            $table->string('boja');
             $table->boolean('muzika')->default(false);
             $table->boolean('klima')->default(false);
         });

@@ -11,16 +11,15 @@ return new class extends Migration
         Schema::table('users', function (Blueprint $table) {
 
             // dodaj odmah posle id
-            $table->string('ime')->after('id');
-            $table->string('prezime')->after('ime');
+            $table->string('ime');
+            $table->string('prezime');
 
             // ostala polja
-            $table->string('uloga')->after('password');
-            $table->string('brojTelefona')->after('uloga');
+            $table->string('uloga');
+            $table->string('brojTelefona');
 
             // FK ka kompaniji
             $table->foreignId('kompanija_id')
-                  ->after('brojTelefona')
                   ->constrained('kompanije')
                   ->restrictOnDelete();
         });
