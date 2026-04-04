@@ -44,7 +44,7 @@ export function Dashboard() {
   const handleJoin = async (rideId) => {
     try {
       await joinRide(rideId);
-      setRides((prev) => prev.map((r) => r.id === rideId ? { ...r, isJoined: true } : r));
+      setRides((prev) => prev.map((r) => r.id === rideId ? { ...r, isJoined: true, seats: Math.max(0, r.seats - 1) } : r));
     } catch (err) {
       console.error(err);
     }

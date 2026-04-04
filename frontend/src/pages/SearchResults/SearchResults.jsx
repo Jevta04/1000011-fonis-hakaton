@@ -126,7 +126,7 @@ export function SearchResults() {
   };
 
   const patchRides = (setter, rideId, patch) =>
-    setter((prev) => prev.map((r) => r.id === rideId ? { ...r, ...patch } : r));
+    setter((prev) => prev.map((r) => r.id === rideId ? { ...r, ...(typeof patch === 'function' ? patch(r) : patch) } : r));
 
   const removeRide = (rideId) => {
     setRides((p) => p.filter((r) => r.id !== rideId));
@@ -137,7 +137,7 @@ export function SearchResults() {
   const handleJoin = async (rideId) => {
     try {
       await joinRide(rideId);
-      const patch = { isJoined: true };
+      const patch = (r) => ({ isJoined: true, seats: Math.max(0, r.seats - 1) });
       patchRides(setRides, rideId, patch);
       patchRides(setNearbyRides, rideId, patch);
       patchRides(setEarliestRides, rideId, patch);
