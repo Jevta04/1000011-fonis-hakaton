@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
-import { MapPin, Flag, Calendar, Search as SearchIcon, ArrowRight } from 'lucide-react';
+import { useSearchParams } from 'react-router-dom';
+import { MapPin, Flag, Calendar, Search as SearchIcon, ArrowRight, Navigation, Clock } from 'lucide-react';
 import { useTranslation } from '../../hooks/useTranslation';
 import { AddressAutocomplete } from '../../components/map/AddressAutocomplete';
 import { MapPicker }           from '../../components/map/MapPicker';
@@ -12,7 +12,6 @@ import './SearchResults.css';
 
 export function SearchResults() {
   const { t }     = useTranslation();
-  const navigate  = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
 
   const [form, setForm] = useState({
@@ -25,12 +24,47 @@ export function SearchResults() {
     arrival_lng:   searchParams.get('arrival_lng')   ? parseFloat(searchParams.get('arrival_lng'))   : null,
   });
 
-  const [rides, setRides]       = useState([]);
-  const [loading, setLoading]   = useState(false);
-  const [searched, setSearched] = useState(false);
-  const [mapOpen, setMapOpen]   = useState(false);
+  const [rides, setRides]         = useState([]);
+  const [nearbyRides, setNearbyRides] = useState([]);
+  const [earliestRides, setEarliestRides] = useState([]);
+  const [loading, setLoading]     = useState(false);
+  const [defaultLoading, setDefaultLoading] = useState(true);
+  const [searched, setSearched]   = useState(false);
+  const [mapOpen, setMapOpen]     = useState(false);
   const [mapTarget, setMapTarget] = useState(null);
 
+  // Učitaj defaultni prikaz (bez pretrage)
+  useEffect(() => {
+    const loadDefault = async (userLat, userLng) => {
+      try {
+        const [nearbyRes, earliestRes] = await Promise.all([
+          userLat
+            ? getAvailableRides({ limit: 5, user_lat: userLat, user_lng: userLng })
+            : Promise.resolve({ data: [] }),
+          getAvailableRides({ limit: 5 }),
+        ]);
+        setNearbyRides(userLat ? (nearbyRes.data?.data || nearbyRes.data || []) : []);
+        setEarliestRides(earliestRes.data?.data || earliestRes.data || []);
+      } catch {
+        setNearbyRides([]);
+        setEarliestRides([]);
+      } finally {
+        setDefaultLoading(false);
+      }
+    };
+
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        ({ coords }) => loadDefault(coords.latitude, coords.longitude),
+        () => loadDefault(null, null),
+        { timeout: 3000 }
+      );
+    } else {
+      loadDefault(null, null);
+    }
+  }, []);
+
+  // Pretraga iz URL parametara
   useEffect(() => {
     const mo = searchParams.get('mestoOd');
     const md = searchParams.get('mestoDo');
@@ -69,9 +103,9 @@ export function SearchResults() {
   const handleSearch = (e) => {
     e.preventDefault();
     const params = new URLSearchParams();
-    if (form.mestoOd)      params.set('mestoOd', form.mestoOd);
-    if (form.mestoDo)      params.set('mestoDo', form.mestoDo);
-    if (form.date)         params.set('date', form.date);
+    if (form.mestoOd)       params.set('mestoOd', form.mestoOd);
+    if (form.mestoDo)       params.set('mestoDo', form.mestoDo);
+    if (form.date)          params.set('date', form.date);
     if (form.departure_lat) params.set('departure_lat', form.departure_lat);
     if (form.departure_lng) params.set('departure_lng', form.departure_lng);
     if (form.arrival_lat)   params.set('arrival_lat', form.arrival_lat);
@@ -91,32 +125,48 @@ export function SearchResults() {
     handleLocSelect(mapTarget)({ address, lat, lng });
   };
 
+  const patchRides = (setter, rideId, patch) =>
+    setter((prev) => prev.map((r) => r.id === rideId ? { ...r, ...patch } : r));
+
+  const removeRide = (rideId) => {
+    setRides((p) => p.filter((r) => r.id !== rideId));
+    setNearbyRides((p) => p.filter((r) => r.id !== rideId));
+    setEarliestRides((p) => p.filter((r) => r.id !== rideId));
+  };
+
   const handleJoin = async (rideId) => {
     try {
       await joinRide(rideId);
-      setRides((prev) => prev.map((r) => r.id === rideId ? { ...r, isJoined: true } : r));
-    } catch (err) {
-      console.error(err);
-    }
+      const patch = { isJoined: true };
+      patchRides(setRides, rideId, patch);
+      patchRides(setNearbyRides, rideId, patch);
+      patchRides(setEarliestRides, rideId, patch);
+    } catch (err) { console.error(err); }
   };
 
   const handleLeave = async (rideId) => {
     try {
       await leaveRide(rideId);
-      setRides((prev) => prev.map((r) => r.id === rideId ? { ...r, isJoined: false, seats: r.seats + 1 } : r));
-    } catch (err) {
-      console.error(err);
-    }
+      const patch = { isJoined: false };
+      patchRides(setRides, rideId, patch);
+      patchRides(setNearbyRides, rideId, patch);
+      patchRides(setEarliestRides, rideId, patch);
+    } catch (err) { console.error(err); }
   };
 
   const handleDelete = async (rideId) => {
     try {
       await deleteRide(rideId);
-      setRides((prev) => prev.filter((r) => r.id !== rideId));
-    } catch (err) {
-      console.error(err);
-    }
+      removeRide(rideId);
+    } catch (err) { console.error(err); }
   };
+
+  const rideCardProps = (ride) => ({
+    ...ride,
+    onJoin:   () => handleJoin(ride.id),
+    onLeave:  () => handleLeave(ride.id),
+    onDelete: () => handleDelete(ride.id),
+  });
 
   return (
     <div className="search-results page-enter">
@@ -127,16 +177,18 @@ export function SearchResults() {
             <AddressAutocomplete
               placeholder={t('from_placeholder')}
               value={form.mestoOd}
-              onChange={(v) => setForm((p) => ({ ...p, mestoOd: v }))}
+              onChange={(v) => setForm((p) => ({ ...p, mestoOd: v, departure_lat: null, departure_lng: null }))}
               onSelect={handleLocSelect('dep')}
               onMapClick={() => { setMapTarget('dep'); setMapOpen(true); }}
               icon={<MapPin size={15} />}
             />
-            <ArrowRight size={16} className="search-results__form-arrow" />
+            <span className="search-results__form-arrow" aria-hidden="true">
+              <ArrowRight size={18} strokeWidth={2} />
+            </span>
             <AddressAutocomplete
               placeholder={t('to_placeholder')}
               value={form.mestoDo}
-              onChange={(v) => setForm((p) => ({ ...p, mestoDo: v }))}
+              onChange={(v) => setForm((p) => ({ ...p, mestoDo: v, arrival_lat: null, arrival_lng: null }))}
               onSelect={handleLocSelect('arr')}
               onMapClick={() => { setMapTarget('arr'); setMapOpen(true); }}
               icon={<Flag size={15} />}
@@ -154,48 +206,90 @@ export function SearchResults() {
           </form>
         </section>
 
-        {/* Rezultati */}
-        <section className="search-results__content">
-          {form.mestoOd && form.mestoDo && (
-            <div className="search-results__header">
-              <h1 className="search-results__title">
-                {form.mestoOd}
-                <span className="search-results__arrow" aria-hidden="true"> → </span>
-                {form.mestoDo}
-              </h1>
-              {!loading && searched && (
-                <span className="search-results__count">
-                  {rides.length} {t('available_rides').toLowerCase()}
-                </span>
-              )}
-            </div>
-          )}
+        {/* Rezultati pretrage */}
+        {searched ? (
+          <section className="search-results__content">
+            {form.mestoOd && form.mestoDo && (
+              <div className="search-results__header">
+                <h1 className="search-results__title">
+                  {form.mestoOd}
+                  <span className="search-results__arrow" aria-hidden="true"> → </span>
+                  {form.mestoDo}
+                </h1>
+                {!loading && (
+                  <span className="search-results__count">
+                    {rides.length} {t('available_rides').toLowerCase()}
+                  </span>
+                )}
+              </div>
+            )}
 
-          {loading ? (
-            <div className="search-results__loading" role="status">
-              {[1, 2, 3, 4].map((i) => (
-                <div key={i} className="search-results__skeleton" aria-hidden="true" />
-              ))}
-            </div>
-          ) : searched && rides.length === 0 ? (
-            <div className="search-results__empty">
-              <span aria-hidden="true">🔍</span>
-              <h2>{t('no_rides_found')}</h2>
-            </div>
-          ) : (
-            <div className="search-results__list">
-              {rides.map((ride) => (
-                <RideCard
-                  key={ride.id}
-                  {...ride}
-                  onJoin={() => handleJoin(ride.id)}
-                  onLeave={() => handleLeave(ride.id)}
-                  onDelete={() => handleDelete(ride.id)}
-                />
-              ))}
-            </div>
-          )}
-        </section>
+            {loading ? (
+              <div className="search-results__loading" role="status">
+                {[1, 2, 3, 4].map((i) => (
+                  <div key={i} className="search-results__skeleton" aria-hidden="true" />
+                ))}
+              </div>
+            ) : rides.length === 0 ? (
+              <div className="search-results__empty">
+                <span aria-hidden="true">🔍</span>
+                <h2>{t('no_rides_found')}</h2>
+              </div>
+            ) : (
+              <div className="search-results__list">
+                {rides.map((ride) => (
+                  <RideCard key={ride.id} {...rideCardProps(ride)} />
+                ))}
+              </div>
+            )}
+          </section>
+        ) : (
+          /* Default prikaz — bez pretrage */
+          <section className="search-results__default">
+            {defaultLoading ? (
+              <div className="search-results__loading" role="status">
+                {[1, 2, 3].map((i) => (
+                  <div key={i} className="search-results__skeleton" aria-hidden="true" />
+                ))}
+              </div>
+            ) : (
+              <>
+                {nearbyRides.length > 0 && (
+                  <div className="search-results__section">
+                    <h2 className="search-results__section-title">
+                      <Navigation size={16} /> Najbliže vama
+                    </h2>
+                    <div className="search-results__list">
+                      {nearbyRides.map((ride) => (
+                        <RideCard key={ride.id} {...rideCardProps(ride)} />
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {earliestRides.length > 0 && (
+                  <div className="search-results__section">
+                    <h2 className="search-results__section-title">
+                      <Clock size={16} /> Najranije vožnje
+                    </h2>
+                    <div className="search-results__list">
+                      {earliestRides.map((ride) => (
+                        <RideCard key={ride.id} {...rideCardProps(ride)} />
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {nearbyRides.length === 0 && earliestRides.length === 0 && (
+                  <div className="search-results__empty">
+                    <span aria-hidden="true">🚗</span>
+                    <h2>{t('no_rides_found')}</h2>
+                  </div>
+                )}
+              </>
+            )}
+          </section>
+        )}
       </div>
 
       <MapPicker
