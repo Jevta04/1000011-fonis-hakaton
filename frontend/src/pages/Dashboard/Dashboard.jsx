@@ -6,12 +6,6 @@ import { RideCard }    from '../../components/rides/RideCard/RideCard';
 import { getAvailableRides, joinRide } from '../../services/apiService';
 import './Dashboard.css';
 
-const MOCK_RIDES = [
-  { id: 1, mestoOd: 'Bežanijska kosa', mestoDo: 'Novi Beograd (Ušće)', datumVreme: '2026-04-10T07:30:00', seats: 3, driver: 'Marko Petrović',  avatar: 'M', vehicle: 'Škoda Octavia',  smoking: false, music: true,  airCondition: true,  pets: false },
-  { id: 2, mestoOd: 'Zemun centar',    mestoDo: 'Savski venac',        datumVreme: '2026-04-10T08:00:00', seats: 1, driver: 'Ana Jovanović',   avatar: 'A', vehicle: 'Toyota Corolla', smoking: false, music: false, airCondition: true,  pets: true  },
-  { id: 3, mestoOd: 'Voždovac',        mestoDo: 'Novi Beograd (Ušće)', datumVreme: '2026-04-11T07:15:00', seats: 0, driver: 'Nikola Nikolić',  avatar: 'N', vehicle: 'BMW Serija 3',   smoking: true,  music: true,  airCondition: false, pets: false },
-];
-
 export function Dashboard() {
   const { t } = useTranslation();
   const [rides, setRides]     = useState([]);
@@ -28,7 +22,7 @@ export function Dashboard() {
         const response = await getAvailableRides({ limit: 5 });
         setRides(response.data?.data || response.data || []);
       } catch {
-        setRides(MOCK_RIDES);
+        setRides([]);
       } finally {
         setLoading(false);
       }
