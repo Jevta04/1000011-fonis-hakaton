@@ -1,183 +1,308 @@
 /* ============================================================
-   PROFILE PAGE
+   PROFILE PAGE COMPONENT CSS - THEME TOGGLE & WIDE EDGES
    ============================================================ */
 
-.profile {
-  padding-block: var(--space-4);
-}
+/* DARK TEMA (Default) */
+.profile-page-wrapper {
+  --bg-color: #191A19;
+  --card-bg: linear-gradient(145deg, #1b211c 0%, #191A19 100%);
+  --card-border: rgba(255, 255, 255, 0.05);
+  --text-primary: #f5f7f8;
+  --text-secondary: #d8e9a8;
+  --card-shadow: 0 4px 20px -4px rgba(0, 0, 0, 0.4);
+  --dashed-border: #1e5128;
+  --tag-bg: rgba(30, 81, 40, 0.1);
+  --tag-border: #1e5128;
+  
+  /* Header ostaje isti u obe teme jer zelena uvek dobro izgleda */
+  --header-bg: linear-gradient(135deg, #2a6634 0%, #111512 100%);
 
-.profile .container {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-8);
-}
-
-/* --- Profil kartica --- */
-.profile__card {
-  background-color: var(--color-bg-card);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-2xl);
-  padding: var(--space-8) var(--space-6);
-  box-shadow: var(--shadow-md);
+  background-color: var(--bg-color); 
+  min-height: 100vh;
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--space-5);
-  text-align: center;
-  transition: background-color var(--transition-normal);
+  transition: background-color 0.3s ease;
 }
 
-@media (min-width: 48em) {
-  .profile__card {
-    flex-direction: row;
-    text-align: left;
-    align-items: flex-start;
-    gap: var(--space-8);
-  }
+/* LIGHT TEMA */
+.profile-page-wrapper.theme-light {
+  --bg-color: #e8ecef; /* Svetlo siva pozadina stranice */
+  --card-bg: #ffffff; /* Bele kartice dole */
+  --card-border: #d8e9a8;
+  --text-primary: #191A19; /* Crna slova u donjim karticama */
+  --text-secondary: #1e5128;
+  --card-shadow: 0 4px 20px -4px rgba(0, 0, 0, 0.08);
+  --dashed-border: #4e9f3d;
+  --tag-bg: rgba(78, 159, 61, 0.15);
+  --tag-border: #4e9f3d;
+  
+  --header-bg: linear-gradient(135deg, #3a8246 0%, #1e5128 100%); /* Malo življa zelena za svetlu temu */
 }
 
-/* --- Avatar --- */
-.profile__avatar {
-  width: 5rem;
-  height: 5rem;
-  border-radius: var(--radius-full);
-  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: var(--font-size-3xl);
-  font-weight: var(--font-weight-bold);
+.navbar-spacer {
+  height: 120px; 
+  width: 100%;
+  display: block;
+}
+
+/* --- GLAVNI KONTEJNER PROFILA - SKROZ DO IVICE --- */
+.profile-content-box {
+  max-width: 1400px !important; /* DOZVOLJENO ŠIRENJE DO IVICE */
+  width: 96% !important; /* OSTAVLJA SAMO 2% LUFTA SA STRANE */
+  margin: 0 auto !important;
+  padding: 0 0 40px 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 1.5rem !important;
+}
+
+/* --- HEADER KARTICA --- */
+.profile-header {
+  background: var(--header-bg) !important;
+  border-radius: 1.5rem !important;
+  padding: 2.5rem 3rem !important; 
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: space-between !important; 
+  gap: 2rem !important;
+  width: 100% !important;
+  box-shadow: 0 0 30px -5px rgba(78, 159, 61, 0.25) !important; 
+  border: 1px solid rgba(78, 159, 61, 0.15) !important; 
+  transition: background 0.3s ease !important;
+}
+
+.profile-avatar-wrapper {
+  position: relative;
   flex-shrink: 0;
-  box-shadow: 0 0.25rem 1rem rgba(78, 159, 61, 0.35);
 }
 
-/* --- Info --- */
-.profile__info {
+.profile-avatar {
+  width: 120px;
+  height: 120px;
+  background-color: #4e9f3d !important; 
+  color: #f5f7f8 !important;
+  font-size: 3.5rem !important;
+  font-weight: 700 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 50% !important;
+  box-shadow: 0 0 20px rgba(78, 159, 61, 0.4) !important; 
+}
+
+.profile-verified-badge {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background-color: #4e9f3d !important;
+  color: #f5f7f8 !important;
+  border: 4px solid #1e5128 !important; /* Prati tamniju zelenu */
+  border-radius: 50% !important;
+  padding: 6px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.profile-info {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: var(--space-1);
+  justify-content: center;
 }
 
-.profile__name {
-  font-size: var(--font-size-2xl);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-text);
+/* Tekst u headeru uvek ostaje isti jer je pozadina uvek zelena */
+.profile-info h1 {
+  margin: 0 0 0.5rem 0 !important;
+  font-size: 2rem !important;
+  color: #f5f7f8 !important; 
+  font-weight: 700 !important;
 }
 
-.profile__email,
-.profile__company {
-  font-size: var(--font-size-sm);
+.profile-info p {
+  margin: 0 0 0.4rem 0 !important;
+  color: #d8e9a8 !important;
+  font-size: 1rem !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.6rem !important;
 }
 
-/* --- Stats --- */
-.profile__stats {
-  display: flex;
-  gap: var(--space-6);
-  flex-shrink: 0;
+/* Bedževi unutar headera */
+.profile-badges {
+  display: flex !important;
+  gap: 0.75rem !important;
+  margin-top: 1.5rem !important;
+  flex-wrap: wrap !important;
 }
 
-@media (min-width: 48em) {
-  .profile__stats {
-    flex-direction: column;
-    gap: var(--space-3);
+.badge {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 0.4rem !important;
+  padding: 0.4rem 1rem !important;
+  border-radius: 50px !important;
+  border: 1px solid #4e9f3d !important; 
+  color: #4e9f3d !important; 
+  font-size: 0.85rem !important;
+  font-weight: 600 !important;
+  background-color: rgba(78, 159, 61, 0.1) !important; 
+}
+
+/* Statistika desno */
+.profile-stats {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 1.5rem !important;
+  text-align: right !important; 
+  flex-shrink: 0 !important;
+}
+
+.stat {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-end !important;
+}
+
+.stat-number {
+  font-size: 2.8rem !important;
+  font-weight: 800 !important;
+  color: #4e9f3d !important; 
+  line-height: 1 !important;
+}
+
+.stat-label {
+  font-size: 0.9rem !important;
+  color: #d8e9a8 !important;
+  margin-top: 0.4rem !important;
+  font-weight: 500 !important;
+}
+
+/* --- DONJE KARTICE (Reaguju na temu) --- */
+.profile-grid {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important; 
+  gap: 1.5rem !important;
+  width: 100% !important; 
+}
+
+.profile-card {
+  background: var(--card-bg) !important; 
+  border: 1px solid var(--card-border) !important; 
+  border-radius: 1.5rem !important;
+  padding: 2rem 2.5rem !important;
+  display: flex !important;
+  flex-direction: column !important;
+  width: 100% !important;
+  box-shadow: var(--card-shadow) !important;
+  transition: all 0.3s ease !important;
+}
+
+.card-title {
+  font-size: 1.25rem !important;
+  color: var(--text-primary) !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.6rem !important;
+  margin: 0 0 1.5rem 0 !important;
+  font-weight: 700 !important;
+  transition: color 0.3s ease !important;
+}
+
+/* --- DUGME ZA DODAVANJE VOZILA --- */
+.add-vehicle-btn {
+  width: 100% !important;
+  flex: 1 !important;
+  background-color: transparent !important;
+  border: 2px dashed var(--dashed-border) !important; 
+  border-radius: 1rem !important;
+  padding: 3rem 1rem !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+  transition: all 0.2s !important;
+}
+
+.add-vehicle-btn:hover {
+  border-color: #4e9f3d !important;
+  background-color: rgba(78, 159, 61, 0.05) !important;
+  box-shadow: 0 0 15px rgba(78, 159, 61, 0.1) !important;
+}
+
+.add-icon {
+  color: var(--dashed-border) !important;
+  margin-bottom: 0.75rem !important;
+  transition: color 0.2s !important;
+}
+
+.add-vehicle-btn:hover .add-icon {
+  color: #4e9f3d !important;
+}
+
+.add-title {
+  color: var(--text-primary) !important; 
+  font-weight: 600 !important;
+  font-size: 1.1rem !important;
+  margin-bottom: 0.3rem !important;
+  transition: color 0.3s ease !important;
+}
+
+.add-subtitle {
+  color: var(--text-secondary) !important;
+  font-size: 0.9rem !important;
+  transition: color 0.3s ease !important;
+}
+
+/* --- TAGOVI ZA SKLONOSTI --- */
+.preferences-list {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 0.85rem !important;
+}
+
+.pref-tag {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 0.5rem !important;
+  padding: 0.6rem 1.2rem !important;
+  border-radius: 50px !important;
+  border: 1px solid var(--tag-border) !important; 
+  color: #4e9f3d !important; 
+  font-size: 0.9rem !important;
+  font-weight: 600 !important;
+  background-color: var(--tag-bg) !important;
+  transition: all 0.2s !important;
+}
+
+.pref-tag:hover {
+  border-color: #4e9f3d !important;
+  box-shadow: 0 0 10px rgba(78, 159, 61, 0.2) !important;
+}
+
+/* Mobilni prikaz */
+@media (max-width: 768px) {
+  .profile-content-box {
+    width: 95% !important; /* Na mobitelu neka bude malo manji luft */
   }
-}
-
-.profile__stat {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--space-1);
-}
-
-@media (min-width: 48em) {
-  .profile__stat {
-    align-items: flex-end;
+  .profile-header {
+    flex-direction: column !important;
+    text-align: center !important;
   }
-}
-
-.profile__stat-value {
-  font-size: var(--font-size-xl);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-primary);
-  line-height: 1;
-}
-
-.profile__stat-label {
-  font-size: var(--font-size-xs);
-  color: var(--color-text-muted);
-  text-align: center;
-}
-
-/* --- Istorija --- */
-.profile__history-title {
-  font-size: var(--font-size-xl);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-text);
-  margin-bottom: var(--space-4);
-}
-
-/* --- Tabovi --- */
-.profile__tabs {
-  display: flex;
-  gap: var(--space-2);
-  margin-bottom: var(--space-5);
-  border-bottom: 2px solid var(--color-border);
-  padding-bottom: 0;
-}
-
-.profile__tab {
-  padding: var(--space-2) var(--space-4);
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-medium);
-  color: var(--color-text-muted);
-  border: none;
-  background: none;
-  cursor: pointer;
-  border-bottom: 2px solid transparent;
-  margin-bottom: -2px;
-  transition: color var(--transition-fast), border-color var(--transition-fast);
-}
-
-.profile__tab:hover {
-  color: var(--color-primary);
-}
-
-.profile__tab--active {
-  color: var(--color-primary);
-  font-weight: var(--font-weight-semibold);
-  border-bottom-color: var(--color-primary);
-}
-
-/* --- Lista vožnji --- */
-.profile__rides-list {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-4);
-}
-
-/* --- Skeleton --- */
-.profile__skeleton {
-  height: 16rem;
-  background: linear-gradient(90deg, var(--color-bg-input) 25%, var(--color-border) 50%, var(--color-bg-input) 75%);
-  background-size: 200% 100%;
-  border-radius: var(--radius-2xl);
-  animation: skeleton-pulse 1.5s ease-in-out infinite;
-}
-
-/* --- Empty --- */
-.profile__empty {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--space-3);
-  padding: var(--space-10) 0;
-  color: var(--color-text-muted);
-}
-
-.profile__empty span {
-  font-size: 2.5rem;
-  opacity: 0.5;
+  .profile-stats {
+    flex-direction: row !important;
+    justify-content: space-around !important;
+    width: 100% !important;
+    text-align: center !important;
+  }
+  .stat {
+    align-items: center !important;
+  }
+  .profile-grid {
+    grid-template-columns: 1fr !important; 
+  }
 }
