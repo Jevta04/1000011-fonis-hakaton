@@ -260,6 +260,9 @@
 
 /* --- Join dugme --- */
 .ride-card__join-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
   padding: var(--space-2) var(--space-5);
   border-radius: var(--radius-lg);
   background-color: var(--color-primary);

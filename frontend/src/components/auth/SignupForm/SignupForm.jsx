@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { User, Mail, Lock, Phone, AlertCircle, CheckCircle } from 'lucide-react';
+import { User, Mail, Lock, Phone, Building2, AlertCircle, CheckCircle } from 'lucide-react';
 import { useTranslation } from '../../../hooks/useTranslation';
-import { register } from '../../../services/apiService';
+import { register, getCompanies } from '../../../services/apiService';
 import { Input }    from '../../common/Input/Input';
 import { Button }   from '../../common/Button/Button';
 import './SignupForm.css';
@@ -17,7 +17,7 @@ function isCompanyEmail(email) {
 
 const INITIAL = {
   ime: '', prezime: '', email: '', password: '',
-  password_confirm: '', broj_telefona: '',
+  password_confirm: '', broj_telefona: '', kompanija_id: '',
 };
 
 export function SignupForm({ onSwitchToLogin }) {
@@ -28,6 +28,13 @@ export function SignupForm({ onSwitchToLogin }) {
   const [errors, setErrors]           = useState({});
   const [serverError, setServerError] = useState('');
   const [loading, setLoading]         = useState(false);
+  const [companies, setCompanies]     = useState([]);
+
+  useEffect(() => {
+    getCompanies()
+      .then((res) => setCompanies(res.data?.data || res.data || []))
+      .catch(() => {});
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -43,6 +50,7 @@ export function SignupForm({ onSwitchToLogin }) {
     if (form.password.length < 6)   e.password = t('password_required');
     if (form.password !== form.password_confirm) e.password_confirm = t('password_mismatch');
     if (!form.broj_telefona.trim()) e.broj_telefona = t('field_required');
+    if (!form.kompanija_id)         e.kompanija_id  = t('field_required');
     return e;
   };
 
@@ -60,6 +68,7 @@ export function SignupForm({ onSwitchToLogin }) {
       formData.append('email',         form.email);
       formData.append('password',      form.password);
       formData.append('broj_telefona', form.broj_telefona);
+      formData.append('kompanija_id',  form.kompanija_id);
       formData.append('uloga',         'zaposleni');
 
       const response = await register(formData);
@@ -134,6 +143,28 @@ export function SignupForm({ onSwitchToLogin }) {
           error={errors.broj_telefona} icon={<Phone size={16} />}
           required
         />
+
+        <div className="signup-form__field">
+          <label className="signup-form__label">
+            <Building2 size={16} className="signup-form__field-icon" />
+            {t('company')} *
+          </label>
+          <select
+            name="kompanija_id"
+            value={form.kompanija_id}
+            onChange={handleChange}
+            className={`signup-form__select ${errors.kompanija_id ? 'signup-form__select--error' : ''}`}
+            required
+          >
+            <option value="">{t('select_company')}</option>
+            {companies.map((c) => (
+              <option key={c.id} value={c.id}>{c.name || c.naziv}</option>
+            ))}
+          </select>
+          {errors.kompanija_id && (
+            <span className="signup-form__error">{errors.kompanija_id}</span>
+          )}
+        </div>
 
         <Input
           name="password" type="password"

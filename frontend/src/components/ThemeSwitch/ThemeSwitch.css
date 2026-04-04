@@ -42,8 +42,16 @@
 }
 
 .theme-switch input:checked + .theme-switch__slider {
-  background-color: var(--color-bg-nav);
+  background-color: var(--color-bg-input);
   border-color: var(--color-border);
+}
+
+html.dark .theme-switch__slider {
+  background-color: var(--color-bg-nav);
+}
+
+html.dark .theme-switch input:checked + .theme-switch__slider {
+  background-color: var(--color-bg-nav);
 }
 
 .theme-switch input:checked + .theme-switch__slider::before {

@@ -64,6 +64,53 @@
   gap: var(--space-3);
 }
 
+/* --- Company select --- */
+.signup-form__field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.signup-form__label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text);
+}
+
+.signup-form__field-icon {
+  color: var(--color-text-muted);
+}
+
+.signup-form__select {
+  width: 100%;
+  padding: var(--space-3) var(--space-4);
+  background-color: var(--color-bg-input);
+  border: 0.0625rem solid var(--color-border);
+  border-radius: var(--radius-lg);
+  color: var(--color-text);
+  font-size: var(--font-size-sm);
+  cursor: pointer;
+  transition: border-color var(--transition-fast);
+  appearance: none;
+}
+
+.signup-form__select:focus {
+  outline: none;
+  border-color: var(--color-primary);
+}
+
+.signup-form__select--error {
+  border-color: var(--color-error);
+}
+
+.signup-form__error {
+  font-size: var(--font-size-xs);
+  color: var(--color-error);
+}
+
 /* --- Switch link --- */
 .signup-form__switch {
   text-align: center;

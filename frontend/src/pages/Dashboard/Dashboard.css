@@ -93,6 +93,10 @@
 }
 
 .dashboard__view-all {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  white-space: nowrap;
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-semibold);
   color: var(--color-primary);

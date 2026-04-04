@@ -160,6 +160,10 @@ export const adminDeleteUser = (id) =>
 export const adminGetAllRides = (params = {}) =>
   api.get('/admin/rides', { params });
 
+/** GET /companies – javni endpoint za listu kompanija */
+export const getCompanies = () =>
+  api.get('/companies');
+
 /** GET /admin/companies */
 export const adminGetCompanies = () =>
   api.get('/admin/companies');

@@ -34,7 +34,6 @@ export function Navbar() {
     { to: '/',        label: t('nav_home') },
     { to: '/search',  label: t('nav_search') },
     { to: '/publish', label: t('nav_publish') },
-    { to: '/profile', label: t('nav_profile') },
     ...(isAdmin ? [{ to: '/admin', label: t('nav_admin') }] : []),
   ];
 
@@ -73,9 +72,9 @@ export function Navbar() {
 
           {/* Avatar + Logout */}
           <div className="navbar__user">
-            <span className="navbar__avatar">
+            <NavLink to="/profile" className="navbar__avatar">
               {user?.name?.charAt(0)?.toUpperCase() || '?'}
-            </span>
+            </NavLink>
             <button
               className="navbar__logout"
               onClick={handleLogout}

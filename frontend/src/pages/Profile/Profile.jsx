@@ -74,12 +74,6 @@ export function Profile() {
               <span className="profile__stat-value">{passengerRides.length}</span>
               <span className="profile__stat-label">{t('rides_as_passenger')}</span>
             </div>
-            <div className="profile__stat">
-              <span className="profile__stat-value">
-                {profile?.rating ? `${profile.rating}★` : '—'}
-              </span>
-              <span className="profile__stat-label">{t('rating')}</span>
-            </div>
           </div>
         </section>
 

@@ -52,6 +52,14 @@
   border-color: var(--color-border);
 }
 
+html.dark .locale-switch__slider {
+  background-color: var(--color-bg-nav);
+}
+
+html.dark .locale-switch input:checked + .locale-switch__slider {
+  background-color: var(--color-bg-nav);
+}
+
 .locale-switch input:checked + .locale-switch__slider .locale-switch__flag {
   left: calc(100% - (var(--icon) + var(--offset)));
 }

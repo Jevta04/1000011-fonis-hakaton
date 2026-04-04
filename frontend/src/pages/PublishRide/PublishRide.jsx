@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import {
   MapPin, Flag, Calendar, Car, Hash,
   Palette, ChevronRight, ChevronLeft, Check,
-  Cigarette, Music, Wind, PawPrint, Briefcase,
+  Cigarette, Music, Wind,
 } from 'lucide-react';
 import { useTranslation } from '../../hooks/useTranslation';
 import { publishRide }    from '../../services/apiService';
@@ -19,7 +19,7 @@ const INITIAL = {
   // Korak 2 – Vozilo
   broj_tablica: '', marka: '', boja: '',
   // Opcije vožnje
-  smoking: false, music: false, airCondition: false, pets: false, luggage: false,
+  smoking: false, music: false, airCondition: false,
 };
 
 export function PublishRide() {
@@ -72,8 +72,6 @@ export function PublishRide() {
         smoking:     form.smoking,
         music:       form.music,
         airCondition: form.airCondition,
-        pets:        form.pets,
-        luggage:     form.luggage,
         vozilo: {
           broj_tablica: form.broj_tablica,
           marka:        form.marka,
@@ -93,8 +91,6 @@ export function PublishRide() {
     { key: 'smoking',      Icon: Cigarette,  labelKey: 'smoking'       },
     { key: 'music',        Icon: Music,      labelKey: 'music'         },
     { key: 'airCondition', Icon: Wind,       labelKey: 'air_condition' },
-    { key: 'pets',         Icon: PawPrint,   labelKey: 'pets'          },
-    { key: 'luggage',      Icon: Briefcase,  labelKey: 'luggage'       },
   ];
 
   return (
