@@ -11,7 +11,7 @@ export function Login() {
   const navigate = useNavigate();
   const { isDark, toggleTheme }       = useTheme();
   const { locale, toggleLocale, t }   = useTranslation();
-  const [activeTab, setActiveTab]     = useState('register');
+  const [activeTab, setActiveTab]     = useState('login');
 
   useEffect(() => {
     if (localStorage.getItem('token')) navigate('/', { replace: true });
