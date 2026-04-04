@@ -3,7 +3,7 @@ import { Car, ArrowRight } from 'lucide-react';
 import { useTranslation } from '../../hooks/useTranslation';
 import { SearchForm }  from '../../components/rides/SearchForm/SearchForm';
 import { RideCard }    from '../../components/rides/RideCard/RideCard';
-import { getAvailableRides, joinRide } from '../../services/apiService';
+import { getAvailableRides, joinRide, leaveRide, deleteRide } from '../../services/apiService';
 import './Dashboard.css';
 
 export function Dashboard() {
@@ -33,7 +33,25 @@ export function Dashboard() {
   const handleJoin = async (rideId) => {
     try {
       await joinRide(rideId);
-      setRides((prev) => prev.map((r) => r.id === rideId ? { ...r, seats: r.seats - 1 } : r));
+      setRides((prev) => prev.map((r) => r.id === rideId ? { ...r, isJoined: true } : r));
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleLeave = async (rideId) => {
+    try {
+      await leaveRide(rideId);
+      setRides((prev) => prev.map((r) => r.id === rideId ? { ...r, isJoined: false, seats: r.seats + 1 } : r));
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleDelete = async (rideId) => {
+    try {
+      await deleteRide(rideId);
+      setRides((prev) => prev.filter((r) => r.id !== rideId));
     } catch (err) {
       console.error(err);
     }
@@ -78,7 +96,13 @@ export function Dashboard() {
           ) : (
             <div className="dashboard__rides-list">
               {rides.map((ride) => (
-                <RideCard key={ride.id} {...ride} onJoin={() => handleJoin(ride.id)} />
+                <RideCard
+                  key={ride.id}
+                  {...ride}
+                  onJoin={() => handleJoin(ride.id)}
+                  onLeave={() => handleLeave(ride.id)}
+                  onDelete={() => handleDelete(ride.id)}
+                />
               ))}
             </div>
           )}

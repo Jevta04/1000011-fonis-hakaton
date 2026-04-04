@@ -190,6 +190,15 @@
   color: var(--color-text-muted);
 }
 
+.ride-card__car-color {
+  display: inline-block;
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: var(--radius-full);
+  border: 1.5px solid rgba(0, 0, 0, 0.2);
+  flex-shrink: 0;
+}
+
 /* --- Meta (mesta + dugme) --- */
 .ride-card__meta {
   display: flex;
@@ -279,6 +288,48 @@
   background-color: var(--color-border);
   color: var(--color-text-muted);
   cursor: not-allowed;
+}
+
+/* --- Leave dugme --- */
+.ride-card__leave-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-lg);
+  background-color: transparent;
+  border: 1.5px solid var(--color-error, #ef4444);
+  color: var(--color-error, #ef4444);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-sm);
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+  white-space: nowrap;
+}
+
+.ride-card__leave-btn:hover {
+  background-color: rgba(239, 68, 68, 0.08);
+}
+
+/* --- Cancel dugme (za vozača) --- */
+.ride-card__cancel-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-lg);
+  background-color: rgba(239, 68, 68, 0.1);
+  border: 1.5px solid var(--color-error, #ef4444);
+  color: var(--color-error, #ef4444);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-sm);
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+  white-space: nowrap;
+}
+
+.ride-card__cancel-btn:hover {
+  background-color: rgba(239, 68, 68, 0.18);
 }
 
 /* --- Badge za sopstvenu vožnju --- */

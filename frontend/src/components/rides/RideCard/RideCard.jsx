@@ -1,13 +1,39 @@
-import { MapPin, Flag, Users, Car, ChevronRight, CigaretteOff, Cigarette, Music, Wind, PawPrint } from 'lucide-react';
+import { MapPin, Flag, Users, Car, ChevronRight, CigaretteOff, Cigarette, Music, Wind, PawPrint, X, LogOut } from 'lucide-react';
 import { useTranslation } from '../../../hooks/useTranslation';
 import { formatDate } from '../../../utils/helpers';
 import './RideCard.css';
 
+const COLOR_MAP = {
+  'crna': '#1a1a1a',   'black': '#1a1a1a',
+  'bela': '#e8e8e8',   'white': '#e8e8e8',
+  'siva': '#718096',   'grey': '#718096', 'gray': '#718096',
+  'crvena': '#e53e3e', 'red': '#e53e3e',
+  'plava': '#3182ce',  'blue': '#3182ce',
+  'zelena': '#38a169', 'green': '#38a169',
+  'zuta': '#d69e2e',   'žuta': '#d69e2e', 'yellow': '#d69e2e',
+  'narandzasta': '#dd6b20', 'narandžasta': '#dd6b20', 'orange': '#dd6b20',
+  'ljubicasta': '#805ad5',  'ljubičasta': '#805ad5',  'purple': '#805ad5',
+  'braon': '#92400e',  'brown': '#92400e',
+  'srebrna': '#b0b8c4','silver': '#b0b8c4',
+  'zlatna': '#d4a017', 'gold': '#d4a017',
+  'tamnoplava': '#2a4365', 'navy': '#2a4365',
+  'bordo': '#702459',  'burgundy': '#702459',
+  'tirkizna': '#0694a2','turquoise': '#0694a2',
+  'bordova': '#702459',
+};
+
+function getCarColor(boja) {
+  if (!boja) return null;
+  return COLOR_MAP[boja.toLowerCase().trim()] ?? '#a0aec0';
+}
+
 export function RideCard({
   mestoOd, mestoDo, datumVreme,
-  seats = 0, driver, driverId, avatar, vehicle,
+  seats = 0, driver, driverId, avatar, vehicle, boja,
   smoking = false, music = false, airCondition = false, pets = false,
-  onJoin, compact = false, className = '',
+  isJoined = false,
+  onJoin, onLeave, onDelete,
+  compact = false, className = '',
 }) {
   const { t } = useTranslation();
   const isFull = seats === 0;
@@ -23,6 +49,8 @@ export function RideCard({
     ? date.toLocaleTimeString('sr-Latn-RS', { hour: '2-digit', minute: '2-digit' })
     : '';
   const dateStr = date ? formatDate(datumVreme) : '';
+
+  const carColor = getCarColor(boja);
 
   const options = [
     smoking      ? { Icon: Cigarette,   label: t('smoking'),       active: true  } : { Icon: CigaretteOff, label: t('no_smoking'),  active: false },
@@ -76,7 +104,16 @@ export function RideCard({
             <span className="ride-card__driver-name">{driver}</span>
             {vehicle && (
               <span className="ride-card__vehicle">
-                <Car size={11} strokeWidth={2} /> {vehicle}
+                <Car size={11} strokeWidth={2} />
+                {carColor && (
+                  <span
+                    className="ride-card__car-color"
+                    style={{ backgroundColor: carColor }}
+                    title={boja}
+                    aria-label={boja}
+                  />
+                )}
+                {vehicle}{boja ? ` · ${boja}` : ''}
               </span>
             )}
           </div>
@@ -105,7 +142,15 @@ export function RideCard({
             </span>
           </div>
 
-          {onJoin && !isOwnRide && (
+          {isOwnRide ? (
+            <button className="ride-card__cancel-btn" onClick={onDelete}>
+              <X size={14} /> {t('cancel_ride')}
+            </button>
+          ) : isJoined ? (
+            <button className="ride-card__leave-btn" onClick={onLeave}>
+              <LogOut size={14} /> {t('leave_ride')}
+            </button>
+          ) : onJoin && (
             <button
               className={`ride-card__join-btn ${isFull ? 'ride-card__join-btn--disabled' : ''}`}
               onClick={!isFull ? onJoin : undefined}
@@ -113,10 +158,6 @@ export function RideCard({
             >
               {isFull ? t('ride_full') : <>{t('join_ride')} <ChevronRight size={14} /></>}
             </button>
-          )}
-
-          {isOwnRide && (
-            <span className="ride-card__own-badge">{t('your_ride') || 'Vaša vožnja'}</span>
           )}
         </div>
       </div>
