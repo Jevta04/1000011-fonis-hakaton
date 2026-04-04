@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Sun, Moon, Globe } from 'lucide-react';
 import { LoginForm }      from '../../components/auth/LoginForm/LoginForm';
 import { SignupForm }     from '../../components/auth/SignupForm/SignupForm';
+import { ThemeSwitch }    from '../../components/ThemeSwitch/ThemeSwitch';
+import { LocaleSwitch }   from '../../components/LocaleSwitch/LocaleSwitch';
 import { useTheme }       from '../../hooks/useTheme';
 import { useTranslation } from '../../hooks/useTranslation';
 import './Login.css';
@@ -24,13 +25,8 @@ export function Login() {
 
       {/* Kontrole */}
       <div className="login-page__controls">
-        <button className="login-page__control-btn" onClick={toggleLocale} aria-label={t('language')}>
-          <Globe size={15} />
-          <span>{locale.toUpperCase()}</span>
-        </button>
-        <button className="login-page__control-btn" onClick={toggleTheme} aria-label={isDark ? t('theme_light') : t('theme_dark')}>
-          {isDark ? <Sun size={15} /> : <Moon size={15} />}
-        </button>
+        <LocaleSwitch locale={locale} onToggle={toggleLocale} />
+        <ThemeSwitch isDark={isDark} onToggle={toggleTheme} />
       </div>
 
       {/* Kartica */}
