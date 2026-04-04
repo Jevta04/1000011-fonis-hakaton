@@ -98,15 +98,16 @@ export function PublishRide() {
       <div className="container">
         <h1 className="publish-ride__title">{t('publish_ride')}</h1>
 
+        <div className="publish-ride__content">
         {/* Step indikator */}
         <div className="publish-ride__steps" role="list">
           {STEPS.map((key, i) => (
             <div key={key} role="listitem"
               className={`publish-ride__step ${i === step ? 'publish-ride__step--active' : ''} ${i < step ? 'publish-ride__step--done' : ''}`}
             >
-              <span className="publish-ride__step-num">
+              <div className="publish-ride__step-num">
                 {i < step ? <Check size={14} /> : i + 1}
-              </span>
+              </div>
               <span className="publish-ride__step-label">{t(key)}</span>
             </div>
           ))}
@@ -228,6 +229,7 @@ export function PublishRide() {
               </Button>
             )}
           </div>
+        </div>
         </div>
       </div>
     </div>

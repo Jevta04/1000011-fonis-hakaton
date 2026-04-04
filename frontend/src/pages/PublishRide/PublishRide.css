@@ -1,47 +1,60 @@
 /* ============================================================
-   PUBLISH RIDE PAGE – Multi-step forma
+   PUBLISH RIDE PAGE
    ============================================================ */
 
 .publish-ride {
-  padding-block: var(--space-4);
+  padding-block: var(--space-8);
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }
 
 .publish-ride__title {
-  font-size: var(--font-size-2xl);
+  font-size: var(--font-size-3xl);
   font-weight: var(--font-weight-bold);
   color: var(--color-text);
-  margin-bottom: var(--space-6);
+  margin-bottom: var(--space-8);
+  text-align: center;
+}
+
+.publish-ride__content {
+  max-width: 42rem;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 /* --- Step indikator --- */
 .publish-ride__steps {
   display: flex;
   align-items: center;
-  gap: 0;
-  margin-bottom: var(--space-8);
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: var(--space-10);
   position: relative;
 }
 
 .publish-ride__steps::before {
   content: '';
   position: absolute;
-  top: 50%;
-  left: 0;
-  right: 0;
+  top: 1.25rem;
+  left: 10%;
+  right: 10%;
   height: 2px;
   background-color: var(--color-border);
   z-index: 0;
-  transform: translateY(-50%);
 }
 
 .publish-ride__step {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--space-2);
-  flex: 1;
+  gap: var(--space-3);
   position: relative;
   z-index: 1;
+  flex: 1;
 }
 
 .publish-ride__step-num {
@@ -53,7 +66,7 @@
   justify-content: center;
   font-weight: var(--font-weight-bold);
   font-size: var(--font-size-sm);
-  background-color: var(--color-bg-input);
+  background-color: var(--color-bg-card);
   border: 2px solid var(--color-border);
   color: var(--color-text-muted);
   transition: all var(--transition-normal);
@@ -77,11 +90,13 @@
   font-weight: var(--font-weight-medium);
   color: var(--color-text-muted);
   text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .publish-ride__step--active .publish-ride__step-label {
   color: var(--color-primary);
-  font-weight: var(--font-weight-semibold);
+  font-weight: var(--font-weight-bold);
 }
 
 /* --- Kartica sa formom --- */
@@ -89,20 +104,20 @@
   background-color: var(--color-bg-card);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-2xl);
-  padding: var(--space-6);
-  box-shadow: var(--shadow-md);
+  padding: var(--space-8);
+  box-shadow: var(--shadow-lg);
   display: flex;
   flex-direction: column;
   gap: var(--space-6);
-  max-width: 40rem;
+  width: 100%;
   transition: background-color var(--transition-normal);
 }
 
-/* --- Polja --- */
+/* --- Polja i Layout --- */
 .publish-ride__fields {
   display: flex;
   flex-direction: column;
-  gap: var(--space-4);
+  gap: var(--space-5);
 }
 
 .publish-ride__row {
@@ -111,161 +126,38 @@
   gap: var(--space-4);
 }
 
-/* --- Textarea --- */
-.publish-ride__label {
-  display: block;
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-text);
-  margin-bottom: var(--space-2);
+@media (max-width: 480px) {
+  .publish-ride__row {
+    grid-template-columns: 1fr;
+  }
 }
 
-.publish-ride__textarea-group {
-  display: flex;
-  flex-direction: column;
-}
-
-.publish-ride__textarea {
-  padding: var(--space-3) var(--space-4);
-  background-color: var(--color-bg-input);
-  border: 1.5px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  font-size: var(--font-size-base);
-  color: var(--color-text);
-  resize: vertical;
-  font-family: var(--font-family);
-  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
-  outline: none;
-}
-
-.publish-ride__textarea:focus {
-  border-color: var(--color-border-focus);
-  box-shadow: 0 0 0 3px rgba(78, 159, 61, 0.15);
-}
-
-/* --- Summary (korak 3) --- */
-.publish-ride__summary {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-4);
-}
-
-.publish-ride__summary-title {
-  font-size: var(--font-size-lg);
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-text);
-}
-
-.publish-ride__summary-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-}
-
-.publish-ride__summary-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: var(--space-3) var(--space-4);
-  border-bottom: 1px solid var(--color-border);
-}
-
-.publish-ride__summary-row:last-child {
-  border-bottom: none;
-}
-
-.publish-ride__summary-label {
-  font-size: var(--font-size-sm);
-  color: var(--color-text-muted);
-}
-
-.publish-ride__summary-value {
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-text);
-}
-
-.publish-ride__notes {
-  font-size: var(--font-size-sm);
-  color: var(--color-text-muted);
-  font-style: italic;
-  padding: var(--space-3) var(--space-4);
-  background-color: var(--color-bg-input);
-  border-radius: var(--radius-md);
-}
-
-/* --- Section label --- */
+/* --- Section Labels --- */
 .publish-ride__section-label {
   display: flex;
   align-items: center;
   gap: var(--space-2);
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
   color: var(--color-text-muted);
   text-transform: uppercase;
-  letter-spacing: 0.04em;
-  padding-top: var(--space-2);
+  letter-spacing: 0.1em;
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--color-border);
 }
 
-/* --- Select wrapper --- */
-.publish-ride__select-group {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
-}
-
-.publish-ride__select-wrapper {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-
-.publish-ride__select-icon {
-  position: absolute;
-  left: var(--space-3);
-  color: var(--color-text-muted);
-  pointer-events: none;
-  display: flex;
-  align-items: center;
-}
-
-.publish-ride__select {
-  width: 100%;
-  padding: var(--space-3) var(--space-8) var(--space-3) calc(var(--space-3) + 1.5rem + var(--space-2));
-  background-color: var(--color-bg-input);
-  border: 1.5px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  font-size: var(--font-size-base);
-  color: var(--color-text);
-  cursor: pointer;
-  appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b7280' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right var(--space-3) center;
-  outline: none;
-  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
-}
-
-.publish-ride__select:focus {
-  border-color: var(--color-border-focus);
-  box-shadow: 0 0 0 3px rgba(78, 159, 61, 0.15);
-}
-
-/* --- Opcije toggle dugmad --- */
+/* --- Options Toggle --- */
 .publish-ride__options {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-2);
+  gap: var(--space-3);
 }
 
 .publish-ride__option-btn {
   display: inline-flex;
   align-items: center;
   gap: var(--space-2);
-  padding: var(--space-2) var(--space-4);
+  padding: var(--space-2) var(--space-5);
   border-radius: var(--radius-full);
   border: 1.5px solid var(--color-border);
   background-color: var(--color-bg-input);
@@ -285,15 +177,51 @@
   border-color: var(--color-primary);
   background-color: rgba(78, 159, 61, 0.1);
   color: var(--color-primary);
-  font-weight: var(--font-weight-semibold);
+  font-weight: var(--font-weight-bold);
 }
 
-/* --- Summary opcije --- */
+/* --- Summary Styles --- */
+.publish-ride__summary-title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+  margin-bottom: var(--space-4);
+}
+
+.publish-ride__summary-grid {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  background-color: var(--color-bg-input);
+}
+
+.publish-ride__summary-row {
+  display: flex;
+  justify-content: space-between;
+  padding: var(--space-4);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.publish-ride__summary-row:last-child {
+  border-bottom: none;
+}
+
+.publish-ride__summary-label {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+.publish-ride__summary-value {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+}
+
 .publish-ride__summary-options {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-2);
-  padding-top: var(--space-2);
+  margin-top: var(--space-4);
 }
 
 .publish-ride__summary-option {
@@ -303,17 +231,19 @@
   padding: var(--space-1) var(--space-3);
   border-radius: var(--radius-full);
   background-color: rgba(78, 159, 61, 0.1);
+  border: 1px solid var(--color-primary);
   color: var(--color-primary);
   font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-semibold);
+  font-weight: var(--font-weight-medium);
 }
 
-/* --- Akcioni buttons --- */
+/* --- Actions (Navigacija na dnu) --- */
 .publish-ride__actions {
   display: flex;
   justify-content: space-between;
-  gap: var(--space-3);
-  padding-top: var(--space-4);
+  gap: var(--space-4);
+  padding-top: var(--space-6);
+  margin-top: var(--space-2);
   border-top: 1px solid var(--color-border);
 }
 

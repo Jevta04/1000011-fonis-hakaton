@@ -118,6 +118,7 @@
   "my_profile": "My profile",
   "full_name": "Full name",
   "company": "Company",
+  "select_company": "Select your company",
   "company_name": "Company name",
   "company_pib": "Tax ID (PIB)",
   "member_since": "Member since",
