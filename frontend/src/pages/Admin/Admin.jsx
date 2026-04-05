@@ -133,7 +133,7 @@ export function Admin() {
         kmData.addRows(daily.map((d) => [d.label, d.km]));
         new window.google.visualization.AreaChart(kmChartRef.current).draw(kmData, {
           title: '', width: w, height: 220,
-          legend: { position: 'bottom', textStyle: { color: textColor, fontSize: 11 } },
+          legend: 'none',
           colors: ['#4e9f3d'],
           backgroundColor: 'transparent',
           curveType: 'function',
@@ -157,7 +157,7 @@ export function Admin() {
         passData.addRows(daily.map((d) => [d.label, d.passengers]));
         new window.google.visualization.ColumnChart(passChartRef.current).draw(passData, {
           title: '', width: w, height: 220,
-          legend: { position: 'bottom', textStyle: { color: textColor, fontSize: 11 } },
+          legend: 'none',
           colors: ['#4e9f3d'],
           backgroundColor: 'transparent',
           chartArea: { left: 36, right: 12, top: 8, bottom: 52 },
