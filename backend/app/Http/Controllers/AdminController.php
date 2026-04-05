@@ -188,6 +188,18 @@ class AdminController extends Controller
         return response()->json(['message' => 'Vožnja obrisana.']);
     }
 
+    /** PUT /admin/companies/{id} */
+    public function updateCompany(Request $request, int $id)
+    {
+        $kompanija = Kompanija::findOrFail($id);
+        $data = $request->validate([
+            'naziv' => 'sometimes|string|max:200',
+            'pib'   => 'sometimes|nullable|string|max:20',
+        ]);
+        $kompanija->update($data);
+        return response()->json(['message' => 'Kompanija ažurirana.']);
+    }
+
     /** GET /admin/charts */
     public function chartData()
     {
