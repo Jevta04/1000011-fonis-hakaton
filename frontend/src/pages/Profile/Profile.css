@@ -283,6 +283,16 @@
   gap: var(--space-4);
 }
 
+/* --- Section label inside rides list --- */
+.profile__rides-section-label {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-text-muted);
+  margin: var(--space-2) 0 var(--space-1) var(--space-1);
+}
+
 /* --- Vehicles --- */
 .profile__vehicles {
   display: flex;

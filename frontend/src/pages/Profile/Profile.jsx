@@ -68,9 +68,11 @@ export function Profile() {
 
   const allDriverRides    = history.filter((r) => r.role === 'driver' || r.uloga === 'vozac');
   const allPassengerRides = history.filter((r) => r.role === 'passenger' || r.uloga === 'putnik');
-  const driverRides    = allDriverRides.filter((r) => r.isPast);
-  const passengerRides = allPassengerRides.filter((r) => r.isPast);
-  const upcomingRides  = history.filter((r) => !r.isPast);
+  const driverRides          = allDriverRides.filter((r) => r.isPast);
+  const passengerRides       = allPassengerRides.filter((r) => r.isPast);
+  const upcomingDriverRides  = allDriverRides.filter((r) => !r.isPast);
+  const upcomingPassengerRides = allPassengerRides.filter((r) => !r.isPast);
+  const upcomingRides        = history.filter((r) => !r.isPast);
 
   /* ── Ride actions ── */
   const handleRideDelete = async (id) => {
@@ -292,10 +294,37 @@ export function Profile() {
           {/* Ride history / upcoming tabs */}
           {activeTab !== 'vehicles' && (
             <div className="profile__rides-list" role="tabpanel">
-              {(() => {
-                const list = activeTab === 'upcoming'  ? upcomingRides
-                           : activeTab === 'driver'    ? driverRides
-                           : passengerRides;
+              {activeTab === 'upcoming' ? (
+                <>
+                  <p className="profile__rides-section-label">{t('rides_as_driver')}</p>
+                  {upcomingDriverRides.length === 0 ? (
+                    <div className="profile__empty">
+                      <span aria-hidden="true">📋</span>
+                      <p>{t('no_rides_found')}</p>
+                    </div>
+                  ) : upcomingDriverRides.map((ride) => (
+                    <RideCard
+                      key={ride.id} {...ride} compact
+                      onDelete={() => handleRideDelete(ride.id)}
+                      onLeave={() => handleRideLeave(ride.id)}
+                    />
+                  ))}
+                  <p className="profile__rides-section-label">{t('rides_as_passenger')}</p>
+                  {upcomingPassengerRides.length === 0 ? (
+                    <div className="profile__empty">
+                      <span aria-hidden="true">📋</span>
+                      <p>{t('no_rides_found')}</p>
+                    </div>
+                  ) : upcomingPassengerRides.map((ride) => (
+                    <RideCard
+                      key={ride.id} {...ride} compact
+                      onDelete={() => handleRideDelete(ride.id)}
+                      onLeave={() => handleRideLeave(ride.id)}
+                    />
+                  ))}
+                </>
+              ) : (() => {
+                const list = activeTab === 'driver' ? driverRides : passengerRides;
                 return list.length === 0 ? (
                   <div className="profile__empty">
                     <span aria-hidden="true">📋</span>

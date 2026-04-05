@@ -124,23 +124,22 @@ export function Admin() {
     const daily = charts.daily;
 
     const drawCharts = () => {
-      // KM — smooth line chart
+      // KM — area chart
       if (kmChartRef.current) {
+        const w = kmChartRef.current.offsetWidth || 320;
         const kmData = new window.google.visualization.DataTable();
-        kmData.addColumn('string', 'Day');
+        kmData.addColumn('string', 'Dan');
         kmData.addColumn('number', 'km');
         kmData.addRows(daily.map((d) => [d.label, d.km]));
         new window.google.visualization.AreaChart(kmChartRef.current).draw(kmData, {
-          title: t('charts_km'),
-          titleTextStyle: { color: textColor, fontSize: 13 },
-          height: 220, legend: 'none',
+          title: '', width: w, height: 200, legend: 'none',
           colors: ['#4e9f3d'],
           backgroundColor: 'transparent',
           curveType: 'function',
-          areaOpacity: 0.3,
-          chartArea: { width: '80%', height: '60%' },
-          hAxis: { textStyle: { color: textColor }, gridlines: { color: gridColor } },
-          vAxis: { textStyle: { color: textColor }, gridlines: { color: gridColor } },
+          areaOpacity: 0.35,
+          chartArea: { left: 44, right: 12, top: 8, bottom: 36 },
+          hAxis: { textStyle: { color: textColor, fontSize: 11 }, gridlines: { color: 'transparent' } },
+          vAxis: { textStyle: { color: textColor, fontSize: 11 }, gridlines: { color: gridColor }, minValue: 0 },
           pointSize: 5,
           pointShape: 'circle',
         });
@@ -148,23 +147,25 @@ export function Admin() {
 
       // Passengers — column chart
       if (passChartRef.current) {
+        const w = passChartRef.current.offsetWidth || 320;
         const passData = new window.google.visualization.DataTable();
-        passData.addColumn('string', 'Day');
-        passData.addColumn('number', t('passengers'));
+        passData.addColumn('string', 'Dan');
+        passData.addColumn('number', 'Putnici');
         passData.addRows(daily.map((d) => [d.label, d.passengers]));
         new window.google.visualization.ColumnChart(passChartRef.current).draw(passData, {
-          title: t('charts_passengers'),
-          titleTextStyle: { color: textColor, fontSize: 13 },
-          height: 220, legend: 'none',
-          colors: ['#1e5128'],
+          title: '', width: w, height: 200, legend: 'none',
+          colors: ['#4e9f3d'],
           backgroundColor: 'transparent',
-          chartArea: { width: '80%', height: '60%' },
-          hAxis: { textStyle: { color: textColor }, gridlines: { color: gridColor } },
-          vAxis: { textStyle: { color: textColor }, gridlines: { color: gridColor } },
-          bar: { groupWidth: '60%' },
+          chartArea: { left: 36, right: 12, top: 8, bottom: 36 },
+          hAxis: { textStyle: { color: textColor, fontSize: 11 }, gridlines: { color: 'transparent' } },
+          vAxis: { textStyle: { color: textColor, fontSize: 11 }, gridlines: { color: gridColor }, minValue: 0 },
+          bar: { groupWidth: '55%' },
         });
       }
     };
+
+    const onResize = () => drawCharts();
+    window.addEventListener('resize', onResize);
 
     if (window.google?.visualization) {
       drawCharts();
@@ -182,6 +183,8 @@ export function Admin() {
         window.google.charts.setOnLoadCallback(drawCharts);
       }
     }
+
+    return () => window.removeEventListener('resize', onResize);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [charts, isDark]);
 
@@ -276,9 +279,11 @@ export function Admin() {
             )}
             <div className="admin__charts">
               <div className="admin__chart-card">
+                <p className="admin__chart-title">{t('charts_km')}</p>
                 <div ref={kmChartRef} className="admin__chart" />
               </div>
               <div className="admin__chart-card">
+                <p className="admin__chart-title">{t('charts_passengers')}</p>
                 <div ref={passChartRef} className="admin__chart" />
               </div>
             </div>

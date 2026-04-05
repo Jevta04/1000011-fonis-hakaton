@@ -222,9 +222,6 @@ export function Navbar() {
             <div className="pill-nav-controls">
               <LocaleSwitch locale={locale} onToggle={toggleLocale} />
               <ThemeSwitch isDark={isDark} onToggle={toggleTheme} />
-              <button className="pill-logout-btn" onClick={handleLogout} title={t('logout')}>
-                <LogOut size={18} />
-              </button>
               <div className="pill-avatar-wrapper">
                 <NavLink to="/profile" className="pill-avatar">
                   {user?.name?.charAt(0)?.toUpperCase() || '?'}
@@ -234,6 +231,9 @@ export function Navbar() {
                   <span className="pill-avatar-tooltip__detail">{user?.email || user?.kompanija || '—'}</span>
                 </div>
               </div>
+              <button className="pill-logout-btn" onClick={handleLogout} title={t('logout')}>
+                <LogOut size={18} />
+              </button>
             </div>
           </div>
 

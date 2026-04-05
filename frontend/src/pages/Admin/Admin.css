@@ -110,7 +110,14 @@
   gap: var(--space-2);
   border-bottom: 2px solid var(--color-border);
   overflow-x: auto;
+  overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.admin__tabs::-webkit-scrollbar {
+  display: none;
 }
 
 .admin__tab {
@@ -377,6 +384,14 @@
   border-radius: var(--radius-xl);
   padding: var(--space-4);
   box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+
+.admin__chart-title {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-muted);
+  margin: 0 0 var(--space-2) var(--space-1);
 }
 
 .admin__chart {

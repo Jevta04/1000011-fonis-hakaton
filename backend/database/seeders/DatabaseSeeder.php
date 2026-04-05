@@ -284,6 +284,17 @@ class DatabaseSeeder extends Seeder
             'updated_at'   => now(),
         ]);
 
+        // ── Vozila ────────────────────────────────────────────────
+        DB::table('vozila')->insert([
+            ['user_id' => $marko,      'marka' => 'Volkswagen Golf',  'boja' => 'siva',   'brojTablica' => 'BG-123-AB', 'fuel_consumption_per_100km' => 6.5, 'created_at' => now(), 'updated_at' => now()],
+            ['user_id' => $jovan,      'marka' => 'Toyota Corolla',   'boja' => 'bela',   'brojTablica' => 'NS-456-CD', 'fuel_consumption_per_100km' => 7.2, 'created_at' => now(), 'updated_at' => now()],
+            ['user_id' => $ana,        'marka' => 'Škoda Octavia',    'boja' => 'crna',   'brojTablica' => 'BG-789-EF', 'fuel_consumption_per_100km' => 5.8, 'created_at' => now(), 'updated_at' => now()],
+            ['user_id' => $stefan,     'marka' => 'Renault Megane',   'boja' => 'plava',  'brojTablica' => 'BG-321-GH', 'fuel_consumption_per_100km' => 6.0, 'created_at' => now(), 'updated_at' => now()],
+            ['user_id' => $nikola,     'marka' => 'BMW Serija 3',     'boja' => 'crna',   'brojTablica' => 'NS-654-IJ', 'fuel_consumption_per_100km' => 8.1, 'created_at' => now(), 'updated_at' => now()],
+            ['user_id' => $luka,       'marka' => 'Opel Astra',       'boja' => 'crvena', 'brojTablica' => 'BG-987-KL', 'fuel_consumption_per_100km' => 7.0, 'created_at' => now(), 'updated_at' => now()],
+            ['user_id' => $aleksandar, 'marka' => 'Ford Focus',       'boja' => 'siva',   'brojTablica' => 'KG-111-MN', 'fuel_consumption_per_100km' => 6.8, 'created_at' => now(), 'updated_at' => now()],
+        ]);
+
         // ── Voznje — PROŠLIH 7 DANA (~15 rides) ────────────────────
 
         // Dan -7: Marko, Zemun → Trg Republike
