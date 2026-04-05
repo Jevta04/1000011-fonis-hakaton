@@ -22,12 +22,13 @@ export function AdminTable({
   columns = [],
   data = [],
   onApprove,
+  onEdit,
   onDelete,
   loading = false,
   emptyMessage,
 }) {
   const { t } = useTranslation();
-  const hasActions = onApprove || onDelete;
+  const hasActions = onApprove || onEdit || onDelete;
 
   if (loading) {
     return (
@@ -84,6 +85,15 @@ export function AdminTable({
                         title={t('approve')}
                       >
                         ✓ {t('approve')}
+                      </button>
+                    )}
+                    {onEdit && (
+                      <button
+                        className="admin-table__action admin-table__action--edit"
+                        onClick={() => onEdit(row)}
+                        title={t('edit')}
+                      >
+                        ✎ {t('edit')}
                       </button>
                     )}
                     {onDelete && (

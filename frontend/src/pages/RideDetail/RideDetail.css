@@ -362,3 +362,32 @@
   background-size: 200% 100%;
   animation: skeleton-pulse 1.5s ease-in-out infinite;
 }
+
+.ride-detail__phone-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+.ride-detail__phone-value {
+  font-family: monospace;
+  letter-spacing: 0.05em;
+}
+
+.ride-detail__phone-toggle {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--color-text-muted);
+  padding: 0;
+  display: flex;
+  align-items: center;
+  transition: color 0.2s;
+}
+
+.ride-detail__phone-toggle:hover {
+  color: var(--color-primary);
+}

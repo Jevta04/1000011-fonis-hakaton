@@ -15,8 +15,8 @@ class AdminController extends Controller
     {
         $query = User::with('kompanija')
             ->withCount([
-                'voznje as driver_rides'    => fn($q) => $q->wherePivot('uloga', 'vozac'),
-                'voznje as passenger_rides' => fn($q) => $q->wherePivot('uloga', 'putnik'),
+                'voznje as driver_rides'    => fn($q) => $q->where('user_voznja.uloga', 'vozac'),
+                'voznje as passenger_rides' => fn($q) => $q->where('user_voznja.uloga', 'putnik'),
             ]);
 
         if ($request->filled('search')) {
@@ -40,6 +40,21 @@ class AdminController extends Controller
         ]);
 
         return response()->json(['data' => $users]);
+    }
+
+    /** PUT /admin/users/{id} */
+    public function updateUser(Request $request, int $id)
+    {
+        $user = User::findOrFail($id);
+        $data = $request->validate([
+            'ime'          => 'sometimes|string|max:100',
+            'prezime'      => 'sometimes|string|max:100',
+            'uloga'        => 'sometimes|in:korisnik,admin',
+            'brojTelefona' => 'sometimes|nullable|string|max:20',
+            'kompanija_id' => 'sometimes|nullable|exists:kompanije,id',
+        ]);
+        $user->update($data);
+        return response()->json(['message' => 'Korisnik ažuriran.']);
     }
 
     /** DELETE /admin/users/{id} */
@@ -150,11 +165,74 @@ class AdminController extends Controller
         return response()->json($companies);
     }
 
+    /** PUT /admin/rides/{id} */
+    public function updateRide(Request $request, int $id)
+    {
+        $voznja = Voznja::findOrFail($id);
+        $data = $request->validate([
+            'datumVreme' => 'sometimes|date',
+            'seats'      => 'sometimes|integer|min:0|max:8',
+            'smoking'    => 'sometimes|boolean',
+            'muzika'     => 'sometimes|boolean',
+            'klima'      => 'sometimes|boolean',
+        ]);
+        $voznja->update($data);
+        return response()->json(['message' => 'Vožnja ažurirana.']);
+    }
+
     /** DELETE /admin/rides/{id} */
     public function deleteRide(int $id)
     {
         $ride = Voznja::findOrFail($id);
         $ride->delete();
         return response()->json(['message' => 'Vožnja obrisana.']);
+    }
+
+    /** GET /admin/charts */
+    public function chartData()
+    {
+        $days = collect();
+        for ($i = 6; $i >= 0; $i--) {
+            $days->push(now()->subDays($i)->startOfDay());
+        }
+
+        $srDays = ['Pon', 'Uto', 'Sre', 'Čet', 'Pet', 'Sub', 'Ned'];
+
+        $kmRaw = DB::table('voznje')
+            ->selectRaw("DATE(\"datumVreme\") as date, COALESCE(SUM(distance_km), 0) as total_km")
+            ->whereBetween('datumVreme', [now()->subDays(6)->startOfDay(), now()->endOfDay()])
+            ->groupByRaw("DATE(\"datumVreme\")")
+            ->get()->keyBy('date');
+
+        $passRaw = DB::table('user_voznja')
+            ->join('voznje', 'voznje.id', '=', 'user_voznja.voznja_id')
+            ->where('user_voznja.uloga', 'putnik')
+            ->selectRaw("DATE(voznje.\"datumVreme\") as date, COUNT(*) as total_passengers")
+            ->whereBetween('voznje.datumVreme', [now()->subDays(6)->startOfDay(), now()->endOfDay()])
+            ->groupByRaw("DATE(voznje.\"datumVreme\")")
+            ->get()->keyBy('date');
+
+        $totalRevenue = DB::table('user_voznja')
+            ->join('voznje', 'voznje.id', '=', 'user_voznja.voznja_id')
+            ->where('user_voznja.uloga', 'putnik')
+            ->where('user_voznja.status', 'confirmed')
+            ->whereNotNull('voznje.price_per_seat')
+            ->sum('voznje.price_per_seat');
+
+        $daily = $days->map(function ($day) use ($kmRaw, $passRaw, $srDays) {
+            $dateStr = $day->format('Y-m-d');
+            $dow = (int)$day->format('N') - 1; // 0=Mon
+            return [
+                'date'       => $dateStr,
+                'label'      => $srDays[$dow],
+                'km'         => round((float)($kmRaw[$dateStr]->total_km ?? 0), 1),
+                'passengers' => (int)($passRaw[$dateStr]->total_passengers ?? 0),
+            ];
+        })->values();
+
+        return response()->json([
+            'daily'         => $daily,
+            'total_revenue' => round($totalRevenue),
+        ]);
     }
 }

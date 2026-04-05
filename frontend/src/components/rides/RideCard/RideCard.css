@@ -35,6 +35,10 @@
   pointer-events: none;
 }
 
+.ride-card--past .ride-card__phone-toggle {
+  pointer-events: auto;
+}
+
 .ride-card--past:hover {
   border-color: var(--color-border);
   box-shadow: var(--shadow-sm);
@@ -196,7 +200,7 @@
 .ride-card__vehicle {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: var(--space-1);
   font-size: var(--font-size-sm);
   color: var(--color-text-muted);
 }
@@ -208,6 +212,36 @@
   border-radius: var(--radius-full);
   border: 1.5px solid rgba(0, 0, 0, 0.2);
   flex-shrink: 0;
+}
+
+.ride-card__phone-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+.ride-card__phone-value {
+  font-family: monospace;
+  letter-spacing: 0.03em;
+  font-size: var(--font-size-xs);
+}
+
+.ride-card__phone-toggle {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--color-text-muted);
+  padding: 0;
+  display: flex;
+  align-items: center;
+  pointer-events: auto;
+  transition: color 0.15s;
+}
+
+.ride-card__phone-toggle:hover {
+  color: var(--color-primary);
 }
 
 /* --- Meta (mesta + dugme) --- */
@@ -343,16 +377,3 @@
   background-color: rgba(239, 68, 68, 0.18);
 }
 
-/* --- Badge za sopstvenu vožnju --- */
-.ride-card__own-badge {
-  display: inline-flex;
-  align-items: center;
-  padding: var(--space-1) var(--space-3);
-  border-radius: var(--radius-full);
-  background-color: rgba(78, 159, 61, 0.1);
-  border: 1px solid var(--color-primary);
-  color: var(--color-primary);
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-semibold);
-  white-space: nowrap;
-}

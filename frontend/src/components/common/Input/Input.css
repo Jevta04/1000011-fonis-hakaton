@@ -84,3 +84,65 @@
   font-size: var(--font-size-sm);
   color: var(--color-text-muted);
 }
+
+/* ── Date / datetime-local / time inputs ───────────────────── */
+
+/* Keep the text color consistent with design system */
+.input-group__field[type="date"],
+.input-group__field[type="datetime-local"],
+.input-group__field[type="time"] {
+  color-scheme: light;
+  /* Extra right padding so text doesn't overlap native indicator */
+  padding-right: var(--space-3);
+}
+
+html.dark .input-group__field[type="date"],
+html.dark .input-group__field[type="datetime-local"],
+html.dark .input-group__field[type="time"] {
+  color-scheme: dark;
+}
+
+/* Native calendar/clock picker indicator */
+.input-group__field[type="date"]::-webkit-calendar-picker-indicator,
+.input-group__field[type="datetime-local"]::-webkit-calendar-picker-indicator,
+.input-group__field[type="time"]::-webkit-calendar-picker-indicator {
+  opacity: 0.65;
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  padding: 0.125rem;
+  transition: opacity 0.15s, filter 0.15s;
+  filter: invert(44%) sepia(60%) saturate(500%) hue-rotate(82deg);
+}
+
+.input-group__field[type="date"]:hover::-webkit-calendar-picker-indicator,
+.input-group__field[type="datetime-local"]:hover::-webkit-calendar-picker-indicator,
+.input-group__field[type="time"]:hover::-webkit-calendar-picker-indicator,
+.input-group__field[type="date"]:focus::-webkit-calendar-picker-indicator,
+.input-group__field[type="datetime-local"]:focus::-webkit-calendar-picker-indicator {
+  opacity: 1;
+}
+
+/* In dark mode invert first then tint green */
+html.dark .input-group__field[type="date"]::-webkit-calendar-picker-indicator,
+html.dark .input-group__field[type="datetime-local"]::-webkit-calendar-picker-indicator,
+html.dark .input-group__field[type="time"]::-webkit-calendar-picker-indicator {
+  filter: invert(1) sepia(0.3) saturate(1.5) hue-rotate(80deg);
+  opacity: 0.8;
+}
+
+html.dark .input-group__field[type="date"]:hover::-webkit-calendar-picker-indicator,
+html.dark .input-group__field[type="datetime-local"]:hover::-webkit-calendar-picker-indicator {
+  opacity: 1;
+}
+
+/* Placeholder-like styling when no value selected (Chrome shows dd/mm/yyyy hh:mm) */
+.input-group__field[type="date"]:not(:valid),
+.input-group__field[type="datetime-local"]:not(:valid) {
+  color: var(--color-text-muted);
+}
+
+/* When a value is set, use normal text color */
+.input-group__field[type="date"]:valid,
+.input-group__field[type="datetime-local"]:valid {
+  color: var(--color-text);
+}

@@ -4,12 +4,14 @@
 
 .admin {
   padding-block: var(--space-4);
+  overflow-x: hidden;
 }
 
 .admin .container {
   display: flex;
   flex-direction: column;
   gap: var(--space-6);
+  max-width: 100%;
 }
 
 /* --- Header --- */
@@ -192,4 +194,212 @@
 .admin-badge--korisnik {
   background-color: rgba(78, 159, 61, 0.12);
   color: var(--color-primary);
+}
+
+/* ============================================================
+   EDIT MODAL
+   ============================================================ */
+
+.admin-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: var(--space-4);
+}
+
+.admin-modal {
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  width: 100%;
+  max-width: 420px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+}
+
+.admin-modal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-5) var(--space-6);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.admin-modal__title {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+  margin: 0;
+}
+
+.admin-modal__close {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--color-text-muted);
+  display: flex;
+  padding: 4px;
+  border-radius: var(--radius-md);
+  transition: color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.admin-modal__close:hover {
+  color: var(--color-text);
+  background-color: var(--color-bg-input);
+}
+
+.admin-modal__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-6);
+}
+
+.admin-modal__label {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-muted);
+}
+
+.admin-modal__input {
+  background: var(--color-bg-input);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--font-size-sm);
+  color: var(--color-text);
+  outline: none;
+  transition: border-color var(--transition-fast);
+}
+
+.admin-modal__input:focus {
+  border-color: var(--color-primary);
+}
+
+.admin-modal__footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-6);
+  border-top: 1px solid var(--color-border);
+}
+
+.admin-modal__cancel {
+  background: var(--color-bg-input);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-2) var(--space-4);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.admin-modal__cancel:hover {
+  background: var(--color-border);
+}
+
+.admin-modal__save {
+  background: var(--color-primary);
+  border: none;
+  border-radius: var(--radius-md);
+  padding: var(--space-2) var(--space-5);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: #fff;
+  cursor: pointer;
+  transition: opacity var(--transition-fast);
+}
+
+.admin-modal__save:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.admin-modal__save:not(:disabled):hover {
+  opacity: 0.88;
+}
+
+/* --- Charts --- */
+.admin__charts-row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.admin__revenue-card {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  background: linear-gradient(135deg, #1e5128, #4e9f3d);
+  border-radius: var(--radius-xl);
+  padding: var(--space-5) var(--space-6);
+  color: #fff;
+  box-shadow: var(--shadow-md);
+}
+
+.admin__revenue-value {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  line-height: 1;
+  display: block;
+}
+
+.admin__revenue-label {
+  font-size: var(--font-size-sm);
+  opacity: 0.8;
+  display: block;
+  margin-top: 2px;
+}
+
+.admin__charts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+}
+
+@media (max-width: 768px) {
+  .admin__charts {
+    grid-template-columns: 1fr;
+  }
+}
+
+.admin__chart-card {
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: var(--space-4);
+  box-shadow: var(--shadow-sm);
+}
+
+.admin__chart {
+  width: 100%;
+  min-height: 220px;
+}
+
+@media (max-width: 768px) {
+  .admin__chart {
+    min-height: 180px;
+    overflow: hidden;
+  }
+
+  .admin__chart-card {
+    overflow: hidden;
+    max-width: 100%;
+  }
+
+  .admin__chart > div,
+  .admin__chart > div > div,
+  .admin__chart svg,
+  .admin__chart table {
+    max-width: 100% !important;
+    width: 100% !important;
+  }
 }

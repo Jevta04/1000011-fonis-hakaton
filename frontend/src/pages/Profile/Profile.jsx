@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
-import { Car, Plus, Trash2, Pencil, ShieldCheck, Verified, Phone } from 'lucide-react';
+import { Car, Plus, Trash2, Pencil, Verified, Phone, Check, X } from 'lucide-react';
 import { useTranslation } from '../../hooks/useTranslation';
 import { useTheme }        from '../../hooks/useTheme';
 import {
-  getUserProfile, getRideHistory,
+  getUserProfile, getRideHistory, updateUserProfile,
   getVehicles, createVehicle, updateVehicle, deleteVehicle,
   deleteRide, leaveRide,
 } from '../../services/apiService';
@@ -28,6 +28,10 @@ export function Profile() {
   const [vErrors, setVErrors]     = useState({});
   const [vLoading, setVLoading]   = useState(false);
   const [showVForm, setShowVForm] = useState(false);
+
+  const [editingPhone, setEditingPhone] = useState(false);
+  const [phoneValue, setPhoneValue]     = useState('');
+  const [phoneSaving, setPhoneSaving]   = useState(false);
 
   useEffect(() => {
     const load = async () => {
@@ -107,8 +111,18 @@ export function Profile() {
     finally { setVLoading(false); }
   };
 
+  const handlePhoneSave = async () => {
+    setPhoneSaving(true);
+    try {
+      await updateUserProfile({ phone: phoneValue });
+      setProfile((p) => ({ ...p, phone: phoneValue }));
+      setEditingPhone(false);
+    } catch (err) { console.error(err); }
+    finally { setPhoneSaving(false); }
+  };
+
   const handleVDelete = async (id) => {
-    if (!window.confirm('Obrisati vozilo?')) return;
+    if (!window.confirm(t('delete_vehicle_confirm'))) return;
     try {
       await deleteVehicle(id);
       setVehicles((p) => p.filter((v) => v.id !== id));
@@ -132,19 +146,43 @@ export function Profile() {
             <div className="profile-avatar">
               {profile?.name?.charAt(0)?.toUpperCase() || '?'}
             </div>
-            <div className="profile-verified-badge">
-              <ShieldCheck size={16} strokeWidth={2.5} />
-            </div>
           </div>
 
           <div className="profile-info">
             <h1>{profile?.name || '—'}</h1>
             <p><span>✉</span> {profile?.email || '—'}</p>
             <p><span>🏢</span> {profile?.company?.name || profile?.company || '—'}</p>
-            {profile?.phone && <p><Phone size={14} /> {profile.phone}</p>}
+            <div className="profile-phone-row">
+              <Phone size={14} />
+              {editingPhone ? (
+                <>
+                  <input
+                    className="profile-phone-input"
+                    value={phoneValue}
+                    onChange={(e) => setPhoneValue(e.target.value)}
+                    placeholder={t('phone_placeholder')}
+                    autoFocus
+                  />
+                  <button className="profile-phone-btn" onClick={handlePhoneSave} disabled={phoneSaving} title={t('save')}>
+                    <Check size={13} />
+                  </button>
+                  <button className="profile-phone-btn profile-phone-btn--cancel" onClick={() => setEditingPhone(false)} title={t('cancel')}>
+                    <X size={13} />
+                  </button>
+                </>
+              ) : (
+                <>
+                  <span>{profile?.phone || t('phone_placeholder')}</span>
+                  <button className="profile-phone-btn" onClick={() => { setPhoneValue(profile?.phone || ''); setEditingPhone(true); }} title={t('edit_phone')}>
+                    <Pencil size={12} />
+                  </button>
+                </>
+              )}
+            </div>
             <div className="profile-badges">
-              <span className="badge"><Verified size={14} /> {t('role_employee')}</span>
-              <span className="badge"><ShieldCheck size={14} /> Trusted member</span>
+              <span className={`badge${profile?.role === 'admin' ? ' badge--admin' : ''}`}>
+                <Verified size={14} /> {profile?.role === 'admin' ? t('role_admin') : t('role_employee')}
+              </span>
             </div>
           </div>
 

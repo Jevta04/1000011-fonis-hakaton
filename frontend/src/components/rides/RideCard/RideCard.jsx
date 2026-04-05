@@ -1,4 +1,5 @@
-import { MapPin, Flag, Users, Car, ChevronRight, CigaretteOff, Cigarette, Music, Wind, PawPrint, X, LogOut } from 'lucide-react';
+import { useState } from 'react';
+import { MapPin, Flag, Users, Car, ChevronRight, CigaretteOff, Cigarette, Music, Wind, PawPrint, X, LogOut, Phone, Eye, EyeOff } from 'lucide-react';
 import { useTranslation } from '../../../hooks/useTranslation';
 import { formatDate } from '../../../utils/helpers';
 import './RideCard.css';
@@ -30,12 +31,14 @@ function getCarColor(boja) {
 export function RideCard({
   mestoOd, mestoDo, datumVreme,
   seats = 0, driver, driverId, avatar, vehicle, boja, brojTablica,
+  driver_phone,
   smoking = false, music = false, airCondition = false, pets = false,
   isJoined = false, isPast = false,
   onJoin, onLeave, onDelete,
   compact = false, className = '',
 }) {
   const { t } = useTranslation();
+  const [phoneVisible, setPhoneVisible] = useState(false);
   const isFull = seats === 0;
 
   const currentUser = (() => {
@@ -114,6 +117,21 @@ export function RideCard({
                   />
                 )}
                 {vehicle}{brojTablica ? ` · ${brojTablica}` : ''}
+              </span>
+            )}
+            {driver_phone && (
+              <span className="ride-card__phone-row">
+                <Phone size={11} strokeWidth={2} />
+                <span className="ride-card__phone-value">
+                  {phoneVisible ? driver_phone : '••••••••'}
+                </span>
+                <button
+                  className="ride-card__phone-toggle"
+                  onClick={(e) => { e.stopPropagation(); setPhoneVisible((v) => !v); }}
+                  title={phoneVisible ? t('hide_phone') : t('show_phone')}
+                >
+                  {phoneVisible ? <EyeOff size={11} /> : <Eye size={11} />}
+                </button>
               </span>
             )}
           </div>

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { gsap } from 'gsap';
-import { Car, LogOut } from 'lucide-react';
+import { LogOut } from 'lucide-react';
 import { useTheme } from '../../../hooks/useTheme';
 import { useTranslation } from '../../../hooks/useTranslation';
 import { logout } from '../../../services/apiService';
@@ -49,12 +49,12 @@ export function Navbar() {
   const logoRef = useRef(null);
 
   const cssVars = {
-    '--base': isDark ? '#191A19' : '#f5f7f8',
+    '--base': isDark ? '#1e2a1e' : '#ffffff',
     '--pill-text': isDark ? '#f5f7f8' : '#191A19',
     '--hover-bg': '#1e5128',
     '--hover-text': '#f5f7f8',
     '--active-dot': isDark ? '#d8e9a8' : '#1e5128',
-    '--border-color': isDark ? '#1e5128' : '#d8e9a8'
+    '--border-color': isDark ? '#2d4a2d' : '#d8e9a8'
   };
 
   useEffect(() => {
@@ -194,7 +194,7 @@ export function Navbar() {
             ref={logoRef}
           >
             <div ref={logoImgRef} className="flex items-center justify-center">
-              <Car size={24} strokeWidth={2.5} color={isDark ? '#f5f7f8' : '#191A19'} />
+              <img src="/EverRoute-logo.webp" alt="EverRoute" className="pill-logo-img" />
             </div>
           </NavLink>
 

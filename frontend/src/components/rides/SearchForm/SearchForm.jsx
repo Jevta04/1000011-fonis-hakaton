@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Flag, Calendar, Search as SearchIcon, ArrowRight } from 'lucide-react';
+import { Flag, Calendar, Search as SearchIcon, ArrowUpDown } from 'lucide-react';
 import { useTranslation } from '../../../hooks/useTranslation';
 import { AddressAutocomplete } from '../../map/AddressAutocomplete';
 import { MapPicker }           from '../../map/MapPicker';
@@ -16,6 +16,11 @@ export function SearchForm({ onSearch, compact = false }) {
   const [to, setTo]         = useState({ address: '', lat: null, lng: null });
   const [date, setDate]     = useState('');
   const [mapFor, setMapFor] = useState(null); // 'from' | 'to' | null
+
+  const handleSwap = () => {
+    setFrom(to);
+    setTo(from);
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -50,9 +55,15 @@ export function SearchForm({ onSearch, compact = false }) {
             required
           />
 
-          <div className="search-form__arrow" aria-hidden="true">
-            <ArrowRight size={18} strokeWidth={2} />
-          </div>
+          <button
+            type="button"
+            className="search-form__swap-btn"
+            onClick={handleSwap}
+            title={t('flip_route')}
+            aria-label={t('flip_route')}
+          >
+            <ArrowUpDown size={16} strokeWidth={2} />
+          </button>
 
           <AddressAutocomplete
             label={!compact ? t('to') : undefined}

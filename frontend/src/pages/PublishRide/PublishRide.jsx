@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import {
   MapPin, Flag, Calendar, Car, Hash, Palette,
   ChevronRight, ChevronLeft, Check, Cigarette, Music,
-  Wind, Route, Fuel, Coins, Users, AlertCircle,
+  Wind, Route, Fuel, Coins, Users, AlertCircle, ArrowUpDown,
 } from 'lucide-react';
 import { useTranslation } from '../../hooks/useTranslation';
 import { publishRide, calculateRoute, getVehicles } from '../../services/apiService';
@@ -79,7 +79,7 @@ export function PublishRide() {
   // OSRM kalkulacija rute
   const calcRoute = async () => {
     if (!form.departure_lat || !form.arrival_lat) {
-      setRouteError('Odaberi adrese sa mape ili autocomplete-a za kalkulaciju rute.');
+      setRouteError(t('route_error_no_coords'));
       return;
     }
     setCalcLoading(true);
@@ -91,7 +91,7 @@ export function PublishRide() {
       );
       setForm((p) => ({ ...p, distance_km: distanceKm, duration_min: durationMin }));
     } catch {
-      setRouteError('Greška pri kalkulaciji rute. Pokušaj ponovo.');
+      setRouteError(t('route_error_failed'));
     } finally {
       setCalcLoading(false);
     }
@@ -103,8 +103,20 @@ export function PublishRide() {
     const f = parseFloat(form.fuel_price_per_liter);
     const s = parseInt(form.seats, 10) || 4;
     if (!d || !c || !f) return null;
-    return Math.round((d / 100) * c * f / s);
+    return Math.round((d / 100) * c * f * 1.5 / s);
   })();
+
+  const handleFlipRoute = () => {
+    setForm((p) => ({
+      ...p,
+      mestoOd:       p.mestoDo,
+      mestoDo:       p.mestoOd,
+      departure_lat: p.arrival_lat,
+      departure_lng: p.arrival_lng,
+      arrival_lat:   p.departure_lat,
+      arrival_lng:   p.departure_lng,
+    }));
+  };
 
   const validateStep = () => {
     const e = {};
@@ -201,6 +213,18 @@ export function PublishRide() {
                   icon={<MapPin size={16} />}
                   error={errors.mestoOd} required
                 />
+                <div className="publish-ride__flip-row">
+                  <button
+                    type="button"
+                    className="publish-ride__flip-btn"
+                    onClick={handleFlipRoute}
+                    title={t('flip_route')}
+                  >
+                    <ArrowUpDown size={16} />
+                    <span>{t('flip_route')}</span>
+                  </button>
+                </div>
+
                 <AddressAutocomplete
                   label={t('to')} placeholder={t('to_placeholder')}
                   value={form.mestoDo}
@@ -218,7 +242,7 @@ export function PublishRide() {
                     onClick={calcRoute} loading={calcLoading}
                     icon={<Route size={14} />}
                   >
-                    Izračunaj rutu
+                    {t('calc_route')}
                   </Button>
 
                   {routeError && (
@@ -308,7 +332,7 @@ export function PublishRide() {
                   />
                 </div>
                 <Input
-                  name="fuel_consumption" label="Potrošnja goriva (L/100km)"
+                  name="fuel_consumption" label={t('fuel_consumption')}
                   placeholder="npr. 6.5" type="number" step="0.1" min="1" max="50"
                   value={form.fuel_consumption} onChange={(e) => set('fuel_consumption', e.target.value)}
                   icon={<Fuel size={16} />}
@@ -320,7 +344,7 @@ export function PublishRide() {
             {step === 2 && (
               <div className="publish-ride__fields">
                 <Input
-                  name="fuel_price_per_liter" label="Cena goriva (din/L)"
+                  name="fuel_price_per_liter" label={t('fuel_price_liter')}
                   placeholder="npr. 185" type="number" step="1" min="50" max="500"
                   value={form.fuel_price_per_liter}
                   onChange={(e) => set('fuel_price_per_liter', e.target.value)}
@@ -333,10 +357,15 @@ export function PublishRide() {
                     <Coins size={20} />
                     <div>
                       <span className="publish-ride__price-amount">{pricePerSeat} din</span>
-                      <span className="publish-ride__price-label">po osobi</span>
+                      <span className="publish-ride__price-label">{t('per_person')}</span>
                     </div>
                   </div>
                 )}
+
+                <div className="publish-ride__price-formula">
+                  <AlertCircle size={13} />
+                  <span>{t('price_formula_text')}</span>
+                </div>
 
                 <p className="publish-ride__section-label">{t('ride_options')}</p>
                 <div className="publish-ride__options">
@@ -364,10 +393,10 @@ export function PublishRide() {
                     { label: t('to'),            value: form.mestoDo },
                     { label: t('datetime'),      value: form.datumVreme?.replace('T', ' ') },
                     { label: t('seats'),         value: form.seats },
-                    { label: 'Distanca',         value: form.distance_km ? `${form.distance_km.toFixed(1)} km` : '—' },
+                    { label: t('distance'),      value: form.distance_km ? `${form.distance_km.toFixed(1)} km` : '—' },
                     { label: t('vehicle_brand'), value: form.marka },
                     { label: t('license_plate'), value: form.broj_tablica },
-                    { label: 'Cena po osobi',     value: pricePerSeat ? `${pricePerSeat} din` : '—' },
+                    { label: t('price_per_seat'), value: pricePerSeat ? `${pricePerSeat} din` : '—' },
                   ].map(({ label, value }) => (
                     <div key={label} className="publish-ride__summary-row">
                       <span className="publish-ride__summary-label">{label}</span>
@@ -411,7 +440,7 @@ export function PublishRide() {
         open={mapOpen}
         onClose={() => setMapOpen(false)}
         onSelect={handleMapSelect}
-        title={mapTarget === 'dep' ? 'Odaberi polazak' : 'Odaberi dolazak'}
+        title={mapTarget === 'dep' ? t('select_departure') : t('select_arrival')}
       />
     </div>
   );

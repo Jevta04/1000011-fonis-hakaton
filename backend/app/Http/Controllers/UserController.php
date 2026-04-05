@@ -15,11 +15,27 @@ class UserController extends Controller
             'name'    => $user->ime . ' ' . $user->prezime,
             'email'   => $user->email,
             'role'    => $user->uloga,
+            'phone'   => $user->brojTelefona,
             'company' => [
                 'id'   => $user->kompanija?->id,
                 'name' => $user->kompanija?->naziv,
             ],
         ]);
+    }
+
+    public function updateProfile(Request $request)
+    {
+        $user = $request->user();
+        $data = $request->validate([
+            'phone' => 'nullable|string|max:30',
+        ]);
+
+        if (array_key_exists('phone', $data)) {
+            $user->brojTelefona = $data['phone'];
+        }
+        $user->save();
+
+        return response()->json(['phone' => $user->brojTelefona]);
     }
 
     public function rides(Request $request)
@@ -44,11 +60,12 @@ class UserController extends Controller
                 'vehicle'     => $voznja->marka,
                 'boja'        => $voznja->boja,
                 'brojTablica' => $voznja->brojTablica,
-                'driver'      => $vozac ? trim("{$vozac->ime} {$vozac->prezime}") : null,
-                'driverId'    => $vozac?->id,
-                'avatar'      => $vozac ? strtoupper(substr($vozac->ime ?? '?', 0, 1)) : '?',
-                'role'        => $pivot->uloga === 'vozac' ? 'driver' : 'passenger',
-                'isPast'      => $isPast,
+                'driver'       => $vozac ? trim("{$vozac->ime} {$vozac->prezime}") : null,
+                'driverId'     => $vozac?->id,
+                'avatar'       => $vozac ? strtoupper(substr($vozac->ime ?? '?', 0, 1)) : '?',
+                'driver_phone' => $vozac?->brojTelefona,
+                'role'         => $pivot->uloga === 'vozac' ? 'driver' : 'passenger',
+                'isPast'       => $isPast,
             ];
         });
 

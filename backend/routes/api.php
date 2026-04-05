@@ -24,6 +24,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Profil
     Route::get('/user/profile', [UserController::class, 'profile']);
+    Route::put('/user/profile', [UserController::class, 'updateProfile']);
     Route::get('/user/rides', [UserController::class, 'rides']);
 
     // Vozila
@@ -46,10 +47,14 @@ Route::middleware('auth:sanctum')->group(function () {
     // Admin rute
     Route::prefix('admin')->group(function () {
         Route::get('/users', [AdminController::class, 'users']);
+        Route::put('/users/{id}', [AdminController::class, 'updateUser']);
         Route::delete('/users/{id}', [AdminController::class, 'deleteUser']);
         Route::get('/rides', [AdminController::class, 'rides']);
+        Route::put('/rides/{id}', [AdminController::class, 'updateRide']);
         Route::delete('/rides/{id}', [AdminController::class, 'deleteRide']);
         Route::get('/stats', [AdminController::class, 'stats']);
+        Route::get('/charts', [AdminController::class, 'chartData']);
         Route::get('/companies', [AdminController::class, 'companies']);
+        Route::put('/companies/{id}', [AdminController::class, 'updateCompany']);
     });
 });

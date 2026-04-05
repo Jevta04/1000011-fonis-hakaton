@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { MapPin, Flag, Calendar, Search as SearchIcon, ArrowRight, Navigation, Clock } from 'lucide-react';
+import { MapPin, Flag, Calendar, Search as SearchIcon, ArrowUpDown, Navigation, Clock } from 'lucide-react';
 import { useTranslation } from '../../hooks/useTranslation';
 import { AddressAutocomplete } from '../../components/map/AddressAutocomplete';
 import { MapPicker }           from '../../components/map/MapPicker';
@@ -182,9 +182,19 @@ export function SearchResults() {
               onMapClick={() => { setMapTarget('dep'); setMapOpen(true); }}
               icon={<MapPin size={15} />}
             />
-            <span className="search-results__form-arrow" aria-hidden="true">
-              <ArrowRight size={18} strokeWidth={2} />
-            </span>
+            <button
+              type="button"
+              className="search-results__form-swap"
+              onClick={() => setForm((p) => ({
+                ...p,
+                mestoOd: p.mestoDo, departure_lat: p.arrival_lat, departure_lng: p.arrival_lng,
+                mestoDo: p.mestoOd, arrival_lat: p.departure_lat, arrival_lng: p.departure_lng,
+              }))}
+              title={t('flip_route')}
+              aria-label={t('flip_route')}
+            >
+              <ArrowUpDown size={16} strokeWidth={2} />
+            </button>
             <AddressAutocomplete
               placeholder={t('to_placeholder')}
               value={form.mestoDo}
@@ -257,7 +267,7 @@ export function SearchResults() {
                 {nearbyRides.length > 0 && (
                   <div className="search-results__section">
                     <h2 className="search-results__section-title">
-                      <Navigation size={16} /> Najbliže vama
+                      <Navigation size={16} /> {t('nearby_rides')}
                     </h2>
                     <div className="search-results__list">
                       {nearbyRides.map((ride) => (
@@ -270,7 +280,7 @@ export function SearchResults() {
                 {earliestRides.length > 0 && (
                   <div className="search-results__section">
                     <h2 className="search-results__section-title">
-                      <Clock size={16} /> Najranije vožnje
+                      <Clock size={16} /> {t('earliest_rides')}
                     </h2>
                     <div className="search-results__list">
                       {earliestRides.map((ride) => (
@@ -296,7 +306,7 @@ export function SearchResults() {
         open={mapOpen}
         onClose={() => setMapOpen(false)}
         onSelect={handleMapSelect}
-        title={mapTarget === 'dep' ? 'Odaberi polazak' : 'Odaberi dolazak'}
+        title={mapTarget === 'dep' ? t('select_departure') : t('select_arrival')}
       />
     </div>
   );

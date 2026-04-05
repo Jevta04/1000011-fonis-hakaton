@@ -110,7 +110,7 @@ class RideController extends Controller
         if (isset($data['distance_km'], $data['fuel_price_per_liter'], $vozilo['fuel_consumption'])) {
             $fuelCost     = ($data['distance_km'] / 100) * $vozilo['fuel_consumption'] * $data['fuel_price_per_liter'];
             $seats        = $data['seats'] ?? 4;
-            $pricePerSeat = round($fuelCost / $seats, 0);
+            $pricePerSeat = round(($fuelCost * 1.5) / $seats, 0);
         }
 
         $voznja = Voznja::create([
@@ -325,6 +325,7 @@ class RideController extends Controller
             'brojTablica'          => $v->brojTablica,
             'driver'               => $vozac ? trim("{$vozac->ime} {$vozac->prezime}") : null,
             'driverId'             => $vozac?->id,
+            'driver_phone'         => $vozac?->brojTelefona,
             'avatar'               => $vozac ? strtoupper(substr($vozac->ime ?? '?', 0, 1)) : '?',
             'isJoined'             => $isJoined,
         ];

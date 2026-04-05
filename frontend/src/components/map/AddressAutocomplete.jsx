@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { MapPin, X } from 'lucide-react';
+import { useTranslation } from '../../hooks/useTranslation';
 import './AddressAutocomplete.css';
 
 const NOMINATIM = 'https://nominatim.openstreetmap.org/search';
@@ -26,6 +27,7 @@ export function AddressAutocomplete({
   value = '', onChange, onSelect,
   label, placeholder, icon, required, error, onMapClick,
 }) {
+  const { t } = useTranslation();
   const [suggestions, setSuggestions] = useState([]);
   const [open, setOpen]               = useState(false);
   const [loading, setLoading]         = useState(false);
@@ -104,12 +106,12 @@ export function AddressAutocomplete({
         {onMapClick && (
           <button type="button" className="addr-auto__map-btn" onClick={onMapClick} tabIndex={-1}>
             <MapPin size={13} />
-            <span className="addr-auto__map-btn-text">Izaberi na mapi</span>
+            <span className="addr-auto__map-btn-text">{t('select_on_map')}</span>
           </button>
         )}
       </div>
 
-      {loading && <div className="addr-auto__loading">Pretraži...</div>}
+      {loading && <div className="addr-auto__loading">{t('searching')}</div>}
 
       {open && suggestions.length > 0 && (
         <ul className="addr-auto__dropdown" role="listbox">

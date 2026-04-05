@@ -16,6 +16,12 @@
 .admin-table-scroll {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.admin-table-scroll::-webkit-scrollbar {
+  display: none;
 }
 
 .admin-table {
@@ -93,6 +99,17 @@
 
 .admin-table__action--approve:hover {
   background-color: var(--color-success);
+  color: #fff;
+}
+
+.admin-table__action--edit {
+  background-color: rgba(59, 130, 246, 0.1);
+  color: #3b82f6;
+  margin-right: var(--space-2);
+}
+
+.admin-table__action--edit:hover {
+  background-color: #3b82f6;
   color: #fff;
 }
 

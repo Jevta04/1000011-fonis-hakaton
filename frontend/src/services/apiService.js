@@ -156,6 +156,15 @@ export const adminGetStats = () =>
 export const adminGetCompanies = () =>
   api.get('/admin/companies');
 
+export const adminUpdateUser = (id, data) =>
+  api.put(`/admin/users/${id}`, data);
+
+export const adminUpdateRide = (id, data) =>
+  api.put(`/admin/rides/${id}`, data);
+
+export const adminGetCharts = () =>
+  api.get('/admin/charts');
+
 /* ============================================================
    OSRM — kalkulacija rute (poziva se direktno sa frontenda)
    ============================================================ */

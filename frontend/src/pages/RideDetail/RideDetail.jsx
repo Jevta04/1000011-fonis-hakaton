@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import {
   MapPin, Flag, Calendar, Users, Car, Route,
   Coins, Cigarette, Music, Wind, Check, X, Clock,
-  ChevronLeft, Trash2,
+  ChevronLeft, Trash2, Eye, EyeOff, Phone,
 } from 'lucide-react';
 import { useTranslation } from '../../hooks/useTranslation';
 import {
@@ -27,6 +27,7 @@ export function RideDetail() {
   const [passengers, setPassengers] = useState([]);
   const [loading, setLoading]       = useState(true);
   const [actionLoading, setAL]      = useState(false);
+  const [phoneVisible, setPhoneVisible] = useState(false);
 
   const currentUser = (() => {
     try { return JSON.parse(localStorage.getItem('user')); } catch { return null; }
@@ -63,6 +64,7 @@ export function RideDetail() {
   };
 
   const handleLeave = async () => {
+    if (!window.confirm(t('leave_ride') + '?')) return;
     setAL(true);
     try { await leaveRide(id); await reloadRide(); }
     catch (err) { console.error(err); }
@@ -204,6 +206,21 @@ export function RideDetail() {
                     <p className="ride-detail__driver-vehicle text-muted">
                       {[ride.vehicle, ride.boja].filter(Boolean).join(' · ')}
                     </p>
+                  )}
+                  {ride.driver_phone && (
+                    <div className="ride-detail__phone-row">
+                      <Phone size={13} />
+                      <span className="ride-detail__phone-value">
+                        {phoneVisible ? ride.driver_phone : '••••••••••'}
+                      </span>
+                      <button
+                        className="ride-detail__phone-toggle"
+                        onClick={() => setPhoneVisible((v) => !v)}
+                        title={phoneVisible ? t('hide_phone') : t('show_phone')}
+                      >
+                        {phoneVisible ? <EyeOff size={14} /> : <Eye size={14} />}
+                      </button>
+                    </div>
                   )}
                 </div>
               </div>

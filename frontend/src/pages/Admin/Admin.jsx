@@ -1,63 +1,14 @@
-import { useState, useEffect } from 'react';
-import { Users, Car, CheckCircle, Building2, Route, Coins, TrendingUp, Download } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import { Users, Car, CheckCircle, Building2, Route, Coins, TrendingUp, Download, X } from 'lucide-react';
 import { useTranslation } from '../../hooks/useTranslation';
+import { useTheme } from '../../hooks/useTheme';
 import { AdminTable } from '../../components/admin/AdminTable/AdminTable';
 import {
   adminGetUsers, adminGetAllRides, adminGetCompanies,
   adminDeleteUser, adminDeleteRide, adminGetStats,
+  adminUpdateUser, adminUpdateRide, adminGetCharts,
 } from '../../services/apiService';
 import './Admin.css';
-
-const TABS = [
-  { key: 'users',     label: 'Korisnici' },
-  { key: 'rides',     label: 'Vožnje' },
-  { key: 'companies', label: 'Kompanije' },
-  { key: 'earnings',  label: 'Zarade vozača' },
-];
-
-const USER_COLUMNS = [
-  { key: 'id',              label: 'ID' },
-  { key: 'name',            label: 'Ime i prezime' },
-  { key: 'email',           label: 'Email' },
-  { key: 'phone',           label: 'Telefon' },
-  { key: 'company',         label: 'Kompanija' },
-  { key: 'role',            label: 'Uloga',
-    render: (val) => <span className={`admin-badge admin-badge--${val}`}>{val}</span> },
-  { key: 'driver_rides',    label: 'Vožnje (vozač)' },
-  { key: 'passenger_rides', label: 'Vožnje (putnik)' },
-];
-
-const RIDE_COLUMNS = [
-  { key: 'id',             label: 'ID' },
-  { key: 'from',           label: 'Od' },
-  { key: 'to',             label: 'Do' },
-  { key: 'date',           label: 'Datum' },
-  { key: 'driver',         label: 'Vozač' },
-  { key: 'seats',          label: 'Slobodna mesta' },
-  { key: 'passengers',     label: 'Putnici' },
-  { key: 'distance_km',    label: 'Distanca (km)' },
-  { key: 'price_per_seat', label: 'Cena / osobi' },
-  { key: 'total_cost',     label: 'Ukupna cena' },
-  { key: 'vehicle',        label: 'Vozilo' },
-];
-
-const COMPANY_COLUMNS = [
-  { key: 'id',          label: 'ID' },
-  { key: 'name',        label: 'Naziv' },
-  { key: 'pib',         label: 'PIB' },
-  { key: 'users_count', label: 'Korisnici' },
-];
-
-const EARNINGS_COLUMNS = [
-  { key: 'name',             label: 'Vozač' },
-  { key: 'email',            label: 'Email' },
-  { key: 'total_rides',      label: 'Broj vožnji' },
-  { key: 'total_passengers', label: 'Ukupno putnika' },
-  { key: 'total_km',         label: 'Pređeno km',
-    render: (val) => val ? `${parseFloat(val).toFixed(1)} km` : '—' },
-  { key: 'total_earned',     label: 'Zarada (din)',
-    render: (val) => val ? <strong>{Math.round(parseFloat(val))} din</strong> : '—' },
-];
 
 function exportCsv(columns, rows, filename) {
   const header = columns.map((c) => c.label).join(';');
@@ -76,26 +27,87 @@ function exportCsv(columns, rows, filename) {
 
 export function Admin() {
   const { t } = useTranslation();
+  const { isDark } = useTheme();
+
+  const TABS = [
+    { key: 'users',     label: t('admin_users') },
+    { key: 'rides',     label: t('admin_rides') },
+    { key: 'companies', label: t('admin_companies') },
+    { key: 'earnings',  label: t('admin_tab_earnings') },
+  ];
+
+  const USER_COLUMNS = [
+    { key: 'id',              label: 'ID' },
+    { key: 'name',            label: t('admin_col_full_name') },
+    { key: 'email',           label: 'Email' },
+    { key: 'phone',           label: t('phone') },
+    { key: 'company',         label: t('company') },
+    { key: 'role',            label: t('admin_col_role'),
+      render: (val) => <span className={`admin-badge admin-badge--${val}`}>{val}</span> },
+    { key: 'driver_rides',    label: t('admin_col_driver_rides') },
+    { key: 'passenger_rides', label: t('admin_col_passenger_rides') },
+  ];
+
+  const RIDE_COLUMNS = [
+    { key: 'id',             label: 'ID' },
+    { key: 'from',           label: t('admin_col_od') },
+    { key: 'to',             label: t('admin_col_do') },
+    { key: 'date',           label: t('date') },
+    { key: 'driver',         label: t('driver') },
+    { key: 'seats',          label: t('admin_col_free_seats') },
+    { key: 'passengers',     label: t('passengers') },
+    { key: 'distance_km',    label: t('admin_col_distance_km') },
+    { key: 'price_per_seat', label: t('admin_col_price_per_seat') },
+    { key: 'total_cost',     label: t('admin_col_total_cost') },
+    { key: 'vehicle',        label: t('vehicle') },
+  ];
+
+  const COMPANY_COLUMNS = [
+    { key: 'id',          label: 'ID' },
+    { key: 'name',        label: t('admin_col_company_name') },
+    { key: 'pib',         label: t('admin_col_pib') },
+    { key: 'users_count', label: t('admin_users') },
+  ];
+
+  const EARNINGS_COLUMNS = [
+    { key: 'name',             label: t('driver') },
+    { key: 'email',            label: 'Email' },
+    { key: 'total_rides',      label: t('admin_col_total_rides') },
+    { key: 'total_passengers', label: t('admin_col_total_passengers') },
+    { key: 'total_km',         label: t('admin_col_total_km'),
+      render: (val) => val ? `${parseFloat(val).toFixed(1)} km` : '—' },
+    { key: 'total_earned',     label: t('admin_col_total_earned'),
+      render: (val) => val ? <strong>{Math.round(parseFloat(val))} din</strong> : '—' },
+  ];
+
   const [activeTab, setActiveTab] = useState('users');
   const [data, setData]           = useState({ users: [], rides: [], companies: [], earnings: [] });
   const [stats, setStats]         = useState(null);
+  const [charts, setCharts]       = useState(null);
   const [loading, setLoading]     = useState(true);
+  const [editModal, setEditModal] = useState(null);
+  const [editForm, setEditForm]   = useState({});
+  const [editSaving, setEditSaving] = useState(false);
+  const kmChartRef   = useRef(null);
+  const passChartRef = useRef(null);
 
   useEffect(() => {
     const loadAll = async () => {
       setLoading(true);
       try {
-        const [usersRes, ridesRes, companiesRes, statsRes] = await Promise.allSettled([
-          adminGetUsers(), adminGetAllRides(), adminGetCompanies(), adminGetStats(),
+        const [usersRes, ridesRes, companiesRes, statsRes, chartsRes] = await Promise.allSettled([
+          adminGetUsers(), adminGetAllRides(), adminGetCompanies(), adminGetStats(), adminGetCharts(),
         ]);
-        const statsData = statsRes.status === 'fulfilled' ? statsRes.value.data : null;
+        const statsData  = statsRes.status  === 'fulfilled' ? statsRes.value.data  : null;
+        const chartsData = chartsRes.status === 'fulfilled' ? chartsRes.value.data : null;
         setData({
           users:     usersRes.status     === 'fulfilled' ? (usersRes.value.data?.data     || []) : [],
           rides:     ridesRes.status     === 'fulfilled' ? (ridesRes.value.data?.data     || []) : [],
           companies: companiesRes.status === 'fulfilled' ? (companiesRes.value.data?.data || companiesRes.value.data || []) : [],
           earnings:  statsData?.driver_earnings || [],
         });
-        if (statsData) setStats(statsData);
+        if (statsData)  setStats(statsData);
+        if (chartsData) setCharts(chartsData);
       } finally {
         setLoading(false);
       }
@@ -103,8 +115,78 @@ export function Admin() {
     loadAll();
   }, []);
 
+  // Draw Google Charts when data or theme changes
+  useEffect(() => {
+    if (!charts?.daily?.length) return;
+
+    const textColor  = isDark ? '#f5f7f8' : '#191a19';
+    const gridColor  = isDark ? '#2d3d2d' : '#e2e6ea';
+    const daily = charts.daily;
+
+    const drawCharts = () => {
+      // KM — smooth line chart
+      if (kmChartRef.current) {
+        const kmData = new window.google.visualization.DataTable();
+        kmData.addColumn('string', 'Day');
+        kmData.addColumn('number', 'km');
+        kmData.addRows(daily.map((d) => [d.label, d.km]));
+        new window.google.visualization.AreaChart(kmChartRef.current).draw(kmData, {
+          title: t('charts_km'),
+          titleTextStyle: { color: textColor, fontSize: 13 },
+          height: 220, legend: 'none',
+          colors: ['#4e9f3d'],
+          backgroundColor: 'transparent',
+          curveType: 'function',
+          areaOpacity: 0.3,
+          chartArea: { width: '80%', height: '60%' },
+          hAxis: { textStyle: { color: textColor }, gridlines: { color: gridColor } },
+          vAxis: { textStyle: { color: textColor }, gridlines: { color: gridColor } },
+          pointSize: 5,
+          pointShape: 'circle',
+        });
+      }
+
+      // Passengers — column chart
+      if (passChartRef.current) {
+        const passData = new window.google.visualization.DataTable();
+        passData.addColumn('string', 'Day');
+        passData.addColumn('number', t('passengers'));
+        passData.addRows(daily.map((d) => [d.label, d.passengers]));
+        new window.google.visualization.ColumnChart(passChartRef.current).draw(passData, {
+          title: t('charts_passengers'),
+          titleTextStyle: { color: textColor, fontSize: 13 },
+          height: 220, legend: 'none',
+          colors: ['#1e5128'],
+          backgroundColor: 'transparent',
+          chartArea: { width: '80%', height: '60%' },
+          hAxis: { textStyle: { color: textColor }, gridlines: { color: gridColor } },
+          vAxis: { textStyle: { color: textColor }, gridlines: { color: gridColor } },
+          bar: { groupWidth: '60%' },
+        });
+      }
+    };
+
+    if (window.google?.visualization) {
+      drawCharts();
+    } else {
+      const existing = document.querySelector('script[src*="gstatic.com/charts"]');
+      if (!existing) {
+        const script = document.createElement('script');
+        script.src = 'https://www.gstatic.com/charts/loader.js';
+        script.onload = () => {
+          window.google.charts.load('current', { packages: ['corechart'] });
+          window.google.charts.setOnLoadCallback(drawCharts);
+        };
+        document.head.appendChild(script);
+      } else {
+        window.google.charts.setOnLoadCallback(drawCharts);
+      }
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [charts, isDark]);
+
   const handleDeleteUser = async (user) => {
-    if (!window.confirm(`Obrisati korisnika "${user.name}"?`)) return;
+    if (!window.confirm(`${t('delete')} "${user.name}"?`)) return;
     try {
       await adminDeleteUser(user.id);
       setData((p) => ({ ...p, users: p.users.filter((u) => u.id !== user.id) }));
@@ -112,25 +194,52 @@ export function Admin() {
   };
 
   const handleDeleteRide = async (ride) => {
-    if (!window.confirm(`Obrisati vožnju #${ride.id}?`)) return;
+    if (!window.confirm(`${t('delete')} #${ride.id}?`)) return;
     try {
       await adminDeleteRide(ride.id);
       setData((p) => ({ ...p, rides: p.rides.filter((r) => r.id !== ride.id) }));
     } catch (err) { console.error(err); }
   };
 
-  const colMap    = { users: USER_COLUMNS, rides: RIDE_COLUMNS, companies: COMPANY_COLUMNS, earnings: EARNINGS_COLUMNS };
-  const csvNames  = { users: 'korisnici.csv', rides: 'voznje.csv', companies: 'kompanije.csv', earnings: 'zarade.csv' };
+  const handleEditUser = (user) => {
+    setEditForm({ ime: user.name?.split(' ')[0] ?? '', prezime: user.name?.split(' ').slice(1).join(' ') ?? '', uloga: user.role, brojTelefona: user.phone === '—' ? '' : user.phone });
+    setEditModal({ type: 'user', row: user });
+  };
+
+  const handleEditRide = (ride) => {
+    setEditForm({ seats: ride.seats });
+    setEditModal({ type: 'ride', row: ride });
+  };
+
+  const handleEditSave = async () => {
+    if (!editModal) return;
+    setEditSaving(true);
+    try {
+      if (editModal.type === 'user') {
+        await adminUpdateUser(editModal.row.id, editForm);
+        const fullName = `${editForm.ime} ${editForm.prezime}`.trim();
+        setData((p) => ({ ...p, users: p.users.map((u) => u.id === editModal.row.id ? { ...u, name: fullName, role: editForm.uloga, phone: editForm.brojTelefona || '—' } : u) }));
+      } else {
+        await adminUpdateRide(editModal.row.id, editForm);
+        setData((p) => ({ ...p, rides: p.rides.map((r) => r.id === editModal.row.id ? { ...r, seats: editForm.seats } : r) }));
+      }
+      setEditModal(null);
+    } catch (err) { console.error(err); }
+    finally { setEditSaving(false); }
+  };
+
+  const colMap   = { users: USER_COLUMNS, rides: RIDE_COLUMNS, companies: COMPANY_COLUMNS, earnings: EARNINGS_COLUMNS };
+  const csvNames = { users: 'users.csv', rides: 'rides.csv', companies: 'companies.csv', earnings: 'earnings.csv' };
 
   const STAT_ITEMS = [
-    { Icon: Users,       label: 'Korisnici',       value: stats?.total_users     ?? '—' },
-    { Icon: Car,         label: 'Vožnje ukupno',   value: stats?.total_rides     ?? '—' },
-    { Icon: CheckCircle, label: 'Aktivne vožnje',  value: stats?.active_rides    ?? '—' },
-    { Icon: Building2,   label: 'Kompanije',       value: stats?.total_companies ?? '—' },
-    { Icon: Route,       label: 'Ukupno km',       value: stats ? `${stats.total_km} km` : '—' },
-    { Icon: Coins,       label: 'Avg. cena/osobi', value: stats ? `${stats.avg_price} din` : '—' },
-    { Icon: TrendingUp,  label: 'Avg. distanca',   value: stats ? `${stats.avg_distance} km` : '—' },
-    { Icon: Users,       label: 'Ukupno putnika',  value: stats?.total_passengers ?? '—' },
+    { Icon: Users,       label: t('total_users'),           value: stats?.total_users     ?? '—' },
+    { Icon: Car,         label: t('admin_stat_total_rides'), value: stats?.total_rides     ?? '—' },
+    { Icon: CheckCircle, label: t('admin_stat_active_rides'),value: stats?.active_rides    ?? '—' },
+    { Icon: Building2,   label: t('total_companies'),        value: stats?.total_companies ?? '—' },
+    { Icon: Route,       label: t('admin_stat_total_km'),    value: stats ? `${stats.total_km} km` : '—' },
+    { Icon: Coins,       label: t('admin_stat_avg_price'),   value: stats ? `${stats.avg_price} din` : '—' },
+    { Icon: TrendingUp,  label: t('admin_stat_avg_distance'),value: stats ? `${stats.avg_distance} km` : '—' },
+    { Icon: Users,       label: t('total_passengers'),       value: stats?.total_passengers ?? '—' },
   ];
 
   return (
@@ -154,6 +263,28 @@ export function Admin() {
           </div>
         )}
 
+        {charts && (
+          <div className="admin__charts-row">
+            {charts.total_revenue > 0 && (
+              <div className="admin__revenue-card">
+                <TrendingUp size={22} strokeWidth={1.5} />
+                <div>
+                  <span className="admin__revenue-value">{charts.total_revenue.toLocaleString()} din</span>
+                  <span className="admin__revenue-label">{t('total_revenue')}</span>
+                </div>
+              </div>
+            )}
+            <div className="admin__charts">
+              <div className="admin__chart-card">
+                <div ref={kmChartRef} className="admin__chart" />
+              </div>
+              <div className="admin__chart-card">
+                <div ref={passChartRef} className="admin__chart" />
+              </div>
+            </div>
+          </div>
+        )}
+
         <div className="admin__tabs-row">
           <div className="admin__tabs" role="tablist">
             {TABS.map(({ key, label }) => (
@@ -170,7 +301,7 @@ export function Admin() {
           <button
             className="admin__export-btn"
             onClick={() => exportCsv(colMap[activeTab], data[activeTab], csvNames[activeTab])}
-            title="Eksportuj CSV"
+            title={t('export_csv')}
           >
             <Download size={15} /> CSV
           </button>
@@ -181,6 +312,10 @@ export function Admin() {
             columns={colMap[activeTab]}
             data={data[activeTab] || []}
             loading={loading}
+            onEdit={
+              activeTab === 'users' ? handleEditUser :
+              activeTab === 'rides' ? handleEditRide : undefined
+            }
             onDelete={
               activeTab === 'users'  ? handleDeleteUser  :
               activeTab === 'rides'  ? handleDeleteRide  : undefined
@@ -189,6 +324,55 @@ export function Admin() {
           />
         </div>
       </div>
+
+      {editModal && (
+        <div className="admin-modal-overlay" onClick={() => setEditModal(null)}>
+          <div className="admin-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="admin-modal__header">
+              <h3 className="admin-modal__title">
+                {editModal.type === 'user' ? t('admin_edit_user') : t('admin_edit_ride')}
+              </h3>
+              <button className="admin-modal__close" onClick={() => setEditModal(null)}>
+                <X size={18} />
+              </button>
+            </div>
+
+            <div className="admin-modal__body">
+              {editModal.type === 'user' && (
+                <>
+                  <label className="admin-modal__label">{t('ime')}
+                    <input className="admin-modal__input" value={editForm.ime ?? ''} onChange={(e) => setEditForm((p) => ({ ...p, ime: e.target.value }))} />
+                  </label>
+                  <label className="admin-modal__label">{t('prezime')}
+                    <input className="admin-modal__input" value={editForm.prezime ?? ''} onChange={(e) => setEditForm((p) => ({ ...p, prezime: e.target.value }))} />
+                  </label>
+                  <label className="admin-modal__label">{t('phone')}
+                    <input className="admin-modal__input" value={editForm.brojTelefona ?? ''} onChange={(e) => setEditForm((p) => ({ ...p, brojTelefona: e.target.value }))} />
+                  </label>
+                  <label className="admin-modal__label">{t('admin_col_role')}
+                    <select className="admin-modal__input" value={editForm.uloga ?? 'korisnik'} onChange={(e) => setEditForm((p) => ({ ...p, uloga: e.target.value }))}>
+                      <option value="korisnik">korisnik</option>
+                      <option value="admin">admin</option>
+                    </select>
+                  </label>
+                </>
+              )}
+              {editModal.type === 'ride' && (
+                <label className="admin-modal__label">{t('admin_col_free_seats')}
+                  <input className="admin-modal__input" type="number" min="0" max="8" value={editForm.seats ?? 0} onChange={(e) => setEditForm((p) => ({ ...p, seats: parseInt(e.target.value, 10) }))} />
+                </label>
+              )}
+            </div>
+
+            <div className="admin-modal__footer">
+              <button className="admin-modal__cancel" onClick={() => setEditModal(null)}>{t('discard')}</button>
+              <button className="admin-modal__save" onClick={handleEditSave} disabled={editSaving}>
+                {editSaving ? t('saving') : t('save')}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
