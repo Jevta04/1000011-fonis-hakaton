@@ -1,5 +1,8 @@
 # EverRoute — Interni sistem za deljenje prevoza
 
+> **Fonis Hakaton 2026** — organizator: Fonis organizacija | 4. – 5. april 2026.
+> Tema: *„Razvoj digitalnog rešenja koje unapređuje svakodnevni život u gradu kroz pametno upravljanje resursima i uslugama"*
+
 EverRoute je web aplikacija namenjena kompanijama koje žele da organizuju deljenje prevoza između zaposlenih. Cilj je smanjiti troškove prevoza, emisiju CO₂ i broj automobila u saobraćaju, tako što zaposleni mogu da objave ili pronađu vožnje do i od posla.
 
 ## Funkcionalnosti
