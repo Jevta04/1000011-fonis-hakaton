@@ -394,6 +394,14 @@
   margin: 0 0 var(--space-2) var(--space-1);
 }
 
+.admin__chart-selected {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-primary);
+  text-align: center;
+  margin: var(--space-1) 0 var(--space-2);
+}
+
 .admin__chart {
   width: 100%;
   min-height: 220px;

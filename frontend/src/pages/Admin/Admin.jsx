@@ -88,8 +88,14 @@ export function Admin() {
   const [editModal, setEditModal] = useState(null);
   const [editForm, setEditForm]   = useState({});
   const [editSaving, setEditSaving] = useState(false);
-  const kmChartRef   = useRef(null);
-  const passChartRef = useRef(null);
+  const kmChartRef      = useRef(null);
+  const passChartRef    = useRef(null);
+  const kmChartObj      = useRef(null);
+  const passChartObj    = useRef(null);
+  const kmDataRef       = useRef(null);
+  const passDataRef     = useRef(null);
+  const [kmSelected,   setKmSelected]   = useState(null);
+  const [passSelected, setPassSelected] = useState(null);
 
   useEffect(() => {
     const loadAll = async () => {
@@ -131,19 +137,33 @@ export function Admin() {
         kmData.addColumn('string', 'Dan');
         kmData.addColumn('number', 'km');
         kmData.addRows(daily.map((d) => [d.label, d.km]));
-        new window.google.visualization.AreaChart(kmChartRef.current).draw(kmData, {
-          title: '', width: w, height: 220,
+        kmDataRef.current = kmData;
+        const kmChart = new window.google.visualization.AreaChart(kmChartRef.current);
+        kmChartObj.current = kmChart;
+        kmChart.draw(kmData, {
+          title: '', width: w, height: 200,
           legend: 'none',
           colors: ['#4e9f3d'],
           backgroundColor: 'transparent',
           curveType: 'function',
           areaOpacity: 0.35,
-          chartArea: { left: 44, right: 12, top: 8, bottom: 52 },
+          chartArea: { left: 44, right: 12, top: 8, bottom: 36 },
           hAxis: { textStyle: { color: textColor, fontSize: 11 }, gridlines: { color: 'transparent' } },
           vAxis: { textStyle: { color: textColor, fontSize: 11 }, gridlines: { color: gridColor }, minValue: 0 },
           pointSize: 5,
           pointShape: 'circle',
-          tooltip: { trigger: 'both' },
+          tooltip: { trigger: 'none' },
+        });
+        window.google.visualization.events.addListener(kmChart, 'select', () => {
+          const sel = kmChart.getSelection();
+          if (sel.length > 0) {
+            const row = sel[0].row;
+            const label = kmData.getValue(row, 0);
+            const val   = kmData.getValue(row, 1);
+            setKmSelected(`${label}: ${val} km`);
+          } else {
+            setKmSelected(null);
+          }
         });
       }
 
@@ -154,16 +174,30 @@ export function Admin() {
         passData.addColumn('string', 'Dan');
         passData.addColumn('number', 'Putnici');
         passData.addRows(daily.map((d) => [d.label, d.passengers]));
-        new window.google.visualization.ColumnChart(passChartRef.current).draw(passData, {
-          title: '', width: w, height: 220,
+        passDataRef.current = passData;
+        const passChart = new window.google.visualization.ColumnChart(passChartRef.current);
+        passChartObj.current = passChart;
+        passChart.draw(passData, {
+          title: '', width: w, height: 200,
           legend: 'none',
           colors: ['#4e9f3d'],
           backgroundColor: 'transparent',
-          chartArea: { left: 36, right: 12, top: 8, bottom: 52 },
+          chartArea: { left: 36, right: 12, top: 8, bottom: 36 },
           hAxis: { textStyle: { color: textColor, fontSize: 11 }, gridlines: { color: 'transparent' } },
           vAxis: { textStyle: { color: textColor, fontSize: 11 }, gridlines: { color: gridColor }, minValue: 0 },
           bar: { groupWidth: '55%' },
-          tooltip: { trigger: 'both' },
+          tooltip: { trigger: 'none' },
+        });
+        window.google.visualization.events.addListener(passChart, 'select', () => {
+          const sel = passChart.getSelection();
+          if (sel.length > 0) {
+            const row = sel[0].row;
+            const label = passData.getValue(row, 0);
+            const val   = passData.getValue(row, 1);
+            setPassSelected(`${label}: ${val} putnika`);
+          } else {
+            setPassSelected(null);
+          }
         });
       }
     };
@@ -285,10 +319,12 @@ export function Admin() {
               <div className="admin__chart-card">
                 <p className="admin__chart-title">{t('charts_km')}</p>
                 <div ref={kmChartRef} className="admin__chart" />
+                {kmSelected && <p className="admin__chart-selected">{kmSelected}</p>}
               </div>
               <div className="admin__chart-card">
                 <p className="admin__chart-title">{t('charts_passengers')}</p>
                 <div ref={passChartRef} className="admin__chart" />
+                {passSelected && <p className="admin__chart-selected">{passSelected}</p>}
               </div>
             </div>
           </div>
