@@ -144,7 +144,6 @@ export function Admin() {
           pointSize: 5,
           pointShape: 'circle',
           tooltip: { trigger: 'both' },
-          focusTarget: 'category',
         });
       }
 
@@ -165,7 +164,6 @@ export function Admin() {
           vAxis: { textStyle: { color: textColor, fontSize: 11 }, gridlines: { color: gridColor }, minValue: 0 },
           bar: { groupWidth: '55%' },
           tooltip: { trigger: 'both' },
-          focusTarget: 'category',
         });
       }
     };
